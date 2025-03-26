@@ -13,6 +13,7 @@ export const Page404 = lazy(() => import('src/pages/page-not-found'));
 // --------------- Auth Pages ---------------
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const CustomersPage = lazy(() => import('src/pages/customers'));
+export const InventoryPage = lazy(() => import('src/pages/inventory'));
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,8 @@ const Router = () => {
       children: [
         { path: '/', element: <Navigate to={NAVIGATION_ROUTES.dashboard.base} replace /> },
         { path: NAVIGATION_ROUTES.dashboard.base, element: <IndexPage /> },
-        {path: NAVIGATION_ROUTES.customers.base, element: <CustomersPage />}
+        { path: NAVIGATION_ROUTES.customers.base, element: <CustomersPage /> },
+        { path: NAVIGATION_ROUTES.inventory.base, element: <InventoryPage /> },
       ],
     },
     ...PublicRoutes,

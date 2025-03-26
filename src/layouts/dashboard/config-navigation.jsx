@@ -3,6 +3,7 @@ import { NAVBAR_ITEMS } from './common/navigation-names';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +13,13 @@ const navConfig = [
     name: NAVBAR_ITEMS.DASHBOARD,
     path: '',
     icon: <DashboardIcon />,
+    adminOnly: false,
+  },
+  {
+    title: 'Inventory',
+    name: NAVBAR_ITEMS.INVENTORY,
+    path: 'inventory',
+    icon: <InventoryIcon />,
     adminOnly: false,
   },
   {

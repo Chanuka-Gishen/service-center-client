@@ -1,4 +1,5 @@
 export const NAVBAR_ITEMS = {
   DASHBOARD: 'dashboard',
-  CUSTOMERS: 'customers'
+  CUSTOMERS: 'customers',
+  INVENTORY: 'inventory'
 };

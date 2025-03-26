@@ -1,6 +1,8 @@
 import React from 'react';
+
 import {
   Box,
+  Button,
   Card,
   Container,
   IconButton,
@@ -12,18 +14,18 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { CustomTable } from 'src/components/custom-table/custom-table';
-import { RegisterCustomerDialog } from '../components/register-customer-dialog';
+import { AddItemDialog } from '../components/add-item-dialog';
 
-export const CustomersView = ({
-  customers,
+export const InventoryView = ({
+  items,
   isLoading,
   isLoadingAdd,
   isOpenAdd,
   handleToggleAddDialog,
-  handleAddCustomer,
+  handleAddItem,
   tableKeys,
   limit,
   page,
@@ -38,11 +40,16 @@ export const CustomersView = ({
       <Grid container spacing={4}>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h4">Manage Customers</Typography>
-            <Tooltip title="Register Customer">
-              <IconButton onClick={handleToggleAddDialog}>
-                <PersonAddAlt1Icon />
-              </IconButton>
+            <Typography variant="h4">Manage Inventory</Typography>
+            <Box flexGrow={1} />
+            <Tooltip title="Add Item">
+              <Button
+                variant="contained"
+                endIcon={<AddCircleOutlineIcon />}
+                onClick={handleToggleAddDialog}
+              >
+                Add Item
+              </Button>
             </Tooltip>
           </Stack>
         </Grid>
@@ -57,14 +64,12 @@ export const CustomersView = ({
                   alignItems="center"
                   gap={2}
                 >
-                  <TextField label="Customer Name" value={''} autoComplete="off" fullWidth />
-                  <TextField label="Customer Mobile" value={''} autoComplete="off" fullWidth />
-                  <TextField label="Customer NIC" value={''} autoComplete="off" fullWidth />
+                  <TextField label="Item Title" value={''} autoComplete="off" />
                 </Box>
               </Container>
               <CustomTable
                 keys={tableKeys}
-                data={customers}
+                data={items}
                 isLoading={isLoading}
                 documentCount={documentCount}
                 page={page}
@@ -77,11 +82,11 @@ export const CustomersView = ({
         </Grid>
       </Grid>
       {isOpenAdd && (
-        <RegisterCustomerDialog
+        <AddItemDialog
           open={isOpenAdd}
           handleOpenClose={handleToggleAddDialog}
           isLoading={isLoadingAdd}
-          handleConfirm={handleAddCustomer}
+          handleConfirm={handleAddItem}
         />
       )}
     </Container>
