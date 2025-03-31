@@ -16,7 +16,6 @@ import { CELL_TYPES } from 'src/constants/common-constants';
 import { formatCurrency } from 'src/utils/format-number';
 import { fDate } from 'src/utils/format-time';
 
-
 export const CustomTable = ({
   keys,
   data,
@@ -49,7 +48,7 @@ export const CustomTable = ({
             {!isLoading && data.length > 0 && (
               <>
                 {data.map((item, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} sx={{ cursor: 'pointer' }}>
                     {keys.map((key, index) => (
                       <TableCell key={index}>
                         {[CELL_TYPES.STRING, CELL_TYPES.NUMBER].includes(key.type) &&

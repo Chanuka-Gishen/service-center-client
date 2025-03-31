@@ -19,9 +19,11 @@ import { RegisterCustomerDialog } from '../components/register-customer-dialog';
 
 export const CustomersView = ({
   customers,
+  selectedFilters,
   isLoading,
   isLoadingAdd,
   isOpenAdd,
+  handleChangeSearch,
   handleToggleAddDialog,
   handleAddCustomer,
   tableKeys,
@@ -46,22 +48,29 @@ export const CustomersView = ({
             </Tooltip>
           </Stack>
         </Grid>
+        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+          <TextField
+            label="Customer Name"
+            value={selectedFilters.name}
+            name="name"
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+          <TextField
+            label="Customer Mobile"
+            value={selectedFilters.mobile}
+            name="mobile"
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
+        </Grid>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Card>
             <Paper elevation={0}>
-              <Container sx={{ p: '10px' }}>
-                <Box
-                  display="flex"
-                  flexDirection={matchDownSm ? 'column' : 'row'}
-                  //justifyContent="space-between"
-                  alignItems="center"
-                  gap={2}
-                >
-                  <TextField label="Customer Name" value={''} autoComplete="off" fullWidth />
-                  <TextField label="Customer Mobile" value={''} autoComplete="off" fullWidth />
-                  <TextField label="Customer NIC" value={''} autoComplete="off" fullWidth />
-                </Box>
-              </Container>
               <CustomTable
                 keys={tableKeys}
                 data={customers}
@@ -82,6 +91,9 @@ export const CustomersView = ({
           handleOpenClose={handleToggleAddDialog}
           isLoading={isLoadingAdd}
           handleConfirm={handleAddCustomer}
+          selectedFilters={selectedFilters}
+          page={page}
+          limit={limit}
         />
       )}
     </Container>
