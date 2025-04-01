@@ -21,9 +21,11 @@ import { AddItemDialog } from '../components/add-item-dialog';
 
 export const InventoryView = ({
   items,
+  selectedFilters,
   isLoading,
   isLoadingAdd,
   isOpenAdd,
+  handleChangeSearch,
   handleToggleAddDialog,
   handleAddItem,
   tableKeys,
@@ -36,7 +38,7 @@ export const InventoryView = ({
   const matchDownSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
-    <Container maxWidth={'lg'}>
+    <Container maxWidth={'xl'}>
       <Grid container spacing={4}>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -53,20 +55,15 @@ export const InventoryView = ({
             </Tooltip>
           </Stack>
         </Grid>
+        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+          <TextField label="Item Code" name='code' value={selectedFilters.code} onChange={handleChangeSearch} autoComplete="off" fullWidth />
+        </Grid>
+        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+          <TextField label="Item Title" name='name' value={selectedFilters.name} onChange={handleChangeSearch} autoComplete="off" fullWidth />
+        </Grid>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Card>
             <Paper elevation={0}>
-              <Container sx={{ p: '10px' }}>
-                <Box
-                  display="flex"
-                  flexDirection={matchDownSm ? 'column' : 'row'}
-                  //justifyContent="space-between"
-                  alignItems="center"
-                  gap={2}
-                >
-                  <TextField label="Item Title" value={''} autoComplete="off" />
-                </Box>
-              </Container>
               <CustomTable
                 keys={tableKeys}
                 data={items}

@@ -20,8 +20,6 @@ const useCustomer = () => {
 
   // Fetch customers
   const fetchCustomers = async (data) => {
-    console.log(data);
-    
     setIsLoading(true);
 
     await backendAuthApi({

@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -13,7 +14,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
-import { ITEM_CATEGOREIS } from 'src/constants/itemCategories';
+import { ITEM_CATEGOREIS, ITEM_CATEGORIES_LABELS } from 'src/constants/itemCategories';
 import { AddInventoryItemSchema } from 'src/schema/add-inv-item-schema';
 
 export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
@@ -39,7 +40,9 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
         }}
         validationSchema={AddInventoryItemSchema}
         onSubmit={(values) => {
-          console.log(values);
+          console.log('--------------');
+
+          handleConfirm(values);
         }}
       >
         {({
@@ -55,20 +58,20 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid size={{ sm: 12, md: 12, lg: 12 }}>
+                <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
                   <TextField
                     label="Item Title"
-                    name="itemTitle"
+                    name="itemName"
                     required
                     fullWidth
                     autoComplete="off"
                     variant="outlined"
-                    {...getFieldProps('itemTitle')}
-                    error={touched.itemTitle && Boolean(errors.itemTitle)}
-                    helperText={touched.itemTitle && errors.itemTitle}
+                    {...getFieldProps('itemName')}
+                    error={touched.itemName && Boolean(errors.itemName)}
+                    helperText={touched.itemName && errors.itemName}
                   />
                 </Grid>
-                <Grid size={{ sm: 12, md: 12, lg: 12 }}>
+                <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
                   <TextField
                     label="Item Description"
                     name="itemDescription"
@@ -78,6 +81,40 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     {...getFieldProps('itemDescription')}
                     error={touched.itemDescription && Boolean(errors.itemDescription)}
                     helperText={touched.itemDescription && errors.itemDescription}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="select-label">Category</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="simple-select"
+                      label="Category"
+                      name="itemCategory"
+                      required
+                      value={values.itemCategory || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      {ITEM_CATEGORIES_LABELS.map((item) => (
+                        <MenuItem value={item}>
+                        {item}
+                      </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{touched.itemCategory && errors.itemCategory}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+                  <TextField
+                    label="Item Supplier"
+                    name="itemSupplier"
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('itemSupplier')}
+                    error={touched.itemSupplier && Boolean(errors.itemSupplier)}
+                    helperText={touched.itemSupplier && errors.itemSupplier}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
@@ -94,40 +131,21 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     helperText={touched.itemQuantity && errors.itemQuantity}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="select-label">Category</InputLabel>
-                    <Select
-                      labelId="select-label"
-                      id="simple-select"
-                      label="Category"
-                      name="itemCategory"
-                      required
-                      value={values.itemCategory}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      <MenuItem value={ITEM_CATEGOREIS.OIL.code}>
-                        {ITEM_CATEGOREIS.OIL.label}
-                      </MenuItem>
-                      <MenuItem value={ITEM_CATEGOREIS.BRK.code}>
-                        {ITEM_CATEGOREIS.BRK.label}
-                      </MenuItem>
-                      <MenuItem value={ITEM_CATEGOREIS.FLT.code}>
-                        {ITEM_CATEGOREIS.FLT.label}
-                      </MenuItem>
-                      <MenuItem value={ITEM_CATEGOREIS.BAT.code}>
-                        {ITEM_CATEGOREIS.BAT.label}
-                      </MenuItem>
-                      <MenuItem value={ITEM_CATEGOREIS.TIR.code}>
-                        {ITEM_CATEGOREIS.TIR.label}
-                      </MenuItem>
-                      <MenuItem value={ITEM_CATEGOREIS.ENG.code}>
-                        {ITEM_CATEGOREIS.ENG.label}
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
+                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+                  <TextField
+                    label="Item Threshold"
+                    name="itemThreshold"
+                    fullWidth
+                    required
+                    type="number"
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('itemThreshold')}
+                    error={touched.itemThreshold && Boolean(errors.itemThreshold)}
+                    helperText={touched.itemThreshold && errors.itemThreshold}
+                  />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
                   <TextField
                     label="Item Cost Price"
@@ -156,40 +174,13 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-                  <TextField
-                    label="Item Threshold"
-                    name="itemThreshold"
-                    fullWidth
-                    required
-                    type='number'
-                    autoComplete="off"
-                    variant="outlined"
-                    {...getFieldProps('itemThreshold')}
-                    error={touched.itemThreshold && Boolean(errors.itemThreshold)}
-                    helperText={touched.itemThreshold && errors.itemThreshold}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-                  <TextField
-                    label="Item Supplier"
-                    name="itemSupplier"
-                    fullWidth
-                    type="number"
-                    autoComplete="off"
-                    variant="outlined"
-                    {...getFieldProps('itemSupplier')}
-                    error={touched.itemSupplier && Boolean(errors.itemSupplier)}
-                    helperText={touched.itemSupplier && errors.itemSupplier}
-                  />
-                </Grid>
               </Grid>
             </DialogContent>
             <DialogActions>
               <Button
                 onClick={() => {
                   handleOpenClose();
-                  resetForm;
+                  resetForm();
                 }}
                 disabled={isLoading}
                 variant="outlined"

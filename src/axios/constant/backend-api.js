@@ -12,4 +12,8 @@ export const BACKEND_API = {
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',
   CUSTOMER_REGISTER: IP_URL + '/customer/auth/register',
+
+  ITEMS: IP_URL + '/inventory/auth/items',
+  ITEMS_ADD: IP_URL + '/inventory/auth/create',
+  ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks'
 };
