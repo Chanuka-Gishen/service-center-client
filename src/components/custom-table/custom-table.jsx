@@ -27,6 +27,7 @@ export const CustomTable = ({
   limit = 10,
   handleChangePage,
   handleChangeRowsPerPage,
+  hanldeOnRowClick = null,
 }) => {
   return (
     <>
@@ -48,7 +49,12 @@ export const CustomTable = ({
             {!isLoading && data.length > 0 && (
               <>
                 {data.map((item, index) => (
-                  <TableRow key={index} sx={{ cursor: 'pointer' }}>
+                  <TableRow
+                    key={index}
+                    sx={{ cursor: 'pointer' }}
+                    hover={hanldeOnRowClick ? true : false}
+                    onClick={() => hanldeOnRowClick(item)}
+                  >
                     {keys.map((key, index) => (
                       <TableCell key={index}>
                         {[CELL_TYPES.STRING, CELL_TYPES.NUMBER].includes(key.type) &&

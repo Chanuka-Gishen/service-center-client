@@ -16,7 +16,7 @@ const useCustomer = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
-  const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
+  const [isLoadingCustomer, setIsLoadingCustomer] = useState(true);
 
   // Fetch customers
   const fetchCustomers = async (data) => {
@@ -43,9 +43,7 @@ const useCustomer = () => {
   };
 
   // Get customer from _id
-  const fetchCustomer = async ({id}) => {
-    if (isLoadingCustomer) return;
-
+  const fetchCustomer = async (id) => {
     setIsLoadingCustomer(true);
 
     await backendAuthApi({

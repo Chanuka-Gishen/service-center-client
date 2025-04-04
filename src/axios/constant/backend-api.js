@@ -14,6 +14,14 @@ export const BACKEND_API = {
   CUSTOMER_REGISTER: IP_URL + '/customer/auth/register',
 
   ITEMS: IP_URL + '/inventory/auth/items',
+  ITEMS_SELECT: IP_URL + '/inventory/auth/items-select',
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
-  ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks'
+  ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
+
+  WO_ACTIVE: IP_URL + '/workorder/auth/active-orders',
+  WO_CREATE: IP_URL + '/workorder/auth/create',
+  WO_UPDATE: IP_URL + '/workorder/auth/update',
+  WO_DOWNLOAD_INVOICE: IP_URL + '/workorder/auth/download-invoice',
+  WO_UPDATE_COMPLETED: IP_URL + '/workorder/auth/update-complete',
+  WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed'
 };

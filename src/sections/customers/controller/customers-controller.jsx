@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { CustomersView } from '../view/customers-view';
 import { CELL_TYPES } from 'src/constants/common-constants';
 import useCustomer from 'src/hooks/useCustomer';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
+import { useNavigate } from 'react-router-dom';
 
 const CustomersController = () => {
   const tableKeys = [
@@ -27,6 +29,8 @@ const CustomersController = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
   const { isLoading, isLoadingAdd, fetchCustomers, registerCustomer, customers, customersCount } =
     useCustomer();
 
@@ -35,10 +39,7 @@ const CustomersController = () => {
     mobile: '',
   });
 
-  const memoizedSelectedFilters = useMemo(
-    () => selectedFilters,
-    [selectedFilters]
-  );
+  const memoizedSelectedFilters = useMemo(() => selectedFilters, [selectedFilters]);
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -46,7 +47,7 @@ const CustomersController = () => {
   const [isOpenAdd, setIsOpenAdd] = useState(false);
 
   //------------------
-  const queryParams = {page, limit, ...selectedFilters}
+  const queryParams = { page, limit, ...selectedFilters };
   //------------------
 
   const handleChangeSearch = (e) => {
@@ -69,16 +70,23 @@ const CustomersController = () => {
     setIsOpenAdd(!isOpenAdd);
   };
 
-  const handleRegisterCustomer = async(data) => {
-    const response = await registerCustomer(data)
-    
+  const handleNavigateCustomer = (data) => {
+    navigate(NAVIGATION_ROUTES.customers.Details.base, {
+      state: {
+        id: data._id,
+      },
+    });
+  };
 
-    if(response){
-      handleToggleAddDialog()
-      
+  const handleRegisterCustomer = async (data) => {
+    const response = await registerCustomer(data);
+
+    if (response) {
+      handleToggleAddDialog();
+
       await fetchCustomers(queryParams);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCustomers(queryParams);
@@ -94,6 +102,7 @@ const CustomersController = () => {
       isLoadingAdd={isLoadingAdd}
       isOpenAdd={isOpenAdd}
       handleChangeSearch={handleChangeSearch}
+      handleNavigateCustomer={handleNavigateCustomer}
       handleToggleAddDialog={handleToggleAddDialog}
       handleAddCustomer={handleRegisterCustomer}
       tableKeys={tableKeys}

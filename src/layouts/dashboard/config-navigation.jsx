@@ -1,9 +1,9 @@
-import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { NAVBAR_ITEMS } from './common/navigation-names';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import WorkIcon from '@mui/icons-material/Work';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +20,13 @@ const navConfig = [
     name: NAVBAR_ITEMS.INVENTORY,
     path: 'inventory',
     icon: <InventoryIcon />,
+    adminOnly: false,
+  },
+  {
+    title: 'Workorders',
+    name: NAVBAR_ITEMS.WORKORDERS,
+    path: 'workorders',
+    icon: <WorkIcon />,
     adminOnly: false,
   },
   {

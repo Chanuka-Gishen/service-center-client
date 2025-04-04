@@ -13,8 +13,10 @@ const useInventory = () => {
   const [items, setItems] = useState([]);
   const [itemsCount, setItemsCount] = useState(0);
   const [item, setItem] = useState(null);
+  const [selectItems, setSelectItems] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingSelect, setIsLoadingSelect] = useState(false);
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
   const [isLoadingStockUpdate, setIsLoadingStockUpdate] = useState(false);
 
@@ -42,6 +44,31 @@ const useInventory = () => {
       });
 
     return items;
+  };
+
+  // Fetch inventory items for selection
+  const fetchItemsForSelection = async (params) => {
+    if (isLoadingSelect) return;
+
+    setIsLoadingSelect(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEMS_SELECT,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSelectItems(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSelect(false);
+      })
+      .finally(() => {
+        setIsLoadingSelect(false);
+      });
   };
 
   // Add inventory item
@@ -111,12 +138,15 @@ const useInventory = () => {
 
   return {
     items,
+    selectItems,
     item,
     itemsCount,
     isLoading,
+    isLoadingSelect,
     isLoadingAdd,
     isLoadingStockUpdate,
     fetchAllItems,
+    fetchItemsForSelection,
     addItems,
     updapteItemStock,
   };

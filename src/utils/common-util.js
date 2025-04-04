@@ -53,17 +53,34 @@ const calculateMonthDifference = (date) => {
 };
 
 const validateFormik = (formik) => {
-  const fieldsToValidateAndTouch = Object.keys(formik.initialValues);
+  // Flatten the initialValues structure to include nested paths
+  const fieldsToValidateAndTouch = [];
+
+  // Recursive function to handle nested objects
+  const flattenObject = (obj, prefix = '') => {
+    Object.keys(obj).forEach((key) => {
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        flattenObject(obj[key], path);
+      } else {
+        fieldsToValidateAndTouch.push(path);
+      }
+    });
+  };
+
+  flattenObject(formik.initialValues);
 
   // Validate the form
   formik.validateForm().then(() => {
-    // Set touched for the specified fields
+    // Set touched for all fields (including nested paths)
     const touchedFields = {};
     fieldsToValidateAndTouch.forEach((field) => {
       touchedFields[field] = true;
     });
     formik.setTouched(touchedFields);
   });
+
+  return;
 };
 
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */

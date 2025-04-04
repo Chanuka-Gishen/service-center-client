@@ -24,6 +24,7 @@ export const CustomersView = ({
   isLoadingAdd,
   isOpenAdd,
   handleChangeSearch,
+  handleNavigateCustomer,
   handleToggleAddDialog,
   handleAddCustomer,
   tableKeys,
@@ -80,6 +81,7 @@ export const CustomersView = ({
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
+                hanldeOnRowClick={handleNavigateCustomer}
               />
             </Paper>
           </Card>

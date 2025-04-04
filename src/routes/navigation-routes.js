@@ -1,3 +1,5 @@
+import { Details } from '@mui/icons-material';
+
 export const NAVIGATION_ROUTES = {
   // authentication routes
   login: 'login',
@@ -10,12 +12,18 @@ export const NAVIGATION_ROUTES = {
 
   // main routes
   dashboard: {
-    base: '/dashboard'
+    base: '/dashboard',
   },
   customers: {
-    base: '/customers'
+    base: '/customers',
+    Details: {
+      base: '/customers/details',
+    },
   },
-  inventory:{
-    base: '/inventory'
-  }
+  inventory: {
+    base: '/inventory',
+  },
+  workorders: {
+    base: '/workorders',
+  },
 };
