@@ -9,27 +9,35 @@ import { WorkOrderUpdateSchema } from 'src/schema/update-workorder-schema';
 import commonUtil from 'src/utils/common-util';
 import { useSnackbar } from 'notistack';
 import { SNACKBAR_MESSAGE, SNACKBAR_VARIANT } from 'src/constants/snackbar-constants';
+import usePayment from 'src/hooks/usePayment';
 
 const WorkordersController = () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
     workOrders,
     isLoading,
+    isLoadingJob,
     isLoadingUpdate,
     isLoadingComplete,
     isLoadingClosed,
+    isDownloading,
     fetchActiveWorkOrders,
+    fetchWorkOrderInfo,
     updateWorkOrder,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
+    downloadInvoice
   } = useWorkOrder();
   const { selectItems, isLoadingSelect, fetchItemsForSelection } = useInventory();
+  const { isLoadingCreate, createPayment } = usePayment();
 
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
 
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [isOpenCompleteDlg, setIsOpenCompleteDlg] = useState(false);
   const [isOpenClosedDlg, setIsOpenClosedDlg] = useState(false);
+  const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState({
     name: '',
@@ -154,15 +162,19 @@ const WorkordersController = () => {
     setIsOpenClosedDlg(!isOpenClosedDlg);
   };
 
+  const handleTogglePaymentDlg = () => {
+    setIsOpenPaymentDlg(!isOpenPaymentDlg);
+  };
+
   const handleSelectJob = (job) => {
-    setSelectedJob(selectedJob && selectedJob._id === job._id ? null : job);
+    setSelectedId(selectedId === job._id ? null : job._id);
   };
 
   const handleUdpateWorkOrderStatusComplete = async () => {
     const isSuccess = await updateWorkOrderToComplete(selectedJob._id);
     if (isSuccess) {
       handleToggleCompleteDlg();
-      fetchActiveWorkOrders();
+      handleFetchWorkOrder();
     }
   };
 
@@ -170,7 +182,29 @@ const WorkordersController = () => {
     const isSuccess = await updateWorkOrderToClosed(selectedJob._id);
     if (isSuccess) {
       handleToggleClosedDlg();
+      setSelectedId(null);
       fetchActiveWorkOrders();
+    }
+  };
+
+  const handleAddPaymentRecord = async (values) => {
+    const data = {
+      paymentworkOrder: selectedJob._id,
+      paymentCustomer: selectedJob.workOrderCustomer._id,
+      ...values,
+    };
+    const isSuccess = await createPayment(data);
+
+    if (isSuccess) {
+      handleTogglePaymentDlg();
+      handleFetchWorkOrder();
+    }
+  };
+
+  const handleFetchWorkOrder = async () => {
+    if (selectedId) {
+      const result = await fetchWorkOrderInfo(selectedId);
+      setSelectedJob(result);
     }
   };
 
@@ -183,7 +217,7 @@ const WorkordersController = () => {
       if (isSucess) {
         handleToggleUpdateDialog();
         await fetchActiveWorkOrders();
-        setSelectedJob(null)
+        setSelectedJob(null);
       }
     } else {
       enqueueSnackbar(SNACKBAR_MESSAGE.FILL_REQUIRED_FIELDS, { variant: SNACKBAR_VARIANT.ERROR });
@@ -197,6 +231,12 @@ const WorkordersController = () => {
   }, [memoizedSelectedFilters]);
 
   useEffect(() => {
+    handleFetchWorkOrder();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  useEffect(() => {
     fetchActiveWorkOrders();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,6 +245,7 @@ const WorkordersController = () => {
     <WorkordersView
       workOrders={workOrders}
       selectItems={selectItems}
+      selectedId={selectedId}
       selectedJob={selectedJob}
       formik={formik}
       handleAddNewInventoryRow={handleAddNewInventoryRow}
@@ -213,19 +254,26 @@ const WorkordersController = () => {
       isOpenUpdate={isOpenUpdate}
       isOpenCompleteDlg={isOpenCompleteDlg}
       isOpenClosedDlg={isOpenClosedDlg}
+      isOpenPaymentDlg={isOpenPaymentDlg}
       isLoading={isLoading}
+      isLoadingJob={isLoadingJob}
       isLoadingUpdate={isLoadingUpdate}
       isLoadingSelect={isLoadingSelect}
       isLoadingComplete={isLoadingComplete}
       isLoadingClosed={isLoadingClosed}
+      isLoadingCreate={isLoadingCreate}
+      isDownloading={isDownloading}
       handleSelectJob={handleSelectJob}
       handleChangeSearch={handleChangeSearch}
       handleToggleUpdateDialog={handleToggleUpdateDialog}
       handleToggleCompleteDlg={handleToggleCompleteDlg}
       handleToggleClosedDlg={handleToggleClosedDlg}
+      handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleUdpateWorkOrderStatusComplete={handleUdpateWorkOrderStatusComplete}
       handleUpdateWorkOrderStatusClosed={handleUpdateWorkOrderStatusClosed}
+      handleAddPaymentRecord={handleAddPaymentRecord}
       handleUpdateWorkOrder={handleUpdateWorkOrder}
+      downloadInvoice={downloadInvoice}
     />
   );
 };

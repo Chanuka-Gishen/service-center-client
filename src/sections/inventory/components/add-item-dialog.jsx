@@ -14,7 +14,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
-import { ITEM_CATEGOREIS, ITEM_CATEGORIES_LABELS } from 'src/constants/itemCategories';
+import { ITEM_CATEGORIES_LABELS } from 'src/constants/itemCategories';
 import { AddInventoryItemSchema } from 'src/schema/add-inv-item-schema';
 
 export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
@@ -40,8 +40,6 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
         }}
         validationSchema={AddInventoryItemSchema}
         onSubmit={(values) => {
-          console.log('--------------');
-
           handleConfirm(values);
         }}
       >
@@ -96,13 +94,15 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      {ITEM_CATEGORIES_LABELS.map((item) => (
-                        <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
+                      {ITEM_CATEGORIES_LABELS.map((item, index) => (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText>{touched.itemCategory && errors.itemCategory}</FormHelperText>
+                    <FormHelperText error={touched.itemCategory && errors.itemCategory}>
+                      {touched.itemCategory && errors.itemCategory}
+                    </FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>

@@ -12,10 +12,12 @@ const useWorkOrder = () => {
   const [workOrders, setWorkOrders] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingJob, setIsLoadingJob] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Fetch active work orders
   const fetchActiveWorkOrders = async () => {
@@ -37,6 +39,35 @@ const useWorkOrder = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  // Fetch work order info - ID
+  const fetchWorkOrderInfo = async (id) => {
+    setIsLoadingJob(true);
+
+    let result = null;
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          result = res.data.responseData;
+        }
+      })
+      .catch(() => {
+        setIsLoadingJob(false);
+      })
+      .finally(() => {
+        setIsLoadingJob(false);
+      });
+
+    return result;
   };
 
   // Create work order
@@ -167,18 +198,55 @@ const useWorkOrder = () => {
     return isSuccess;
   };
 
+  // Download invoice
+  const downloadInvoice = async (data) => {
+    if (isDownloading) return;
+
+    setIsDownloading(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_DOWNLOAD_INVOICE,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        id: data._id,
+      },
+      responseType: 'blob',
+    })
+      .then((res) => {
+        // Create a link element and trigger download
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${data.workOrderInvoiceNumber}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(() => {
+        setIsDownloading(false);
+      })
+      .finally(() => {
+        setIsDownloading(false);
+      });
+  };
+
   return {
     workOrders,
     isLoading,
+    isLoadingJob,
     isLoadingCreate,
     isLoadingUpdate,
     isLoadingComplete,
     isLoadingClosed,
+    isDownloading,
     fetchActiveWorkOrders,
+    fetchWorkOrderInfo,
     createWorkOrder,
     updateWorkOrder,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
+    downloadInvoice
   };
 };
 

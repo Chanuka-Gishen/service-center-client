@@ -13,10 +13,13 @@ import { account } from 'src/_mock/account';
 import { backendAuthApi } from 'src/axios/instance/backend-axios-instance';
 import { BACKEND_API } from 'src/axios/constant/backend-api';
 import useAuthStore from 'src/store/auth-store';
+import { useNavigate } from 'react-router-dom';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const router = useNavigate();
   const [open, setOpen] = useState(null);
   const [isLoading, setIsloading] = useState(false);
 
@@ -41,6 +44,7 @@ export default function AccountPopover() {
     })
       .then(() => {
         logoutUser();
+        router(NAVIGATION_ROUTES.login)
       })
       .finally(() => {
         setIsloading(false);
@@ -101,6 +105,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem
+          disabled={isLoading}
           disableRipple
           disableTouchRipple
           onClick={handleLogout}

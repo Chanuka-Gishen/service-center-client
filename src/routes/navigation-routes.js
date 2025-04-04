@@ -13,6 +13,7 @@ export const NAVIGATION_ROUTES = {
   // main routes
   dashboard: {
     base: '/dashboard',
+    main: ''
   },
   customers: {
     base: '/customers',

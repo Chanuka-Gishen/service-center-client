@@ -23,8 +23,14 @@ import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import { fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { WokrOrderUpdateDialog } from '../components/workorder-update-dialog';
-import { WO_STATUS_COMPLETED, WO_STATUS_OPEN } from 'src/constants/workorderStatus';
+import {
+  WO_STATUS_CLOSED,
+  WO_STATUS_COMPLETED,
+  WO_STATUS_OPEN,
+} from 'src/constants/workorderStatus';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
+import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
+import { AddPaymentDialog } from '../components/add-payment-dialog';
 
 const LoadingStack = () => {
   return (
@@ -54,10 +60,8 @@ const LoadingStack = () => {
 export const WorkordersView = ({
   workOrders,
   selectItems,
+  selectedId,
   selectedJob,
-  setSelectedJob,
-  formikValues,
-  setFormikValues,
   formik,
   handleAddNewInventoryRow,
   handleDeleteInventoryItem,
@@ -65,18 +69,25 @@ export const WorkordersView = ({
   isOpenUpdate,
   isOpenCompleteDlg,
   isOpenClosedDlg,
+  isOpenPaymentDlg,
   isLoading,
+  isLoadingJob,
   isLoadingUpdat,
   isLoadingSelect,
   isLoadingComplete,
   isLoadingClosed,
+  isLoadingCreate,
+  isDownloading,
   handleSelectJob,
   handleToggleUpdateDialog,
   handleToggleCompleteDlg,
   handleToggleClosedDlg,
+  handleTogglePaymentDlg,
   handleUpdateWorkOrder,
+  downloadInvoice,
   handleUdpateWorkOrderStatusComplete,
   handleUpdateWorkOrderStatusClosed,
+  handleAddPaymentRecord,
   handleChangeSearch,
 }) => {
   return (
@@ -96,7 +107,7 @@ export const WorkordersView = ({
                     <ListItemButton
                       key={index}
                       onClick={() => handleSelectJob(item)}
-                      selected={selectedJob ? item._id === selectedJob._id : false}
+                      selected={selectedId ? item._id === selectedId : false}
                     >
                       <ListItemAvatar>
                         <Avatar>
@@ -116,7 +127,7 @@ export const WorkordersView = ({
             </>
           )}
         </Grid>
-        {selectedJob && (
+        {selectedJob && selectedId && !isLoadingJob && (
           <Grid size={{ xs: 12, sm: 12, md: 7, lg: 7 }}>
             <Box
               display="flex"
@@ -236,19 +247,37 @@ export const WorkordersView = ({
             </Box>
           </Grid>
         )}
-        {selectedJob && (
+        {selectedJob && selectedId && !isLoadingJob && (
           <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2 }}>
             <Stack spacing={1}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={handleToggleUpdateDialog}
-                disabled={isLoadingUpdat}
-              >
-                Edit Invoice
-              </Button>
+              {selectedJob.workOrderStatus != WO_STATUS_CLOSED && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleToggleUpdateDialog}
+                  disabled={isLoadingUpdat}
+                >
+                  Edit Invoice
+                </Button>
+              )}
+              {selectedJob.workOrderPaymentStatus != PAY_STATUS_PAID && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleTogglePaymentDlg}
+                  disabled={isLoadingCreate}
+                >
+                  Add Payment
+                </Button>
+              )}
+
               {selectedJob.workOrderStatus != WO_STATUS_OPEN && (
-                <Button variant="contained" size="large">
+                <Button
+                  variant="contained"
+                  size="large"
+                  disabled={isDownloading}
+                  onClick={() => downloadInvoice(selectedJob)}
+                >
                   Download Invoice
                 </Button>
               )}
@@ -289,6 +318,15 @@ export const WorkordersView = ({
           handleOpenClose={handleToggleUpdateDialog}
           handleChangeSearch={handleChangeSearch}
           handleConfirm={handleUpdateWorkOrder}
+        />
+      )}
+      {isOpenPaymentDlg && (
+        <AddPaymentDialog
+          open={isOpenPaymentDlg}
+          handleClose={handleTogglePaymentDlg}
+          data={selectedJob}
+          isLoading={isLoadingCreate}
+          handleConfirm={handleAddPaymentRecord}
         />
       )}
       {isOpenCompleteDlg && (
