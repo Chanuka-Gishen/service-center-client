@@ -7,7 +7,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Workorders | ZenXbyte </title>
+        <title> Workorders | WijayaAuto </title>
       </Helmet>
 
       <Workorders />

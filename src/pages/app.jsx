@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | ZenXbyte </title>
+        <title> Dashboard | WijayaAuto </title>
       </Helmet>
 
       <Overview />

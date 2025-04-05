@@ -7,7 +7,7 @@ export default function CustomerDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Details | ZenXbyte </title>
+        <title> Details | WijayaAuto </title>
       </Helmet>
 
       <CustomerDetails />

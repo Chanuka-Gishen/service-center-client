@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | ZenXbyte </title>
+        <title> Login | WijayaAuto </title>
       </Helmet>
 
       <LoginView />

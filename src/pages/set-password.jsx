@@ -8,7 +8,7 @@ export default function SetPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> Password | ZenXbyte </title>
+        <title> Password | WijayaAuto </title>
       </Helmet>
 
       <SetPassword />

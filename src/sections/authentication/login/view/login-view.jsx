@@ -52,7 +52,7 @@ export const LoginView = ({ handleLogin, formik, isLoading }) => {
             ERP Login
           </Typography>
           <Typography variant="subtitle1" textAlign={'center'} sx={{ mb: 5 }}>
-            Product By ZenXbyte
+            Wijaya Auto Electricals
           </Typography>
 
           <LoginForm

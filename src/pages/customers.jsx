@@ -8,7 +8,7 @@ export default function CustomersPage() {
   return (
     <>
       <Helmet>
-        <title> Customers | ZenXbyte </title>
+        <title> Customers | WijayaAuto </title>
       </Helmet>
 
       <Customers />

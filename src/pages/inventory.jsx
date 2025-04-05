@@ -7,7 +7,7 @@ export default function InventoryPage() {
   return (
     <>
       <Helmet>
-        <title> Inventory | ZenXbyte </title>
+        <title> Inventory | WijayaAuto </title>
       </Helmet>
 
       <Inventory />
