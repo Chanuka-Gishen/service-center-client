@@ -11,7 +11,6 @@ const useAppStore = create(
         colorMode: COLOR_MODE.LIGHT,
       },
       toggleMode: () => {
-        console.log('switching');
         set((state) => ({
           app: {
             colorMode:

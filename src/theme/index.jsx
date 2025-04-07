@@ -15,7 +15,6 @@ import useAppStore from 'src/store/app-store';
 
 export default function ThemeProvider({ children }) {
   const { app } = useAppStore();
-  console.log(app);
 
   const memoizedValue = useMemo(
     () => ({

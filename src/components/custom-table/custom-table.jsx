@@ -26,6 +26,8 @@ export const CustomTable = ({
   handleChangePage,
   handleChangeRowsPerPage,
 }) => {
+  console.log(documentCount);
+
   return (
     <>
       <TableContainer>
@@ -47,7 +49,7 @@ export const CustomTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {dataLength > 10 && (
+      {dataLength > 5 && (
         <TablePagination
           page={page}
           component="div"
