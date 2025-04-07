@@ -16,6 +16,7 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { RegisterCustomerDialog } from '../components/register-customer-dialog';
+import { CustomerRow } from '../components/customer-row';
 
 export const CustomersView = ({
   customers,
@@ -74,14 +75,14 @@ export const CustomersView = ({
             <Paper elevation={0}>
               <CustomTable
                 keys={tableKeys}
-                data={customers}
+                dataLength={customers.length}
                 isLoading={isLoading}
                 documentCount={documentCount}
                 page={page}
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                hanldeOnRowClick={handleNavigateCustomer}
+                tableBody={<CustomerRow data={customers} onClickRow={handleNavigateCustomer} />}
               />
             </Paper>
           </Card>

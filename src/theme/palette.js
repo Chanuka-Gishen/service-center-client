@@ -101,8 +101,8 @@ const base = {
 
 // ----------------------------------------------------------------------
 
-export function palette() {
-  return {
+export function palette(mode = 'light') {
+  const light = {
     ...base,
     mode: 'light',
     text: {
@@ -120,4 +120,25 @@ export function palette() {
       active: grey[600],
     },
   };
+
+  const dark = {
+    ...base,
+    mode: 'dark',
+    text: {
+      primary: '#FFFFFF',
+      secondary: grey[400],
+      disabled: grey[600],
+    },
+    background: {
+      paper: grey[800],
+      default: grey[900],
+      neutral: alpha(grey[500], 0.12),
+    },
+    action: {
+      ...base.action,
+      active: grey[400],
+    },
+  };
+
+  return mode === 'light' ? light : dark;
 }

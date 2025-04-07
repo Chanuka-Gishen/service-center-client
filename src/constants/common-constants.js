@@ -7,5 +7,10 @@ export const CELL_TYPES = {
   STRING: 'String',
   CURRENCY: 'Currency',
   NUMBER: 'Number',
-  DATE: 'Date'
-}
+  DATE: 'Date',
+};
+
+export const COLOR_MODE = {
+  LIGHT: 'light',
+  DARK: 'dark',
+};

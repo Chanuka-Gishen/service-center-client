@@ -5,52 +5,16 @@ import useInventory from 'src/hooks/useInventory';
 
 const InventoryController = () => {
   const tableKeys = [
-    {
-      header: 'Item Code',
-      value: 'itemCode',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Item Name',
-      value: 'itemName',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Item Description',
-      value: 'itemDescription',
-      type: CELL_TYPES.STRING,
-    },
-    { header: 'Category', value: 'itemCategory', type: CELL_TYPES.STRING },
-    {
-      header: 'Item Quantity',
-      value: 'itemQuantity',
-      type: CELL_TYPES.NUMBER,
-    },
-    {
-      header: 'Threshold',
-      value: 'itemQuantity',
-      type: CELL_TYPES.NUMBER,
-    },
-    {
-      header: 'Cost Price',
-      value: 'itemBuyingPrice',
-      type: CELL_TYPES.CURRENCY,
-    },
-    {
-      header: 'Selling Price',
-      value: 'itemSellingPrice',
-      type: CELL_TYPES.CURRENCY,
-    },
-    {
-      header: 'Supplier',
-      value: 'itemSupplier',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Status',
-      value: 'itemStatus',
-      type: CELL_TYPES.STRING,
-    },
+    'Item Code',
+    'Item Name',
+    'Item Description',
+    'Category',
+    'Item Quantity',
+    'Threshold',
+    'Cost Price',
+    'Selling Price',
+    'Supplier',
+    'Status',
   ];
 
   const { items, itemsCount, isLoading, isLoadingAdd, fetchAllItems, addItems } = useInventory();

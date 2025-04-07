@@ -6,28 +6,7 @@ import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { useNavigate } from 'react-router-dom';
 
 const CustomersController = () => {
-  const tableKeys = [
-    {
-      header: 'Customer Name',
-      value: 'customerName',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Customer Mobile',
-      value: 'customerMobile',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Customer Email',
-      value: 'customerEmail',
-      type: CELL_TYPES.STRING,
-    },
-    {
-      header: 'Registered Date',
-      value: 'createdAt',
-      type: CELL_TYPES.DATE,
-    },
-  ];
+  const tableKeys = ['Customer Name', 'Customer Mobile', 'Customer Email', 'Registered Date'];
 
   const navigate = useNavigate();
 

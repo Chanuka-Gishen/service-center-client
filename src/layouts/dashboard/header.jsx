@@ -12,6 +12,8 @@ import { bgBlur } from 'src/theme/css';
 
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
+import { ColorSwitch } from 'src/components/color-switch';
+import { Stack } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +31,10 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Box sx={{ flexGrow: 1 }} />
-
-      <AccountPopover />
+      <Stack direction="row" spacing={2} justifyContent='center' alignItems='center'>
+        <ColorSwitch />
+        <AccountPopover />
+      </Stack>
     </>
   );
 

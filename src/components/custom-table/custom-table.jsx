@@ -12,14 +12,12 @@ import {
 
 import TableLoadingRow from './table-loading-row.jsx';
 import TableEmptyRow from './table-empty-row.jsx';
-import { CELL_TYPES } from 'src/constants/common-constants';
-import { formatCurrency } from 'src/utils/format-number';
-import { fDate } from 'src/utils/format-time';
 
 export const CustomTable = ({
   keys,
-  data,
+  dataLength,
   isLoading,
+  tableBody,
   enableAction = false,
   documentCount = 0,
   rowerPerPage = [10, 20, 30],
@@ -27,7 +25,6 @@ export const CustomTable = ({
   limit = 10,
   handleChangePage,
   handleChangeRowsPerPage,
-  hanldeOnRowClick = null,
 }) => {
   return (
     <>
@@ -37,7 +34,7 @@ export const CustomTable = ({
             <TableRow>
               {keys.map((item, index) => (
                 <TableCell key={index} align={'left'}>
-                  {item.header}
+                  {item}
                 </TableCell>
               ))}
               {enableAction && <TableCell align={'right'}>Action</TableCell>}
@@ -45,32 +42,12 @@ export const CustomTable = ({
           </TableHead>
           <TableBody>
             {isLoading && <TableLoadingRow colSpan={keys.length} />}
-            {!isLoading && data.length === 0 && <TableEmptyRow colSpan={keys.length} />}
-            {!isLoading && data.length > 0 && (
-              <>
-                {data.map((item, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ cursor: 'pointer' }}
-                    hover={hanldeOnRowClick ? true : false}
-                    onClick={() => hanldeOnRowClick(item)}
-                  >
-                    {keys.map((key, index) => (
-                      <TableCell key={index}>
-                        {[CELL_TYPES.STRING, CELL_TYPES.NUMBER].includes(key.type) &&
-                          item[`${key.value}`]}
-                        {key.type === CELL_TYPES.CURRENCY && formatCurrency(item[`${key.value}`])}
-                        {key.type === CELL_TYPES.DATE && fDate(item[`${key.value}`])}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </>
-            )}
+            {!isLoading && dataLength === 0 && <TableEmptyRow colSpan={keys.length} />}
+            {!isLoading && dataLength > 0 && <>{tableBody}</>}
           </TableBody>
         </Table>
       </TableContainer>
-      {data.length > 10 && (
+      {dataLength > 10 && (
         <TablePagination
           page={page}
           component="div"

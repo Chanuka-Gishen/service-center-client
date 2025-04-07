@@ -4,6 +4,7 @@ export const CAT_BRAKE_SYS = "Brake System";
 export const CAT_FILTERS = "Filter";
 export const CAT_BATTERIES = "Bateries";
 export const CAT_TYRE = "Tyre";
+export const CAT_OTHER = "Other";
 
 export const ITEM_CATEGOREIS = {
   OIL: { code: "OIL", label: CAT_LUBRICANTS },
@@ -12,6 +13,7 @@ export const ITEM_CATEGOREIS = {
   BAT: { code: "BAT", label: CAT_BATTERIES },
   TIR: { code: "TIR", label: CAT_TYRE },
   ENG: { code: "ENG", label: CAT_ENGINE },
+  ITM: { code: "ITM", label: CAT_OTHER },
 };
 
 export const ITEM_CATEGORIES_LABELS = [
@@ -21,4 +23,5 @@ export const ITEM_CATEGORIES_LABELS = [
   CAT_BATTERIES,
   CAT_TYRE,
   CAT_ENGINE,
+  CAT_OTHER
 ];
