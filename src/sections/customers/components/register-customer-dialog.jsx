@@ -6,6 +6,11 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -13,6 +18,7 @@ import Slide from '@mui/material/Slide';
 import { Formik } from 'formik';
 
 import { RegisterCustomerSchema } from 'src/schema/register-customer-schema';
+import { CUSTOMER_PREFIX } from 'src/constants/customer-prefix';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -32,6 +38,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
 
       <Formik
         initialValues={{
+          customerPrefix: CUSTOMER_PREFIX[0],
           customerName: '',
           customerMobile: '',
           customerEmail: '',
@@ -44,11 +51,45 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
           handleConfirm(values);
         }}
       >
-        {({ errors, touched, resetForm, handleSubmit, getFieldProps }) => (
+        {({
+          values,
+          errors,
+          touched,
+          resetForm,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          getFieldProps,
+        }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 2 }}>
-                <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+                <Grid ize={{ xs: 12, sm: 12, md: 2, lg: 2 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="select-label">Prefix</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="simple-select"
+                      label="Category"
+                      name="customerPrefix"
+                      required
+                      fullWidth
+                      value={values.customerPrefix || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      {CUSTOMER_PREFIX.map((item, index) => (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText error={touched.customerPrefix && errors.customerPrefix}>
+                      {touched.customerPrefix && errors.customerPrefix}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, md: 10, lg: 10 }}>
                   <TextField
                     label="Customer Name"
                     name="customerName"
@@ -94,6 +135,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
                     label="Vehicle Number"
                     name="vehicleNumber"
                     fullWidth
+                    required
                     autoComplete="off"
                     variant="outlined"
                     {...getFieldProps('vehicleNumber')}
@@ -106,6 +148,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
                     label="Vehicle Manufactuerer"
                     name="vehicleManufacturer"
                     fullWidth
+                    required
                     autoComplete="off"
                     variant="outlined"
                     {...getFieldProps('vehicleManufacturer')}
@@ -118,6 +161,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
                     label="Vehicle Model"
                     name="vehicleModel"
                     fullWidth
+                    required
                     autoComplete="off"
                     variant="outlined"
                     {...getFieldProps('vehicleModel')}

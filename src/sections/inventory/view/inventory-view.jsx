@@ -18,6 +18,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { AddItemDialog } from '../components/add-item-dialog';
+import { InventoryRow } from '../components/inventory-row';
 
 export const InventoryView = ({
   items,
@@ -56,23 +57,38 @@ export const InventoryView = ({
           </Stack>
         </Grid>
         <Grid size={{ sm: 12, md: 4, lg: 3 }}>
-          <TextField label="Item Code" name='code' value={selectedFilters.code} onChange={handleChangeSearch} autoComplete="off" fullWidth />
+          <TextField
+            label="Item Code"
+            name="code"
+            value={selectedFilters.code}
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
         </Grid>
         <Grid size={{ sm: 12, md: 4, lg: 3 }}>
-          <TextField label="Item Title" name='name' value={selectedFilters.name} onChange={handleChangeSearch} autoComplete="off" fullWidth />
+          <TextField
+            label="Item Title"
+            name="name"
+            value={selectedFilters.name}
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
         </Grid>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Card>
             <Paper elevation={0}>
               <CustomTable
                 keys={tableKeys}
-                data={items}
+                dataLength={items.length}
                 isLoading={isLoading}
                 documentCount={documentCount}
                 page={page}
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
+                tableBody={<InventoryRow data={items} />}
               />
             </Paper>
           </Card>

@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { bgGradient } from 'src/theme/css';
 
 import LoginForm from '../component/login-form';
+import Logo from 'src/components/logo';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,7 @@ export const LoginView = ({ handleLogin, formik, isLoading }) => {
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
+          imgUrl: '/assets/background/overlay_3.jpg',
         }),
         height: 1,
       }}
@@ -48,13 +49,19 @@ export const LoginView = ({ handleLogin, formik, isLoading }) => {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4" textAlign={'center'} gutterBottom>
-            ERP Login
-          </Typography>
-          <Typography variant="subtitle1" textAlign={'center'} sx={{ mb: 5 }}>
-            Wijaya Auto Electricals
-          </Typography>
-
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Logo />
+            <Typography variant="subtitle1" textAlign={'center'} sx={{ mb: 5 }}>
+              Welcome Back !
+            </Typography>
+          </Box>
           <LoginForm
             formik={formik}
             handleClick={handleLogin}

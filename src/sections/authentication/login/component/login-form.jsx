@@ -12,10 +12,11 @@ const LoginForm = ({ handleClick, handleShowPassword, showPassword, formik, isLo
 
   return (
     <FormikProvider value={formik}>
-      <Stack spacing={3} sx={{ my: 3 }}>
+      <Stack spacing={3} sx={{ my: 1 }}>
         <TextField
           label="User Name/Email"
           autoComplete="off"
+          fullWidth
           {...getFieldProps('userEmail')}
           error={Boolean(touched.userEmail && errors.userEmail)}
           helperText={touched.userEmail && errors.userEmail}
@@ -24,6 +25,7 @@ const LoginForm = ({ handleClick, handleShowPassword, showPassword, formik, isLo
         <TextField
           label="Password"
           type={showPassword ? 'text' : 'password'}
+          fullWidth
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

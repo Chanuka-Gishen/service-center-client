@@ -1,6 +1,10 @@
+import { CUSTOMER_PREFIX } from 'src/constants/customer-prefix';
 import * as Yup from 'yup';
 
 export const RegisterCustomerSchema = Yup.object().shape({
+  customerPrefix: Yup.string()
+    .oneOf(CUSTOMER_PREFIX, 'Invalid prefix')
+    .required('Prefix is required'),
   customerName: Yup.string().required('Full Name is required'),
   customerMobile: Yup.string()
     .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/, 'Invalid mobile number (10 digits required)')

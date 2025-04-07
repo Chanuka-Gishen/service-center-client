@@ -33,14 +33,15 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       ref={ref}
       component="div"
       sx={{
-        width: 40,
-        height: 40,
-        display: 'inline-flex',
+        width: 100,
+        height: 100,
+        display: 'cover',
+        cursor: 'pointer',
         ...sx,
       }}
       {...other}
     >
-      <img src="assets/logo.svg" />
+      <img src="assets/main-logo.png" />
     </Box>
   );
 
