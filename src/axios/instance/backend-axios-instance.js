@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { v1 as uuid } from 'uuid';
 
 import common_util from 'src/utils/common-util';
 
@@ -7,6 +6,7 @@ import { SNACKBAR_MESSAGE } from 'src/constants/snackbar-constants';
 import responseUtil from 'src/utils/responseUtil';
 import useAuthStore from 'src/store/auth-store';
 import useSnackbarStore from 'src/store/notification-store';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 
 export const backendAuthApi = axios.create({
   // one minute timeout
@@ -29,6 +29,7 @@ backendAuthApi.interceptors.response.use(
   (error) => {
     const { logoutUser } = useAuthStore.getState();
     const { enqueueSnackbar } = useSnackbarStore.getState();
+
     if (error && !axios.isCancel(error)) {
       let errorMessage = SNACKBAR_MESSAGE.SOMETHING_WENT_WRONG.MESSAGE;
       let errorCode = null;
@@ -49,18 +50,14 @@ backendAuthApi.interceptors.response.use(
 
         if (errorResponse.responseCode === 'AUTH-004') {
           logoutUser();
-          return;
+          window.location.href = NAVIGATION_ROUTES.login;
         }
       }
 
-      enqueueSnackbar({
-        message: errorMessage,
-        options: {
-          key: uuid(),
-          variant: errorCode
-            ? responseUtil.findResponseType(errorCode)
-            : SNACKBAR_MESSAGE.SOMETHING_WENT_WRONG.VARIANT,
-        },
+      enqueueSnackbar(errorMessage, {
+        variant: errorCode
+          ? responseUtil.findResponseType(errorCode)
+          : SNACKBAR_MESSAGE.SOMETHING_WENT_WRONG.VARIANT,
       });
     }
     return Promise.reject(error);

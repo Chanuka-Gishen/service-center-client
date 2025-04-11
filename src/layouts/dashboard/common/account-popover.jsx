@@ -42,12 +42,11 @@ export default function AccountPopover() {
       url: BACKEND_API.LOGOUT,
       method: 'GET',
     })
-      .then(() => {
-        logoutUser();
-        router(NAVIGATION_ROUTES.login)
-      })
+      .then(() => {})
       .finally(() => {
         setIsloading(false);
+        logoutUser();
+        router(NAVIGATION_ROUTES.login);
       });
   };
 
