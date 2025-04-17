@@ -10,14 +10,40 @@ const useWorkOrder = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [workOrders, setWorkOrders] = useState([]);
+  const [jobs, setJobs] = useState([]);
+
+  const [jobsCount, setJobsCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingJobs, setIsLoadingJobs] = useState(true);
   const [isLoadingJob, setIsLoadingJob] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  // Fetch all work orders
+  const fetchWorkOrders = async (params) => {
+    await backendAuthApi({
+      url: BACKEND_API.WO_ALL,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setJobs(res.data.responseData.data);
+          setJobsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingJobs(false);
+      })
+      .finally(() => {
+        setIsLoadingJobs(false);
+      });
+  };
 
   // Fetch active work orders
   const fetchActiveWorkOrders = async () => {
@@ -233,20 +259,24 @@ const useWorkOrder = () => {
 
   return {
     workOrders,
+    jobs,
+    jobsCount,
     isLoading,
+    isLoadingJobs,
     isLoadingJob,
     isLoadingCreate,
     isLoadingUpdate,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
+    fetchWorkOrders,
     fetchActiveWorkOrders,
     fetchWorkOrderInfo,
     createWorkOrder,
     updateWorkOrder,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
-    downloadInvoice
+    downloadInvoice,
   };
 };
 

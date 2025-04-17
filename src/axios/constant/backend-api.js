@@ -18,6 +18,7 @@ export const BACKEND_API = {
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
 
+  WO_ALL : IP_URL + '/workorder/auth/list',
   WO_ACTIVE: IP_URL + '/workorder/auth/active-orders',
   WO_INFO: IP_URL + '/workorder/auth/info',
   WO_CREATE: IP_URL + '/workorder/auth/create',
