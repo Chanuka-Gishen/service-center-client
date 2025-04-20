@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { v1 as uuid } from 'uuid';
 
 import common_util from 'src/utils/common-util';
 
@@ -54,10 +55,14 @@ backendAuthApi.interceptors.response.use(
         }
       }
 
-      enqueueSnackbar(errorMessage, {
-        variant: errorCode
-          ? responseUtil.findResponseType(errorCode)
-          : SNACKBAR_MESSAGE.SOMETHING_WENT_WRONG.VARIANT,
+      enqueueSnackbar({
+        message: errorMessage,
+        options: {
+          key: uuid(),
+          variant: errorCode
+            ? responseUtil.findResponseType(errorCode)
+            : SNACKBAR_MESSAGE.SOMETHING_WENT_WRONG.VARIANT,
+        },
       });
     }
     return Promise.reject(error);
