@@ -1,0 +1,1 @@
+export { default as WorkorderDetails } from "./controller/workorder-details-controller"

@@ -27,5 +27,6 @@ export const BACKEND_API = {
   WO_UPDATE_COMPLETED: IP_URL + '/workorder/auth/update-complete',
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
 
+  PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add'
 };
