@@ -2,5 +2,6 @@ export const NAVBAR_ITEMS = {
   DASHBOARD: 'dashboard',
   CUSTOMERS: 'customers',
   INVENTORY: 'inventory',
-  WORKORDERS: 'workorders'
+  WORKORDERS: 'workorders',
+  JOBS: 'jobs'
 };

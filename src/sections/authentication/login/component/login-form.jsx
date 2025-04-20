@@ -1,6 +1,5 @@
 import React from 'react';
-import { LoadingButton } from '@mui/lab';
-import { IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { Button, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import { FormikProvider } from 'formik';
 
@@ -47,18 +46,18 @@ const LoginForm = ({ handleClick, handleShowPassword, showPassword, formik, isLo
         </Link>
       </Stack> */}
 
-      <LoadingButton
+      <Button
         fullWidth
+        loading={isLoading}
         size="large"
         type="submit"
         variant="contained"
         color="inherit"
+        loadingPosition="start"
         onClick={handleClick}
-        loading={isLoading}
-        disabled={isLoading}
       >
-        Login
-      </LoadingButton>
+        Continue
+      </Button>
     </FormikProvider>
   );
 };

@@ -26,8 +26,6 @@ export const CustomTable = ({
   handleChangePage,
   handleChangeRowsPerPage,
 }) => {
-  console.log(documentCount);
-
   return (
     <>
       <TableContainer>

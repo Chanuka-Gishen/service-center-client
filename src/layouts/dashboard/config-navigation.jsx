@@ -4,6 +4,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import WorkIcon from '@mui/icons-material/Work';
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 
 // ----------------------------------------------------------------------
 
@@ -23,10 +24,17 @@ const navConfig = [
     adminOnly: false,
   },
   {
-    title: 'Workorders',
+    title: 'Active Jobs',
     name: NAVBAR_ITEMS.WORKORDERS,
     path: 'workorders',
     icon: <WorkIcon />,
+    adminOnly: false,
+  },
+  {
+    title: 'Workorders',
+    name: NAVBAR_ITEMS.JOBS,
+    path: 'jobs',
+    icon: <WorkHistoryIcon />,
     adminOnly: false,
   },
   {
