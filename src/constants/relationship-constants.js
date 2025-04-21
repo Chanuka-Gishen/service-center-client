@@ -1,0 +1,13 @@
+export const EMP_RELATION_FAMILY = 'Family';
+export const EMP_RELATION_SPOUSE = 'Spouse';
+export const EMP_RELATION_CHILDREN = 'Child';
+export const EMP_RELATION_RELATIVE = 'Relative';
+export const EMP_RELATION_OTHER = 'Other';
+
+export const EMP_RELATIONSHIPS = [
+  EMP_RELATION_FAMILY,
+  EMP_RELATION_CHILDREN,
+  EMP_RELATION_RELATIVE,
+  EMP_RELATION_SPOUSE,
+  EMP_RELATION_OTHER,
+];

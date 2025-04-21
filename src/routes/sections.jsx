@@ -18,6 +18,7 @@ export const WorkordersPage = lazy(() => import('src/pages/workorders'));
 export const CustomerDetailsPage = lazy(() => import('src/pages/customer-details'));
 export const JobsPage = lazy(() => import('src/pages/jobs'));
 export const WorkorderDetailsPage = lazy(() => import('src/pages/workorder-details'));
+export const EmployeesPage = lazy(() => import('src/pages/employees'));
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +63,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.customers.Details.base, element: <CustomerDetailsPage /> },
         { path: NAVIGATION_ROUTES.jobs.base, element: <JobsPage /> },
         { path: NAVIGATION_ROUTES.jobs.details.base, element: <WorkorderDetailsPage /> },
+        { path: NAVIGATION_ROUTES.employees.base, element: <EmployeesPage /> },
       ],
     },
     ...PublicRoutes,
