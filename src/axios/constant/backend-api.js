@@ -18,7 +18,7 @@ export const BACKEND_API = {
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
 
-  WO_ALL : IP_URL + '/workorder/auth/list',
+  WO_ALL: IP_URL + '/workorder/auth/list',
   WO_ACTIVE: IP_URL + '/workorder/auth/active-orders',
   WO_INFO: IP_URL + '/workorder/auth/info',
   WO_CREATE: IP_URL + '/workorder/auth/create',
@@ -28,5 +28,9 @@ export const BACKEND_API = {
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
 
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
-  PAYMENT_CREATE: IP_URL + '/payment/auth/add'
+  PAYMENT_CREATE: IP_URL + '/payment/auth/add',
+
+  EMP_REGISTER: IP_URL + '/employee/auth/register',
+  EMP_ALL: IP_URL + '/employee/auth/employees',
+  EMP_INFO: IP_URL + 'employee/auth/employee',
 };

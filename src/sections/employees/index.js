@@ -1,0 +1,1 @@
+export { default as Employees } from "./controller/employees-controller"

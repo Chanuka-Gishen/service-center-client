@@ -13,7 +13,7 @@ export const NAVIGATION_ROUTES = {
   // main routes
   dashboard: {
     base: '/dashboard',
-    main: ''
+    main: '',
   },
   customers: {
     base: '/customers',
@@ -27,10 +27,16 @@ export const NAVIGATION_ROUTES = {
   workorders: {
     base: '/workorders',
   },
-  jobs:{
+  jobs: {
     base: '/jobs',
     details: {
-      base: '/jobs/details'
-    }
-  }
+      base: '/jobs/details',
+    },
+  },
+  employees: {
+    base: '/employees',
+    details: {
+      base: '/employees/details',
+    },
+  },
 };

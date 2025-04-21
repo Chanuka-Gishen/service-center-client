@@ -218,6 +218,7 @@ const WorkordersController = () => {
         handleToggleUpdateDialog();
         await fetchActiveWorkOrders();
         setSelectedJob(null);
+        setSelectedId(null)
       }
     } else {
       enqueueSnackbar(SNACKBAR_MESSAGE.FILL_REQUIRED_FIELDS, { variant: SNACKBAR_VARIANT.ERROR });

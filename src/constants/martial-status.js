@@ -1,0 +1,14 @@
+export const MARTIAL_STS_SINGLE = 'Single';
+export const MARTIAL_STS_MARRIED = 'Married';
+export const MARTIAL_STS_DIVORCED = 'Divorced';
+export const MARTIAL_STS_WIDOWED = 'Widowed';
+export const MARTIAL_STS_SEPERATED = 'Seperated';
+
+export const MARTIAL_STATUS = [
+  MARTIAL_STS_SINGLE,
+  MARTIAL_STS_MARRIED,
+  MARTIAL_STS_SEPERATED,
+  MARTIAL_STS_DIVORCED,
+  MARTIAL_STS_WIDOWED,
+  MARTIAL_STS_SEPERATED,
+];
