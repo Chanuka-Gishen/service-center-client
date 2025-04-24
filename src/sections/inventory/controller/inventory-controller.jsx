@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CELL_TYPES } from 'src/constants/common-constants';
 import { InventoryView } from '../view/inventory-view';
 import useInventory from 'src/hooks/useInventory';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
+import { useNavigate } from 'react-router-dom';
 
 const InventoryController = () => {
   const tableKeys = [
@@ -17,6 +18,7 @@ const InventoryController = () => {
     'Status',
   ];
 
+  const navigate = useNavigate()
   const { items, itemsCount, isLoading, isLoadingAdd, fetchAllItems, addItems } = useInventory();
 
   const [limit, setLimit] = useState(10);
@@ -55,6 +57,14 @@ const InventoryController = () => {
     setIsOpenAdd(!isOpenAdd);
   };
 
+  const handleNavigateItem = (id) => {
+      navigate(NAVIGATION_ROUTES.inventory.details.base, {
+        state: {
+          id,
+        },
+      });
+    };
+
   const handleAddItem = async (data) => {
     const response = await addItems(data);
 
@@ -85,6 +95,7 @@ const InventoryController = () => {
       limit={limit}
       page={page}
       documentCount={itemsCount}
+      handleNavigateItem={handleNavigateItem}
       handleChangePage={handleChangePage}
       handleChangeRowsPerPage={handleChangeRowsPerPage}
     />

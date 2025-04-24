@@ -5,9 +5,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import Avatar from '@mui/material/Avatar';
-import { alpha } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { usePathname, useRouter } from 'src/routes/hooks';
 
@@ -20,8 +21,38 @@ import navConfig from './config-navigation';
 import { USER_ROLE } from 'src/constants/user-role';
 import { NAVBAR_ITEMS } from './common/navigation-names';
 import useAuthStore from 'src/store/auth-store';
+import { Badge } from '@mui/material';
 
 // ----------------------------------------------------------------------
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: 'ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}));
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
@@ -58,7 +89,16 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
+      <StyledBadge
+        overlap="circular"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        variant="dot"
+      >
+        <Avatar>
+          <AccountCircleIcon />
+        </Avatar>
+      </StyledBadge>
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{user.name}</Typography>

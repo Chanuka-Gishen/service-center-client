@@ -1,16 +1,14 @@
 import { TableCell, TableRow } from '@mui/material';
 import { formatCurrency } from 'src/utils/format-number';
 
-export const InventoryRow = ({ data, onClickRow = null }) => {
+export const InventoryRow = ({ data, onClickRow }) => {
   return (
     <>
       {data.map((item, index) => (
         <TableRow
           key={index}
-          hover={onClickRow ? true : false}
-          onClick={() => {
-            onClickRow ? onClickRow(item._id) : null;
-          }}
+          hover={true}
+          onClick={() => onClickRow(item._id)}
           sx={{ cursor: 'pointer' }}
         >
           <TableCell>{item.itemCode}</TableCell>
