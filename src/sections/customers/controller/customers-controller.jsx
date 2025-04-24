@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { CustomersView } from '../view/customers-view';
-import { CELL_TYPES } from 'src/constants/common-constants';
 import useCustomer from 'src/hooks/useCustomer';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { useNavigate } from 'react-router-dom';

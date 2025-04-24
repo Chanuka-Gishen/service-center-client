@@ -23,6 +23,9 @@ export const NAVIGATION_ROUTES = {
   },
   inventory: {
     base: '/inventory',
+    details:{
+      base: '/inventory/details'
+    }
   },
   workorders: {
     base: '/workorders',
@@ -39,4 +42,7 @@ export const NAVIGATION_ROUTES = {
       base: '/employees/details',
     },
   },
+  users:{
+    base: '/users'
+  }
 };

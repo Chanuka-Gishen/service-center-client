@@ -7,7 +7,8 @@ export const BACKEND_API = {
   LOGIN: IP_URL + '/authentication/noAuth/login',
   LOGOUT: IP_URL + '/authentication/auth/logout',
 
-  REGISTER: IP_URL + '/auth/create',
+  USER_REGISTER: IP_URL + '/user/supAuth/create',
+  USERS: IP_URL + '/user/auth/all',
 
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',
@@ -16,7 +17,10 @@ export const BACKEND_API = {
   ITEMS: IP_URL + '/inventory/auth/items',
   ITEMS_SELECT: IP_URL + '/inventory/auth/items-select',
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
+  ITEMS_EDIT: IP_URL + '/inventory/supAuth/update',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
+  ITEM_UPDATE_LOGS: IP_URL + '/inventory/auth/stock-logs',
+  ITEMS_INFO: IP_URL + '/inventory/auth/item',
 
   WO_ALL: IP_URL + '/workorder/auth/list',
   WO_ACTIVE: IP_URL + '/workorder/auth/active-orders',

@@ -15,34 +15,24 @@ import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
-import { AddInventoryItemSchema } from 'src/schema/add-inv-item-schema';
+import { UpdateInventoryItemSchema } from 'src/schema/update-inv-item-schema';
 
-export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
+export const UpdateItemDialog = ({ open, initialValues, isLoading, handleOpenClose, handleConfirm }) => {
   return (
     <Dialog
       open={open}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Add Inventory Item</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Update Inventory Item</DialogTitle>
 
       <Formik
-        initialValues={{
-          itemCode: '',
-          itemName: '',
-          itemCategory: '',
-          itemDescription: '',
-          itemQuantity: 0,
-          itemUnit: 'Pieces',
-          itemBuyingPrice: 0,
-          itemSellingPrice: 0,
-          itemSupplier: '',
-          itemThreshold: 5,
-        }}
-        validationSchema={AddInventoryItemSchema}
+        initialValues={initialValues}
+        validationSchema={UpdateInventoryItemSchema}
         onSubmit={(values) => {
           handleConfirm(values);
         }}
+        enableReinitialize
       >
         {({
           values,
@@ -57,7 +47,7 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid size={{ sm: 12, xs: 12, lg: 6 }}>
+              <Grid size={{ sm: 12, xs: 12, lg: 6 }}>
                   <TextField
                     label="Item Code"
                     name="itemCode"
@@ -129,20 +119,6 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     {...getFieldProps('itemSupplier')}
                     error={touched.itemSupplier && Boolean(errors.itemSupplier)}
                     helperText={touched.itemSupplier && errors.itemSupplier}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-                  <TextField
-                    label="Item Quantity"
-                    name="itemQuantity"
-                    type="number"
-                    fullWidth
-                    required
-                    autoComplete="off"
-                    variant="outlined"
-                    {...getFieldProps('itemQuantity')}
-                    error={touched.itemQuantity && Boolean(errors.itemQuantity)}
-                    helperText={touched.itemQuantity && errors.itemQuantity}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>

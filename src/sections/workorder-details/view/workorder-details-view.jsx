@@ -95,6 +95,7 @@ export const WorkorderView = ({
                 <Typography variant="h6">{`${job.workOrderCustomer.customerPrefix ?? 'Mr'} ${job.workOrderCustomer.customerName}`}</Typography>
                 <Typography>{`Created At ${fDateTime(job.createdAt)}`}</Typography>
               </Stack>
+              <Typography>{`Contact Number - ${job.workOrderCustomer.customerMobile}`}</Typography>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography>{`${job.workOrderVehicle.vehicleNumber} - ${job.workOrderVehicle.vehicleManufacturer} - ${job.workOrderVehicle.vehicleModel}`}</Typography>
                 <Typography>{`Updated At ${fDateTime(job.updatedAt)}`}</Typography>
@@ -232,7 +233,7 @@ export const WorkorderView = ({
             {!isLoading && woPayments.length > 0 && (
               <>
                 {woPayments.map((payment) => (
-                  <Card sx={{ p: '10px' }}>
+                  <Card>
                     <TableContainer>
                       <Table>
                         <TableBody>

@@ -13,12 +13,17 @@ const useInventory = () => {
   const [items, setItems] = useState([]);
   const [itemsCount, setItemsCount] = useState(0);
   const [item, setItem] = useState(null);
+  const [stockLogs, setStockLogs] = useState([]);
+  const [stockLogsCount, setStockLogsCount] = useState(0);
   const [selectItems, setSelectItems] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingItem, setIsLoadingItem] = useState(true);
   const [isLoadingSelect, setIsLoadingSelect] = useState(false);
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false);
   const [isLoadingStockUpdate, setIsLoadingStockUpdate] = useState(false);
+  const [isLoadingStockUpdateLogs, setIsLoadingStockUpdateLogs] = useState(false);
 
   // Fetch all inventory items
   const fetchAllItems = async (params) => {
@@ -44,6 +49,31 @@ const useInventory = () => {
       });
 
     return items;
+  };
+
+  // Fetch item info
+  const fetchItemInfo = async (id) => {
+    setIsLoadingItem(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEMS_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setItem(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingItem(false);
+      })
+      .finally(() => {
+        setIsLoadingItem(false);
+      });
   };
 
   // Fetch inventory items for selection
@@ -103,8 +133,44 @@ const useInventory = () => {
     return isSuccess;
   };
 
+  // Update inventory item
+  const updateItem = async (id, data) => {
+    if (isLoadingEdit || !id) return;
+
+    let isSuccess = false;
+
+    setIsLoadingEdit(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEMS_EDIT,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        } else {
+          enqueueSnackbar(res.data.responseMessage, {
+            variant: responseUtil.findResponseType(res.data.responseCode),
+          });
+        }
+      })
+      .catch(() => {
+        setIsLoadingEdit(false);
+      })
+      .finally(() => {
+        setIsLoadingEdit(false);
+      });
+
+    return isSuccess;
+  };
+
   // Update inventory item stock
-  const updapteItemStock = async (data) => {
+  const updateItemStock = async (data) => {
     if (isLoadingStockUpdate) return;
 
     let isSuccess = false;
@@ -136,19 +202,54 @@ const useInventory = () => {
     return isSuccess;
   };
 
+  // Get stock update logs
+  const fetchStockUpdateLogs = async (params) => {
+    
+    if (isLoadingStockUpdateLogs) return;
+
+    setIsLoadingStockUpdateLogs(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEM_UPDATE_LOGS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setStockLogs(res.data.responseData.data);
+          setStockLogsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingStockUpdateLogs(false);
+      })
+      .finally(() => {
+        setIsLoadingStockUpdateLogs(false);
+      });
+  };
+
   return {
     items,
     selectItems,
     item,
     itemsCount,
+    stockLogs,
+    stockLogsCount,
     isLoading,
+    isLoadingItem,
     isLoadingSelect,
     isLoadingAdd,
+    isLoadingEdit,
     isLoadingStockUpdate,
+    isLoadingStockUpdateLogs,
     fetchAllItems,
+    fetchItemInfo,
     fetchItemsForSelection,
     addItems,
-    updapteItemStock,
+    updateItem,
+    updateItemStock,
+    fetchStockUpdateLogs
   };
 };
 

@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   Container,
-  IconButton,
   Paper,
   Stack,
   TextField,
@@ -33,6 +32,7 @@ export const InventoryView = ({
   limit,
   page,
   documentCount,
+  handleNavigateItem,
   handleChangePage,
   handleChangeRowsPerPage,
 }) => {
@@ -88,7 +88,7 @@ export const InventoryView = ({
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableBody={<InventoryRow data={items} />}
+                tableBody={<InventoryRow data={items} onClickRow={handleNavigateItem} />}
               />
             </Paper>
           </Card>
