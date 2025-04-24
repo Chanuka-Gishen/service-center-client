@@ -95,9 +95,7 @@ export default function Nav({ openNav, onCloseNav }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant="dot"
       >
-        <Avatar>
-          <AccountCircleIcon />
-        </Avatar>
+        <Avatar src={'assets/main-logo.png'} alt="photoURL" />
       </StyledBadge>
 
       <Box sx={{ ml: 2 }}>
@@ -113,7 +111,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
       {navConfig
-        .filter((item) => !item.adminOnly || (item.adminOnly && user.userRole === USER_ROLE.ADMIN))
+        .filter((item) => item.permissions.includes(user.userRole))
         .map((item) => (
           <NavItem key={item.title} item={item} selected={selected} handleSelect={handleSelect} />
         ))}

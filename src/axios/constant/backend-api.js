@@ -7,7 +7,8 @@ export const BACKEND_API = {
   LOGIN: IP_URL + '/authentication/noAuth/login',
   LOGOUT: IP_URL + '/authentication/auth/logout',
 
-  REGISTER: IP_URL + '/auth/create',
+  USER_REGISTER: IP_URL + '/user/supAuth/create',
+  USERS: IP_URL + '/user/auth/all',
 
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',

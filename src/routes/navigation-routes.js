@@ -42,4 +42,7 @@ export const NAVIGATION_ROUTES = {
       base: '/employees/details',
     },
   },
+  users:{
+    base: '/users'
+  }
 };
