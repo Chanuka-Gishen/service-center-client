@@ -69,6 +69,7 @@ const InventoryItemController = () => {
     if (!isOpenUpdateDialog) {
       handleCloseOptions();
       setInitialValues({
+        itemCode: item.itemCode,
         itemName: item.itemName,
         itemCategory: item.itemCategory,
         itemDescription: item.itemDescription,

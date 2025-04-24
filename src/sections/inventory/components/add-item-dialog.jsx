@@ -28,6 +28,7 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
 
       <Formik
         initialValues={{
+          itemCode: '',
           itemName: '',
           itemCategory: '',
           itemDescription: '',
@@ -56,6 +57,19 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid size={{ sm: 12, xs: 12, lg: 6 }}>
+                  <TextField
+                    label="Item Code"
+                    name="itemCode"
+                    required
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('itemCode')}
+                    error={touched.itemCode && Boolean(errors.itemCode)}
+                    helperText={touched.itemCode && errors.itemCode}
+                  />
+                </Grid>
                 <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
                   <TextField
                     label="Item Title"
