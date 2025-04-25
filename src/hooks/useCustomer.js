@@ -16,6 +16,7 @@ const useCustomer = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isLoadingCustomer, setIsLoadingCustomer] = useState(true);
 
   // Fetch customers
@@ -99,16 +100,52 @@ const useCustomer = () => {
     return isSuccess;
   };
 
+  // Update customer
+  const updateCustomer = async (id, data) => {
+    if (isLoadingUpdate) return;
+
+    let isSuccess = false;
+
+    setIsLoadingUpdate(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.CUSTOMER_EDIT,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingUpdate(false);
+      })
+      .finally(() => {
+        setIsLoadingUpdate(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     customers,
     customersCount,
     customer,
     isLoading,
     isLoadingAdd,
+    isLoadingUpdate,
     isLoadingCustomer,
     fetchCustomers,
     fetchCustomer,
     registerCustomer,
+    updateCustomer,
   };
 };
 

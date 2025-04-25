@@ -70,7 +70,7 @@ export const WorkorderView = ({
                 </Button>
               )}
 
-              {job.workOrderStatus != WO_STATUS_OPEN && (
+              {(job.workOrderStatus != WO_STATUS_OPEN && job.workOrderInvoiceNumber) && (
                 <Button
                   variant="contained"
                   size="large"
