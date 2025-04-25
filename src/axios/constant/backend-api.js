@@ -13,6 +13,10 @@ export const BACKEND_API = {
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',
   CUSTOMER_REGISTER: IP_URL + '/customer/auth/register',
+  CUSTOMER_EDIT: IP_URL + '/customer/supAuth/update',
+
+  VEHICLE_REGISTER : IP_URL + '/vehicle/auth/register',
+  VEHICLE_EDIT: IP_URL + '/vehicle/supAuth/update',
 
   ITEMS: IP_URL + '/inventory/auth/items',
   ITEMS_SELECT: IP_URL + '/inventory/auth/items-select',

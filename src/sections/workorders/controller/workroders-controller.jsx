@@ -10,6 +10,7 @@ import commonUtil from 'src/utils/common-util';
 import { useSnackbar } from 'notistack';
 import { SNACKBAR_MESSAGE, SNACKBAR_VARIANT } from 'src/constants/snackbar-constants';
 import usePayment from 'src/hooks/usePayment';
+import { WO_TYPE_SERVICE } from 'src/constants/workorder-types';
 
 const WorkordersController = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -53,6 +54,7 @@ const WorkordersController = () => {
   const formik = useFormik({
     initialValues: {
       workOrderMileage: 0,
+      workOrderType: WO_TYPE_SERVICE,
       workOrderServiceItems: [],
       workOrderCustomItems: [],
       workOrderServiceCharge: 0,
@@ -141,6 +143,7 @@ const WorkordersController = () => {
         formik.setValues({
           _id: selectedJob._id,
           workOrderMileage: selectedJob.workOrderMileage,
+          workOrderType: selectedJob.workOrderType,
           workOrderServiceItems: selectedJob.workOrderServiceItems,
           workOrderCustomItems: selectedJob.workOrderCustomItems,
           workOrderServiceCharge: selectedJob.workOrderServiceCharge,

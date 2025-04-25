@@ -1,11 +1,22 @@
 import React from 'react';
 import { FieldArray, FormikProvider } from 'formik';
 
-import { Button, Divider, IconButton, TextField } from '@mui/material';
+import {
+  Button,
+  Divider,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
+import { WO_TYPES } from 'src/constants/workorder-types';
 
 export const WokrOrderUpdateForm = ({
   formik,
@@ -17,359 +28,383 @@ export const WokrOrderUpdateForm = ({
 
   return (
     <FormikProvider value={formik}>
-      
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              label="Vehicle Mileage"
-              name="workOrderMileage"
-              type="number"
-              required
-              fullWidth
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderMileage')}
-              error={touched.workOrderMileage && Boolean(errors.workOrderMileage)}
-              helperText={touched.workOrderMileage && errors.workOrderMileage}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            <Divider>Inventory Items</Divider>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            {values.workOrderServiceItems.map((item, index) => {
-              // Calculate error states once to avoid repetition
-              const inventoryItemError =
-                touched.workOrderServiceItems?.[index]?.inventoryItemName &&
-                errors.workOrderServiceItems?.[index]?.inventoryItemName;
-
-              const quantityError =
-                touched.workOrderServiceItems?.[index]?.quantity &&
-                errors.workOrderServiceItems?.[index]?.quantity;
-
-              const unitPriceError =
-                touched.workOrderServiceItems?.[index]?.unitPrice &&
-                errors.workOrderServiceItems?.[index]?.unitPrice;
-
-              // Calculate total price
-              const totalPrice = item.quantity * item.unitPrice;
-              return (
-                <Grid
-                  key={index}
-                  container
-                  spacing={1}
-                  sx={{ marginBottom: '1rem' }}
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
-                    <TextField
-                      label="Item"
-                      name={`workOrderServiceItems.${index}.inventoryItemName`}
-                      required
-                      fullWidth
-                      autoComplete="off"
-                      variant="outlined"
-                      {...getFieldProps(`workOrderServiceItems.${index}.inventoryItemName`)}
-                      error={inventoryItemError}
-                      helperText={
-                        (touched.workOrderServiceItems &&
-                          touched.workOrderServiceItems[index] &&
-                          touched.workOrderServiceItems[index].inventoryItemName &&
-                          errors.workOrderServiceItems &&
-                          errors.workOrderServiceItems[index] &&
-                          errors.workOrderServiceItems[index].inventoryItemName) ||
-                        ''
-                      }
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
-                    <TextField
-                      label="Quantity"
-                      name={`workOrderServiceItems.${index}.quantity`}
-                      type="number"
-                      required
-                      fullWidth
-                      autoComplete="off"
-                      variant="outlined"
-                      {...getFieldProps(`workOrderServiceItems.${index}.quantity`)}
-                      error={quantityError}
-                      helperText={
-                        (touched.workOrderServiceItems &&
-                          touched.workOrderServiceItems[index] &&
-                          touched.workOrderServiceItems[index].quantity &&
-                          errors.workOrderServiceItems &&
-                          errors.workOrderServiceItems[index] &&
-                          errors.workOrderServiceItems[index].quantity) ||
-                        ''
-                      }
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
-                    <TextField
-                      label="Unit Price"
-                      name={`workOrderServiceItems.${index}.unitPrice`}
-                      fullWidth
-                      required
-                      autoComplete="off"
-                      variant="outlined"
-                      {...getFieldProps(`workOrderServiceItems.${index}.unitPrice`)}
-                      error={unitPriceError}
-                      helperText={
-                        (touched.workOrderServiceItems &&
-                          touched.workOrderServiceItems[index] &&
-                          touched.workOrderServiceItems[index].unitPrice &&
-                          errors.workOrderServiceItems &&
-                          errors.workOrderServiceItems[index] &&
-                          errors.workOrderServiceItems[index].unitPrice) ||
-                        ''
-                      }
-                      slotProps={{ input: { inputComponent: CurrencyInput } }}
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
-                    <TextField
-                      label="Total Price"
-                      name={`workOrderServiceItems.${index}.totalPrice`}
-                      value={totalPrice}
-                      fullWidth
-                      required
-                      autoComplete="off"
-                      variant="outlined"
-                      disabled
-                      slotProps={{ input: { inputComponent: CurrencyInput } }}
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
-                    <IconButton onClick={() => handleDeleteInventoryItem(index)}>
-                      <RemoveCircleIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              );
-            })}
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            <Divider>Custom Entries</Divider>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            <FieldArray name="workOrderCustomItems">
-              {({ push, remove }) => (
-                <>
-                  {values.workOrderCustomItems.map((item, index) => {
-                    // Calculate error states once to avoid repetition
-                    const inventoryItemError =
-                      touched.workOrderCustomItems?.[index]?.inventoryItemName &&
-                      errors.workOrderCustomItems?.[index]?.inventoryItemName;
-
-                    const quantityError =
-                      touched.workOrderCustomItems?.[index]?.quantity &&
-                      errors.workOrderCustomItems?.[index]?.quantity;
-
-                    const unitPriceError =
-                      touched.workOrderCustomItems?.[index]?.unitPrice &&
-                      errors.workOrderCustomItems?.[index]?.unitPrice;
-
-                    // Calculate total price
-                    const totalPrice = item.quantity * item.unitPrice;
-                    return (
-                      <Grid
-                        key={index}
-                        container
-                        spacing={1}
-                        sx={{ marginBottom: '1rem' }}
-                        justifyContent="flex-start"
-                        alignItems="center"
-                      >
-                        <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
-                          <TextField
-                            label="Item"
-                            name={`workOrderCustomItems.${index}.inventoryItemName`}
-                            required
-                            fullWidth
-                            autoComplete="off"
-                            variant="outlined"
-                            {...getFieldProps(`workOrderCustomItems.${index}.inventoryItemName`)}
-                            error={inventoryItemError}
-                            helperText={
-                              (touched.workOrderCustomItems &&
-                                touched.workOrderCustomItems[index] &&
-                                touched.workOrderCustomItems[index].inventoryItemName &&
-                                errors.workOrderCustomItems &&
-                                errors.workOrderCustomItems[index] &&
-                                errors.workOrderCustomItems[index].inventoryItemName) ||
-                              ''
-                            }
-                          />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
-                          <TextField
-                            label="Quantity"
-                            name={`workOrderCustomItems.${index}.quantity`}
-                            type="number"
-                            required
-                            fullWidth
-                            autoComplete="off"
-                            variant="outlined"
-                            {...getFieldProps(`workOrderCustomItems.${index}.quantity`)}
-                            error={quantityError}
-                            helperText={
-                              (touched.workOrderCustomItems &&
-                                touched.workOrderCustomItems[index] &&
-                                touched.workOrderCustomItems[index].quantity &&
-                                errors.workOrderCustomItems &&
-                                errors.workOrderCustomItems[index] &&
-                                errors.workOrderCustomItems[index].quantity) ||
-                              ''
-                            }
-                          />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
-                          <TextField
-                            label="Item Unit Price"
-                            name={`workOrderCustomItems.${index}.unitPrice`}
-                            fullWidth
-                            required
-                            autoComplete="off"
-                            variant="outlined"
-                            {...getFieldProps(`workOrderCustomItems.${index}.unitPrice`)}
-                            error={unitPriceError}
-                            helperText={
-                              (touched.workOrderCustomItems &&
-                                touched.workOrderCustomItems[index] &&
-                                touched.workOrderCustomItems[index].unitPrice &&
-                                errors.workOrderCustomItems &&
-                                errors.workOrderCustomItems[index] &&
-                                errors.workOrderCustomItems[index].unitPrice) ||
-                              ''
-                            }
-                            slotProps={{ input: { inputComponent: CurrencyInput } }}
-                          />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
-                          <TextField
-                            label="Item Selling Price"
-                            name={`workOrderCustomItems.${index}.totalPrice`}
-                            value={totalPrice}
-                            fullWidth
-                            required
-                            autoComplete="off"
-                            variant="outlined"
-                            disabled
-                            slotProps={{ input: { inputComponent: CurrencyInput } }}
-                          />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
-                          <IconButton onClick={() => remove(index)}>
-                            <RemoveCircleIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    );
-                  })}
-                  <Button
-                    onClick={() =>
-                      push({
-                        inventoryItemName: '',
-                        quantity: 1,
-                        unitPrice: 0,
-                        totalPrice: 0,
-                      })
-                    }
-                  >
-                    Add Service Item
-                  </Button>
-                </>
-              )}
-            </FieldArray>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            <Divider>Chargers</Divider>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              label="Service Charge"
-              name="workOrderServiceCharge"
-              fullWidth
-              required
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderServiceCharge')}
-              error={touched.workOrderServiceCharge && Boolean(errors.workOrderServiceCharge)}
-              helperText={touched.workOrderServiceCharge && errors.workOrderServiceCharge}
-              slotProps={{ input: { inputComponent: CurrencyInput } }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              label="Other Charges"
-              name="workOrderOtherChargers"
-              fullWidth
-              required
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderOtherChargers')}
-              error={touched.workOrderOtherChargers && Boolean(errors.workOrderOtherChargers)}
-              helperText={touched.workOrderOtherChargers && errors.workOrderOtherChargers}
-              slotProps={{ input: { inputComponent: CurrencyInput } }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-            <TextField
-              label="Notes"
-              name="workOrderNotes"
-              fullWidth
-              multiline
-              rows={2}
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderNotes')}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              label="Cash Discount"
-              name="workOrderDiscountCash"
-              fullWidth
-              required
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderDiscountCash')}
-              error={touched.workOrderDiscountCash && Boolean(errors.workOrderDiscountCash)}
-              helperText={touched.workOrderDiscountCash && errors.workOrderDiscountCash}
-              slotProps={{ input: { inputComponent: CurrencyInput } }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              label="Cash Discount"
-              name="workOrderDiscountPercentage"
-              type="number"
-              fullWidth
-              required
-              autoComplete="off"
-              variant="outlined"
-              {...getFieldProps('workOrderDiscountPercentage')}
-              error={
-                touched.workOrderDiscountPercentage && Boolean(errors.workOrderDiscountPercentage)
-              }
-              helperText={touched.workOrderDiscountPercentage && errors.workOrderDiscountPercentage}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <Button
-              autoFocus
-              fullWidth
-              variant="contained"
-              size="large"
-              type="submit"
-              onClick={handleConfirm}
-              disabled={isLoading}
-            >
-              save
-            </Button>
-          </Grid>
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TextField
+            label="Vehicle Mileage"
+            name="workOrderMileage"
+            type="number"
+            required
+            fullWidth
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderMileage')}
+            error={touched.workOrderMileage && Boolean(errors.workOrderMileage)}
+            helperText={touched.workOrderMileage && errors.workOrderMileage}
+          />
         </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <FormControl fullWidth required>
+            <InputLabel id="select-label">Workorder Type</InputLabel>
+            <Select
+              labelId="select-label"
+              id="simple-select"
+              label="Workorder Type"
+              name="workOrderType"
+              required
+              fullWidth
+              value={values.workOrderType || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >
+              {WO_TYPES.map((item, index) => (
+                <MenuItem key={index} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText error={touched.workOrderType && errors.workOrderType}>
+              {touched.workOrderType && errors.workOrderType}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <Divider>Inventory Items</Divider>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          {values.workOrderServiceItems.map((item, index) => {
+            // Calculate error states once to avoid repetition
+            const inventoryItemError =
+              touched.workOrderServiceItems?.[index]?.inventoryItemName &&
+              errors.workOrderServiceItems?.[index]?.inventoryItemName;
+
+            const quantityError =
+              touched.workOrderServiceItems?.[index]?.quantity &&
+              errors.workOrderServiceItems?.[index]?.quantity;
+
+            const unitPriceError =
+              touched.workOrderServiceItems?.[index]?.unitPrice &&
+              errors.workOrderServiceItems?.[index]?.unitPrice;
+
+            // Calculate total price
+            const totalPrice = item.quantity * item.unitPrice;
+            return (
+              <Grid
+                key={index}
+                container
+                spacing={1}
+                sx={{ marginBottom: '1rem' }}
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+                  <TextField
+                    label="Item"
+                    name={`workOrderServiceItems.${index}.inventoryItemName`}
+                    required
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps(`workOrderServiceItems.${index}.inventoryItemName`)}
+                    error={inventoryItemError}
+                    helperText={
+                      (touched.workOrderServiceItems &&
+                        touched.workOrderServiceItems[index] &&
+                        touched.workOrderServiceItems[index].inventoryItemName &&
+                        errors.workOrderServiceItems &&
+                        errors.workOrderServiceItems[index] &&
+                        errors.workOrderServiceItems[index].inventoryItemName) ||
+                      ''
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                  <TextField
+                    label="Quantity"
+                    name={`workOrderServiceItems.${index}.quantity`}
+                    type="number"
+                    required
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps(`workOrderServiceItems.${index}.quantity`)}
+                    error={quantityError}
+                    helperText={
+                      (touched.workOrderServiceItems &&
+                        touched.workOrderServiceItems[index] &&
+                        touched.workOrderServiceItems[index].quantity &&
+                        errors.workOrderServiceItems &&
+                        errors.workOrderServiceItems[index] &&
+                        errors.workOrderServiceItems[index].quantity) ||
+                      ''
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                  <TextField
+                    label="Unit Price"
+                    name={`workOrderServiceItems.${index}.unitPrice`}
+                    fullWidth
+                    required
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps(`workOrderServiceItems.${index}.unitPrice`)}
+                    error={unitPriceError}
+                    helperText={
+                      (touched.workOrderServiceItems &&
+                        touched.workOrderServiceItems[index] &&
+                        touched.workOrderServiceItems[index].unitPrice &&
+                        errors.workOrderServiceItems &&
+                        errors.workOrderServiceItems[index] &&
+                        errors.workOrderServiceItems[index].unitPrice) ||
+                      ''
+                    }
+                    slotProps={{ input: { inputComponent: CurrencyInput } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                  <TextField
+                    label="Total Price"
+                    name={`workOrderServiceItems.${index}.totalPrice`}
+                    value={totalPrice}
+                    fullWidth
+                    required
+                    autoComplete="off"
+                    variant="outlined"
+                    disabled
+                    slotProps={{ input: { inputComponent: CurrencyInput } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                  <IconButton onClick={() => handleDeleteInventoryItem(index)}>
+                    <RemoveCircleIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            );
+          })}
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <Divider>Custom Entries</Divider>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <FieldArray name="workOrderCustomItems">
+            {({ push, remove }) => (
+              <>
+                {values.workOrderCustomItems.map((item, index) => {
+                  // Calculate error states once to avoid repetition
+                  const inventoryItemError =
+                    touched.workOrderCustomItems?.[index]?.inventoryItemName &&
+                    errors.workOrderCustomItems?.[index]?.inventoryItemName;
+
+                  const quantityError =
+                    touched.workOrderCustomItems?.[index]?.quantity &&
+                    errors.workOrderCustomItems?.[index]?.quantity;
+
+                  const unitPriceError =
+                    touched.workOrderCustomItems?.[index]?.unitPrice &&
+                    errors.workOrderCustomItems?.[index]?.unitPrice;
+
+                  // Calculate total price
+                  const totalPrice = item.quantity * item.unitPrice;
+                  return (
+                    <Grid
+                      key={index}
+                      container
+                      spacing={1}
+                      sx={{ marginBottom: '1rem' }}
+                      justifyContent="flex-start"
+                      alignItems="center"
+                    >
+                      <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+                        <TextField
+                          label="Item"
+                          name={`workOrderCustomItems.${index}.inventoryItemName`}
+                          required
+                          fullWidth
+                          autoComplete="off"
+                          variant="outlined"
+                          {...getFieldProps(`workOrderCustomItems.${index}.inventoryItemName`)}
+                          error={inventoryItemError}
+                          helperText={
+                            (touched.workOrderCustomItems &&
+                              touched.workOrderCustomItems[index] &&
+                              touched.workOrderCustomItems[index].inventoryItemName &&
+                              errors.workOrderCustomItems &&
+                              errors.workOrderCustomItems[index] &&
+                              errors.workOrderCustomItems[index].inventoryItemName) ||
+                            ''
+                          }
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                        <TextField
+                          label="Quantity"
+                          name={`workOrderCustomItems.${index}.quantity`}
+                          type="number"
+                          required
+                          fullWidth
+                          autoComplete="off"
+                          variant="outlined"
+                          {...getFieldProps(`workOrderCustomItems.${index}.quantity`)}
+                          error={quantityError}
+                          helperText={
+                            (touched.workOrderCustomItems &&
+                              touched.workOrderCustomItems[index] &&
+                              touched.workOrderCustomItems[index].quantity &&
+                              errors.workOrderCustomItems &&
+                              errors.workOrderCustomItems[index] &&
+                              errors.workOrderCustomItems[index].quantity) ||
+                            ''
+                          }
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                        <TextField
+                          label="Item Unit Price"
+                          name={`workOrderCustomItems.${index}.unitPrice`}
+                          fullWidth
+                          required
+                          autoComplete="off"
+                          variant="outlined"
+                          {...getFieldProps(`workOrderCustomItems.${index}.unitPrice`)}
+                          error={unitPriceError}
+                          helperText={
+                            (touched.workOrderCustomItems &&
+                              touched.workOrderCustomItems[index] &&
+                              touched.workOrderCustomItems[index].unitPrice &&
+                              errors.workOrderCustomItems &&
+                              errors.workOrderCustomItems[index] &&
+                              errors.workOrderCustomItems[index].unitPrice) ||
+                            ''
+                          }
+                          slotProps={{ input: { inputComponent: CurrencyInput } }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                        <TextField
+                          label="Item Selling Price"
+                          name={`workOrderCustomItems.${index}.totalPrice`}
+                          value={totalPrice}
+                          fullWidth
+                          required
+                          autoComplete="off"
+                          variant="outlined"
+                          disabled
+                          slotProps={{ input: { inputComponent: CurrencyInput } }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                        <IconButton onClick={() => remove(index)}>
+                          <RemoveCircleIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+                <Button
+                  onClick={() =>
+                    push({
+                      inventoryItemName: '',
+                      quantity: 1,
+                      unitPrice: 0,
+                      totalPrice: 0,
+                    })
+                  }
+                >
+                  Add Service Item
+                </Button>
+              </>
+            )}
+          </FieldArray>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <Divider>Chargers</Divider>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TextField
+            label="Service Charge"
+            name="workOrderServiceCharge"
+            fullWidth
+            required
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderServiceCharge')}
+            error={touched.workOrderServiceCharge && Boolean(errors.workOrderServiceCharge)}
+            helperText={touched.workOrderServiceCharge && errors.workOrderServiceCharge}
+            slotProps={{ input: { inputComponent: CurrencyInput } }}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TextField
+            label="Other Charges"
+            name="workOrderOtherChargers"
+            fullWidth
+            required
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderOtherChargers')}
+            error={touched.workOrderOtherChargers && Boolean(errors.workOrderOtherChargers)}
+            helperText={touched.workOrderOtherChargers && errors.workOrderOtherChargers}
+            slotProps={{ input: { inputComponent: CurrencyInput } }}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <TextField
+            label="Notes"
+            name="workOrderNotes"
+            fullWidth
+            multiline
+            rows={2}
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderNotes')}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TextField
+            label="Cash Discount"
+            name="workOrderDiscountCash"
+            fullWidth
+            required
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderDiscountCash')}
+            error={touched.workOrderDiscountCash && Boolean(errors.workOrderDiscountCash)}
+            helperText={touched.workOrderDiscountCash && errors.workOrderDiscountCash}
+            slotProps={{ input: { inputComponent: CurrencyInput } }}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TextField
+            label="Cash Discount"
+            name="workOrderDiscountPercentage"
+            type="number"
+            fullWidth
+            required
+            autoComplete="off"
+            variant="outlined"
+            {...getFieldProps('workOrderDiscountPercentage')}
+            error={
+              touched.workOrderDiscountPercentage && Boolean(errors.workOrderDiscountPercentage)
+            }
+            helperText={touched.workOrderDiscountPercentage && errors.workOrderDiscountPercentage}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Button
+            autoFocus
+            fullWidth
+            variant="contained"
+            size="large"
+            type="submit"
+            onClick={handleConfirm}
+            disabled={isLoading}
+          >
+            save
+          </Button>
+        </Grid>
+      </Grid>
     </FormikProvider>
   );
 };

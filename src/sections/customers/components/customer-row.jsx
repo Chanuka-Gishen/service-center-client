@@ -1,4 +1,5 @@
 import { TableCell, TableRow } from '@mui/material';
+import { CUS_TYPE_INDIVIDUAL } from 'src/constants/customer-type';
 import { fDate } from 'src/utils/format-time';
 
 export const CustomerRow = ({ data, onClickRow = null }) => {
@@ -11,7 +12,11 @@ export const CustomerRow = ({ data, onClickRow = null }) => {
           onClick={() => onClickRow(item)}
           sx={{ cursor: 'pointer' }}
         >
-          <TableCell>{`${item.customerPrefix} ${item.customerName}`}</TableCell>
+          <TableCell>
+            {item.customerType === CUS_TYPE_INDIVIDUAL
+              ? `${item.customerPrefix} ${item.customerName}`
+              : item.customerName}
+          </TableCell>
           <TableCell>{item.customerMobile}</TableCell>
           <TableCell>{item.customerEmail}</TableCell>
           <TableCell>{fDate(item.createdAt)}</TableCell>
