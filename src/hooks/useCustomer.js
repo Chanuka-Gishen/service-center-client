@@ -74,7 +74,7 @@ const useCustomer = () => {
 
     setIsLoadingAdd(true);
 
-    let isSuccess = false;
+    let response = null;
 
     await backendAuthApi({
       url: BACKEND_API.CUSTOMER_REGISTER,
@@ -84,7 +84,7 @@ const useCustomer = () => {
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
-          isSuccess = true;
+          response = res.data.responseData;
         }
         enqueueSnackbar(res.data.responseMessage, {
           variant: responseUtil.findResponseType(res.data.responseCode),
@@ -97,7 +97,7 @@ const useCustomer = () => {
         setIsLoadingAdd(false);
       });
 
-    return isSuccess;
+    return response;
   };
 
   // Update customer
