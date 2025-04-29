@@ -84,8 +84,6 @@ const useCustomer = () => {
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
-          console.log(res.data.responseData);
-
           response = res.data.responseData;
         }
         enqueueSnackbar(res.data.responseMessage, {
