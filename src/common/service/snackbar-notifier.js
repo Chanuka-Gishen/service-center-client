@@ -14,7 +14,7 @@ const SnackbarNotifier = () => {
   };
 
   const removeDisplayed = (id) => {
-    displayed = displayed.filter((key) => id !== key);
+    displayed = [];
   };
 
   useEffect(() => {

@@ -50,7 +50,7 @@ export const CustomersView = ({
             </Tooltip>
           </Stack>
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3 }}>
           <TextField
             label="Customer Name"
             value={selectedFilters.name}
@@ -60,11 +60,21 @@ export const CustomersView = ({
             fullWidth
           />
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3 }}>
           <TextField
             label="Customer Mobile"
             value={selectedFilters.mobile}
             name="mobile"
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3 }}>
+          <TextField
+            label="Vehicle Number"
+            value={selectedFilters.vehicleNumber}
+            name="vehicleNumber"
             onChange={handleChangeSearch}
             autoComplete="off"
             fullWidth
