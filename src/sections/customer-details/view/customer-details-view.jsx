@@ -5,6 +5,7 @@ import {
   Box,
   Breadcrumbs,
   Button,
+  Card,
   Container,
   IconButton,
   Link,
@@ -14,6 +15,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Paper,
   Stack,
   styled,
   Table,
@@ -24,6 +26,9 @@ import {
   Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import PaymentIcon from '@mui/icons-material/Payment';
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import EditIcon from '@mui/icons-material/Edit';
@@ -38,6 +43,9 @@ import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
 import { UpdateCustomerDialog } from '../components/update-customer-dialog';
 import { VehicleFormDialog } from '../components/vehicle-form-dialog';
+import { CustomTable } from 'src/components/custom-table/custom-table';
+import { CustomerJobRow } from '../components/customer-job-row';
+import StatCard from 'src/components/stat-card';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -80,15 +88,23 @@ const StyledMenu = styled((props) => (
 }));
 
 export const CustomerDetailsView = ({
+  tableColumns,
   data,
+  customerJobs,
+  customerJobsCount,
+  customerPaymentStats,
   selectedVehicle,
   customerInitialValues,
   vehicleInitialValues,
+  limit,
+  page,
   isOpenCreate,
   isOpenUpdateCustomer,
   isOpenAddVehicle,
   isOpenUpdateVehicle,
   isLoading,
+  isLoadingCustomerJobs,
+  isLoadingCustomerPayStats,
   isLoadingCreate,
   isLoadingUpdate,
   isLoadingUpdateVehicle,
@@ -105,12 +121,14 @@ export const CustomerDetailsView = ({
   isOpenOptions,
   handleClickOptions,
   handleCloseOptions,
+  handleChangePage,
+  handleChangeRowsPerPage,
 }) => {
   const { auth } = useAuthStore.getState();
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" >
       <Grid container rowSpacing={4} columnSpacing={2}>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 8, lg: 8 }}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href={NAVIGATION_ROUTES.customers.base}>
               Customers
@@ -120,18 +138,44 @@ export const CustomerDetailsView = ({
             </Typography>
           </Breadcrumbs>
         </Grid>
+        {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+          <Grid size={{ xs: 6, sm: 3, md: 2, lg: 2 }}>
+            <Button fullWidth variant="contained" onClick={handleToggleUpdateCustomerDialog}>
+              Edit Customer
+            </Button>
+          </Grid>
+        )}
+
+        <Grid size={{ xs: 6, sm: 3, md: 2, lg: 2 }}>
+          <Button fullWidth variant="contained" onClick={handleToggleAddVehicleDialog}>
+            Add Vehicle
+          </Button>
+        </Grid>
+        <Grid size={12}>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
+              <StatCard
+                title="Revenue Generated"
+                isLoading={isLoadingCustomerPayStats}
+                value={customerPaymentStats ? customerPaymentStats.totalRevenue : 0.0}
+                icon={<AttachMoneyIcon color="success" fontSize="large" />}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
+              <StatCard
+                title="Receivables"
+                isLoading={isLoadingCustomerPayStats}
+                value={customerPaymentStats ? customerPaymentStats.totalReceivable : 0.0}
+                icon={<PaymentIcon color="info" fontSize="large" />}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
         {data != null && (
           <>
             <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Typography variant="h5">Customer Details</Typography>
-                  {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
-                    <Button variant="contained" onClick={handleToggleUpdateCustomerDialog}>
-                      Edit Customer
-                    </Button>
-                  )}
-                </Stack>
+                <Typography variant="h5">Customer Details</Typography>
                 <TableContainer>
                   <Table>
                     <TableBody>
@@ -162,28 +206,13 @@ export const CustomerDetailsView = ({
             </Grid>
             <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Typography variant="h5">Customer Vehicles</Typography>
-                  <Button variant="contained" onClick={handleToggleAddVehicleDialog}>
-                    Add Vehicle
-                  </Button>
-                </Stack>
+                <Typography variant="h5">Customer Vehicles</Typography>
 
                 <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                   {data.customerVehicles.map((item, index) => (
                     <ListItem
                       key={index}
                       secondaryAction={
-                        // <IconButton
-                        //   edge="end"
-                        //   aria-label="create"
-                        //   onClick={(e) => {
-                        //     e.stopPropagation();
-                        //     handleToggleWorkOrderCreateDialog(item);
-                        //   }}
-                        // >
-                        //   <EngineeringIcon />
-                        // </IconButton>
                         <>
                           <IconButton
                             aria-label="options"
@@ -238,6 +267,26 @@ export const CustomerDetailsView = ({
             </Grid>
           </>
         )}
+        <Grid size={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
+            <Typography variant="h5">Customer Workorder history</Typography>
+            <Card>
+              <Paper elevation={0}>
+                <CustomTable
+                  keys={tableColumns}
+                  dataLength={customerJobs.length}
+                  isLoading={isLoadingCustomerJobs}
+                  documentCount={customerJobsCount}
+                  page={page}
+                  limit={limit}
+                  handleChangePage={handleChangePage}
+                  handleChangeRowsPerPage={handleChangeRowsPerPage}
+                  tableBody={<CustomerJobRow data={customerJobs} />}
+                />
+              </Paper>
+            </Card>
+          </Box>
+        </Grid>
       </Grid>
       {isOpenCreate && selectedVehicle && (
         <CreateWorkOrderDialog
