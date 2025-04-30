@@ -8,12 +8,25 @@ import { VEHICLE_TYPE_PETROL } from 'src/constants/vehicle-type';
 import { CUS_TYPE_INDIVIDUAL } from 'src/constants/customer-type';
 import useVehicle from 'src/hooks/useVehicle';
 
+const tableColumns = [
+  'Vehicle Number',
+  'Status',
+  'Invoice Number',
+  'Payment Status',
+  'Total Amount',
+  'Balance Amount',
+  'Created At',
+];
+
 const CustomerDetailsController = () => {
   const location = useLocation();
   const { id } = location.state || {};
 
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   const isOpenOptions = Boolean(optionsAnchorEl);
+
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
 
   const [selectedVehicle, setSelectedVehicle] = useState(null);
 
@@ -27,7 +40,19 @@ const CustomerDetailsController = () => {
 
   const { isLoadingCustomer, isLoadingUpdate, customer, fetchCustomer, updateCustomer } =
     useCustomer();
-  const { isLoadingCreate, createWorkOrder } = useWorkOrder();
+
+  const {
+    customerJobs,
+    customerJobsCount,
+    customerPaymentStats,
+    isLoadingCreate,
+    isLoadingCustomerJobs,
+    isLoadingCustomerPayStats,
+    createWorkOrder,
+    fetchCustomerWorkorders,
+    fetchCustomerPaymentStatus,
+  } = useWorkOrder();
+
   const {
     isLoadingAddVehicle,
     isLoadingUpdateVehicle,
@@ -38,6 +63,15 @@ const CustomerDetailsController = () => {
   const handleClickOptions = (event, vehicle) => {
     setOptionsAnchorEl(event.currentTarget);
     setSelectedVehicle(vehicle);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setLimit(parseInt(event.target.value, 10));
   };
 
   const handleCloseOptions = () => {
@@ -108,7 +142,7 @@ const CustomerDetailsController = () => {
 
     if (isSuccess) {
       handleToggleUpdateCustomerDialog();
-      fetchCustomer(customer._id)
+      fetchCustomer(customer._id);
     }
   };
 
@@ -149,21 +183,31 @@ const CustomerDetailsController = () => {
   useEffect(() => {
     if (id) {
       fetchCustomer(id);
+      fetchCustomerWorkorders(id);
+      fetchCustomerPaymentStatus(id);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <CustomerDetailsView
+      tableColumns={tableColumns}
       data={customer}
+      customerJobs={customerJobs}
+      customerJobsCount={customerJobsCount}
+      customerPaymentStats={customerPaymentStats}
       selectedVehicle={selectedVehicle}
       customerInitialValues={customerInitialValues}
       vehicleInitialValues={vehicleInitialValues}
+      limit={limit}
+      page={page}
       isOpenCreate={isOpenCreate}
       isOpenUpdateCustomer={isOpenUpdateCustomer}
       isOpenAddVehicle={isOpenAddVehicle}
       isOpenUpdateVehicle={isOpenUpdateVehicle}
       isLoading={isLoadingCustomer}
+      isLoadingCustomerJobs={isLoadingCustomerJobs}
+      isLoadingCustomerPayStats={isLoadingCustomerPayStats}
       isLoadingCreate={isLoadingCreate}
       isLoadingUpdate={isLoadingUpdate}
       isLoadingUpdateVehicle={isLoadingUpdateVehicle}
@@ -180,6 +224,8 @@ const CustomerDetailsController = () => {
       isOpenOptions={isOpenOptions}
       handleClickOptions={handleClickOptions}
       handleCloseOptions={handleCloseOptions}
+      handleChangePage={handleChangePage}
+      handleChangeRowsPerPage={handleChangeRowsPerPage}
     />
   );
 };

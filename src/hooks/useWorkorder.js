@@ -11,11 +11,16 @@ const useWorkOrder = () => {
 
   const [workOrders, setWorkOrders] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [customerJobs, setCustomerJobs] = useState([]);
+  const [customerPaymentStats, setCustomerPaymentStats] = useState(null);
 
   const [jobsCount, setJobsCount] = useState(0);
+  const [customerJobsCount, setCustomerJobsCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingJobs, setIsLoadingJobs] = useState(true);
+  const [isLoadingCustomerJobs, setIsLoadingCustomerJobs] = useState(false);
+  const [isLoadingCustomerPayStats, setIsLoadingCustomerPayStats] = useState(false);
   const [isLoadingJob, setIsLoadingJob] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
@@ -94,6 +99,57 @@ const useWorkOrder = () => {
       });
 
     return result;
+  };
+
+  // Fetch customer workorders
+  const fetchCustomerWorkorders = async (id) => {
+    if (isLoadingCustomerJobs) return;
+
+    setIsLoadingCustomerJobs(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_CUSTOMER,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setCustomerJobs(res.data.responseData.data);
+          setCustomerJobsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingCustomerJobs(false);
+      })
+      .finally(() => {
+        setIsLoadingCustomerJobs(false);
+      });
+  };
+
+  // Fetch customer workorders payment status
+  const fetchCustomerPaymentStatus = async (id) => {
+    if (isLoadingCustomerPayStats) return;
+
+    setIsLoadingCustomerPayStats(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_CUSTOMER_PAYMENT_STATUS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setCustomerPaymentStats(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingCustomerPayStats(false);
+      })
+      .finally(() => {
+        setIsLoadingCustomerPayStats(false);
+      });
   };
 
   // Create work order
@@ -260,7 +316,10 @@ const useWorkOrder = () => {
   return {
     workOrders,
     jobs,
+    customerJobs,
+    customerPaymentStats,
     jobsCount,
+    customerJobsCount,
     isLoading,
     isLoadingJobs,
     isLoadingJob,
@@ -269,9 +328,13 @@ const useWorkOrder = () => {
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
+    isLoadingCustomerJobs,
+    isLoadingCustomerPayStats,
     fetchWorkOrders,
     fetchActiveWorkOrders,
     fetchWorkOrderInfo,
+    fetchCustomerWorkorders,
+    fetchCustomerPaymentStatus,
     createWorkOrder,
     updateWorkOrder,
     updateWorkOrderToComplete,

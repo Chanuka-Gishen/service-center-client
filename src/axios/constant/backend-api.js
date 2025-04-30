@@ -15,7 +15,7 @@ export const BACKEND_API = {
   CUSTOMER_REGISTER: IP_URL + '/customer/auth/register',
   CUSTOMER_EDIT: IP_URL + '/customer/supAuth/update',
 
-  VEHICLE_REGISTER : IP_URL + '/vehicle/auth/register',
+  VEHICLE_REGISTER: IP_URL + '/vehicle/auth/register',
   VEHICLE_EDIT: IP_URL + '/vehicle/supAuth/update',
 
   ITEMS: IP_URL + '/inventory/auth/items',
@@ -34,6 +34,8 @@ export const BACKEND_API = {
   WO_DOWNLOAD_INVOICE: IP_URL + '/workorder/auth/download-invoice',
   WO_UPDATE_COMPLETED: IP_URL + '/workorder/auth/update-complete',
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
+  WO_CUSTOMER: IP_URL + '/workorder/auth/customer-jobs',
+  WO_CUSTOMER_PAYMENT_STATUS: IP_URL + '/workorder/auth/customer-payment-stats',
 
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
