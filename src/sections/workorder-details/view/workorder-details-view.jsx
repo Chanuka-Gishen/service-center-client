@@ -27,6 +27,7 @@ import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
 import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
 import commonUtil from 'src/utils/common-util';
+import { EditAssigneeButton } from 'src/components/edit-assignee-button';
 
 export const WorkorderView = ({
   job,
@@ -35,9 +36,11 @@ export const WorkorderView = ({
   isDownloading,
   isLoadingCreate,
   isLoadingWoPayments,
+  isLoadingUpdateAssignee,
   isOpenPaymentDlg,
   handleTogglePaymentDlg,
   handleAddPaymentRecord,
+  handelUpdateWorkorderAssignees,
   downloadInvoice,
 }) => {
   return (
@@ -61,6 +64,11 @@ export const WorkorderView = ({
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
             <Stack spacing={1} direction="row">
+              <EditAssigneeButton
+                assignees={job.workOrderAssignees}
+                isLoading={isLoadingUpdateAssignee}
+                handleAssign={handelUpdateWorkorderAssignees}
+              />
               {job.workOrderPaymentStatus != PAY_STATUS_PAID && (
                 <Button
                   variant="contained"
@@ -107,7 +115,7 @@ export const WorkorderView = ({
                 {job.workOrderStatus != WO_STATUS_OPEN && (
                   <Typography>
                     <b>#INVOICE NO</b>
-                    {` ${job.workOrderInvoiceNumber ?? "-"}`}
+                    {` ${job.workOrderInvoiceNumber ?? '-'}`}
                   </Typography>
                 )}
               </Stack>

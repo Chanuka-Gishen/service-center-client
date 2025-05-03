@@ -9,8 +9,21 @@ const WorkorderController = () => {
 
   const { id } = location.state || {};
 
-  const { fetchWorkOrderInfo, isLoadingJob, isDownloading, downloadInvoice } = useWorkOrder();
-  const { woPayments, isLoadingWoPayments, isLoadingCreate, createPayment, fetchWorkorderPayments } = usePayment();
+  const {
+    fetchWorkOrderInfo,
+    isLoadingJob,
+    isLoadingUpdateAssignee,
+    isDownloading,
+    updateWorkorderAssignees,
+    downloadInvoice,
+  } = useWorkOrder();
+  const {
+    woPayments,
+    isLoadingWoPayments,
+    isLoadingCreate,
+    createPayment,
+    fetchWorkorderPayments,
+  } = usePayment();
 
   const [job, setJob] = useState(null);
 
@@ -31,6 +44,14 @@ const WorkorderController = () => {
     if (isSuccess) {
       handleTogglePaymentDlg();
       fetchWorkorder();
+    }
+  };
+
+  const handelUpdateWorkorderAssignees = async (values) => {
+    const isSuccess = await updateWorkorderAssignees(job._id, values);
+
+    if (isSuccess) {
+      await fetchWorkorder();
     }
   };
 
@@ -59,9 +80,11 @@ const WorkorderController = () => {
       isDownloading={isDownloading}
       isLoadingCreate={isLoadingCreate}
       isLoadingWoPayments={isLoadingWoPayments}
+      isLoadingUpdateAssignee={isLoadingUpdateAssignee}
       isOpenPaymentDlg={isOpenPaymentDlg}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleAddPaymentRecord={handleAddPaymentRecord}
+      handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       downloadInvoice={downloadInvoice}
     />
   );
