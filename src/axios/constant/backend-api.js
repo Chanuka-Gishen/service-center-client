@@ -31,6 +31,7 @@ export const BACKEND_API = {
   WO_INFO: IP_URL + '/workorder/auth/info',
   WO_CREATE: IP_URL + '/workorder/auth/create',
   WO_UPDATE: IP_URL + '/workorder/auth/update',
+  WO_ASSIGNEES: IP_URL + '/workorder/auth/assign-emp',
   WO_DOWNLOAD_INVOICE: IP_URL + '/workorder/auth/download-invoice',
   WO_UPDATE_COMPLETED: IP_URL + '/workorder/auth/update-complete',
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
@@ -42,5 +43,6 @@ export const BACKEND_API = {
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
   EMP_ALL: IP_URL + '/employee/auth/employees',
-  EMP_INFO: IP_URL + 'employee/auth/employee',
+  EMP_INFO: IP_URL + '/employee/auth/employee',
+  EMP_SELECT: IP_URL + '/employee/auth/selection',
 };

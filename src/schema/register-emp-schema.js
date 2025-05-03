@@ -1,3 +1,4 @@
+import { EMP_ROLES } from 'src/constants/emp-role';
 import { GENDER_FEMALE, GENDER_MALE, GENDER_OTHER } from 'src/constants/gender';
 import {
   MARTIAL_STS_DIVORCED,
@@ -99,6 +100,10 @@ export const EmployeeValidationSchema = Yup.object().shape({
   employeeId: Yup.string().nullable().notRequired(),
 
   empJobTitle: Yup.string().required('Job title is required'),
+
+  empRole: Yup.string()
+    .required('Employee role is required')
+    .oneOf(EMP_ROLES, 'Invalid employee role'),
 
   empEmploymentType: Yup.string()
     .required('Employment type is required')

@@ -24,6 +24,7 @@ const useWorkOrder = () => {
   const [isLoadingJob, setIsLoadingJob] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isLoadingUpdateAssignee, setIsLoadingUpdateAssignee] = useState(false);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -210,6 +211,38 @@ const useWorkOrder = () => {
     return isSuccess;
   };
 
+  // Update workorder assignees
+  const updateWorkorderAssignees = async (id, data) => {
+    if (isLoadingUpdateAssignee) return;
+
+    setIsLoadingUpdateAssignee(true);
+
+    let isSuccess = false;
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_ASSIGNEES,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingUpdateAssignee(false);
+      })
+      .finally(() => {
+        setIsLoadingUpdateAssignee(false);
+      });
+
+    return isSuccess;
+  };
+
   // Update work order to complete status
   const updateWorkOrderToComplete = async (id) => {
     if (isLoadingComplete) return;
@@ -325,6 +358,7 @@ const useWorkOrder = () => {
     isLoadingJob,
     isLoadingCreate,
     isLoadingUpdate,
+    isLoadingUpdateAssignee,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
@@ -337,6 +371,7 @@ const useWorkOrder = () => {
     fetchCustomerPaymentStatus,
     createWorkOrder,
     updateWorkOrder,
+    updateWorkorderAssignees,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
     downloadInvoice,

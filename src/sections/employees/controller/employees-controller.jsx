@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { EmployeesView } from '../view/employees-view';
-import useEmployee from 'src/hooks/useClient';
+import useEmployee from 'src/hooks/useEmployee';
 
 const EmployeesController = () => {
   const tableKeys = [
     'Name',
+    'Role',
     'NIC',
     'Mobile Number',
     'Position',

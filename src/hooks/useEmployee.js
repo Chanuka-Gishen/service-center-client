@@ -11,12 +11,14 @@ const useEmployee = () => {
 
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState(null);
+  const [empSelectables, setEmpSelectables] = useState([]);
 
   const [employeesCount, setEmployeesCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const [isLoadingEmp, setIsLoadingEmp] = useState(false);
+  const [isLoadingEmpSelect, setIsLoadingEmpSelect] = useState(false);
 
   // Register employee data
   const registerEmployee = async (data) => {
@@ -103,16 +105,43 @@ const useEmployee = () => {
       });
   };
 
+  // Fetch employees for select options
+  const fetchEmployeeForSelect = async () => {
+    if (isLoadingEmpSelect) return;
+
+    setIsLoadingEmpSelect(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_SELECT,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setEmpSelectables(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingEmpSelect(false);
+      })
+      .finally(() => {
+        setIsLoadingEmpSelect(false);
+      });
+  };
+
   return {
     isLoading,
     isLoadingEmp,
     isLoadingRegister,
+    isLoadingEmpSelect,
     employee,
     employees,
+    empSelectables,
     employeesCount,
     registerEmployee,
     fetchAllEmployees,
     fetchEmployee,
+    fetchEmployeeForSelect,
   };
 };
 
