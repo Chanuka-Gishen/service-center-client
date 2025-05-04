@@ -36,6 +36,7 @@ import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-
 import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
 import { AddPaymentDialog } from '../components/add-payment-dialog';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
+import commonUtil from 'src/utils/common-util';
 
 const LoadingStack = () => {
   return (
@@ -331,16 +332,17 @@ export const WorkordersView = ({
                   Complete Invoice
                 </Button>
               )}
-              {selectedJob.workOrderStatus === WO_STATUS_COMPLETED && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleToggleClosedDlg}
-                  disabled={isLoadingClosed}
-                >
-                  Close Invoice
-                </Button>
-              )}
+              {selectedJob.workOrderStatus === WO_STATUS_COMPLETED &&
+                !commonUtil.stringIsEmptyOrSpaces(selectedJob.workOrderInvoiceNumber) && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleToggleClosedDlg}
+                    disabled={isLoadingClosed}
+                  >
+                    Close Invoice
+                  </Button>
+                )}
             </Stack>
           </Grid>
         )}

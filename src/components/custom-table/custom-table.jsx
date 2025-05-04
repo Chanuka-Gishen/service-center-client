@@ -19,6 +19,7 @@ export const CustomTable = ({
   isLoading,
   tableBody,
   enableAction = false,
+  enablePagination = true,
   documentCount = 0,
   rowerPerPage = [10, 20, 30],
   page = 0,
@@ -47,7 +48,7 @@ export const CustomTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {dataLength > 5 && (
+      {dataLength > 5 && enablePagination && (
         <TablePagination
           page={page}
           component="div"
