@@ -13,6 +13,11 @@ const useWorkOrder = () => {
   const [jobs, setJobs] = useState([]);
   const [customerJobs, setCustomerJobs] = useState([]);
   const [customerPaymentStats, setCustomerPaymentStats] = useState(null);
+  const [chartTotalRevenueData, setChartTotalRevenueData] = useState([]);
+  const [charTotalJobsData, setChartTotalJobsData] = useState([]);
+  const [activeJobsCount, setActiveJobsCount] = useState(0);
+  const [todayRevenue, setTodayRevenue] = useState(0);
+  const [totalReceivables, setTotalReveivables] = useState(0);
 
   const [jobsCount, setJobsCount] = useState(0);
   const [customerJobsCount, setCustomerJobsCount] = useState(0);
@@ -24,9 +29,15 @@ const useWorkOrder = () => {
   const [isLoadingJob, setIsLoadingJob] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isLoadingUpdateAssignee, setIsLoadingUpdateAssignee] = useState(false);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isLoadingChartRevenueData, setIsLoadingChartRevenueData] = useState(false);
+  const [isLoadingChartTotalJobs, setIsLoadingChartTotalJobs] = useState(false);
+  const [isLoadingActiveJobsCount, setIsLoadingActiveJobsCount] = useState(false);
+  const [isLoadingTodayRevenue, setIsLoadingTodayRevenue] = useState(false);
+  const [isLoadingReceivables, setIsLoadingReceivables] = useState(false);
 
   // Fetch all work orders
   const fetchWorkOrders = async (params) => {
@@ -210,6 +221,38 @@ const useWorkOrder = () => {
     return isSuccess;
   };
 
+  // Update workorder assignees
+  const updateWorkorderAssignees = async (id, data) => {
+    if (isLoadingUpdateAssignee) return;
+
+    setIsLoadingUpdateAssignee(true);
+
+    let isSuccess = false;
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_ASSIGNEES,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingUpdateAssignee(false);
+      })
+      .finally(() => {
+        setIsLoadingUpdateAssignee(false);
+      });
+
+    return isSuccess;
+  };
+
   // Update work order to complete status
   const updateWorkOrderToComplete = async (id) => {
     if (isLoadingComplete) return;
@@ -280,6 +323,126 @@ const useWorkOrder = () => {
     return isSuccess;
   };
 
+  // Total revenue chart data
+  const fetchTotalRevenueChartData = async () => {
+    if (isLoadingChartRevenueData) return;
+
+    setIsLoadingChartRevenueData(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_CHART_REVENUE,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setChartTotalRevenueData(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingChartRevenueData(false);
+      })
+      .finally(() => {
+        setIsLoadingChartRevenueData(false);
+      });
+  };
+
+  // Total Jobs count chart data
+  const fetchTotalJobsCountChartData = async () => {
+    if (isLoadingChartTotalJobs) return;
+
+    setIsLoadingChartTotalJobs(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_CHART_TOTAL_JOBS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setChartTotalJobsData(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingChartTotalJobs(false);
+      })
+      .finally(() => {
+        setIsLoadingChartTotalJobs(false);
+      });
+  };
+
+  // Active jobs count
+  const fetchActiveJobsCount = async () => {
+    if (isLoadingActiveJobsCount) return;
+
+    setIsLoadingActiveJobsCount(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_ACTIVE_JOBS_COUNT,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setActiveJobsCount(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingActiveJobsCount(false);
+      })
+      .finally(() => {
+        setIsLoadingActiveJobsCount(false);
+      });
+  };
+
+  // Today total revenue
+  const fetchTodayTotalRevenue = async () => {
+    if (isLoadingTodayRevenue) return;
+
+    setIsLoadingTodayRevenue(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_TODAY_REVENUE,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setTodayRevenue(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingTodayRevenue(false);
+      })
+      .finally(() => {
+        setIsLoadingTodayRevenue(false);
+      });
+  };
+
+  // Total receivables
+  const fetchTotalReceivables = async () => {
+    if (isLoadingReceivables) return;
+
+    setIsLoadingReceivables(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_TOTAL_RECEIVABLES,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setTotalReveivables(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingReceivables(false);
+      })
+      .finally(() => {
+        setIsLoadingReceivables(false);
+      });
+  };
+
   // Download invoice
   const downloadInvoice = async (data) => {
     if (isDownloading) return;
@@ -320,23 +483,40 @@ const useWorkOrder = () => {
     customerPaymentStats,
     jobsCount,
     customerJobsCount,
+    chartTotalRevenueData,
+    charTotalJobsData,
+    activeJobsCount,
+    todayRevenue,
+    totalReceivables,
     isLoading,
     isLoadingJobs,
     isLoadingJob,
     isLoadingCreate,
     isLoadingUpdate,
+    isLoadingUpdateAssignee,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
     isLoadingCustomerJobs,
     isLoadingCustomerPayStats,
+    isLoadingChartRevenueData,
+    isLoadingChartTotalJobs,
+    isLoadingActiveJobsCount,
+    isLoadingTodayRevenue,
+    isLoadingReceivables,
     fetchWorkOrders,
     fetchActiveWorkOrders,
     fetchWorkOrderInfo,
     fetchCustomerWorkorders,
     fetchCustomerPaymentStatus,
+    fetchTotalRevenueChartData,
+    fetchTotalJobsCountChartData,
+    fetchActiveJobsCount,
+    fetchTodayTotalRevenue,
+    fetchTotalReceivables,
     createWorkOrder,
     updateWorkOrder,
+    updateWorkorderAssignees,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
     downloadInvoice,

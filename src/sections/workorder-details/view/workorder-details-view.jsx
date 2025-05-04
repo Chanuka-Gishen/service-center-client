@@ -6,8 +6,10 @@ import {
   Breadcrumbs,
   Button,
   Card,
+  Chip,
   CircularProgress,
   Container,
+  Divider,
   Link,
   Stack,
   Table,
@@ -25,6 +27,7 @@ import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
 import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
 import commonUtil from 'src/utils/common-util';
+import { EditAssigneeButton } from 'src/components/edit-assignee-button';
 
 export const WorkorderView = ({
   job,
@@ -33,9 +36,11 @@ export const WorkorderView = ({
   isDownloading,
   isLoadingCreate,
   isLoadingWoPayments,
+  isLoadingUpdateAssignee,
   isOpenPaymentDlg,
   handleTogglePaymentDlg,
   handleAddPaymentRecord,
+  handelUpdateWorkorderAssignees,
   downloadInvoice,
 }) => {
   return (
@@ -59,6 +64,11 @@ export const WorkorderView = ({
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
             <Stack spacing={1} direction="row">
+              <EditAssigneeButton
+                assignees={job.workOrderAssignees}
+                isLoading={isLoadingUpdateAssignee}
+                handleAssign={handelUpdateWorkorderAssignees}
+              />
               {job.workOrderPaymentStatus != PAY_STATUS_PAID && (
                 <Button
                   variant="contained"
@@ -70,7 +80,7 @@ export const WorkorderView = ({
                 </Button>
               )}
 
-              {(job.workOrderStatus != WO_STATUS_OPEN && job.workOrderInvoiceNumber) && (
+              {job.workOrderStatus != WO_STATUS_OPEN && job.workOrderInvoiceNumber && (
                 <Button
                   variant="contained"
                   size="large"
@@ -105,10 +115,23 @@ export const WorkorderView = ({
                 {job.workOrderStatus != WO_STATUS_OPEN && (
                   <Typography>
                     <b>#INVOICE NO</b>
-                    {` ${job.workOrderInvoiceNumber}`}
+                    {` ${job.workOrderInvoiceNumber ?? '-'}`}
                   </Typography>
                 )}
               </Stack>
+
+              {job.workOrderAssignees && job.workOrderAssignees.length > 0 && (
+                <>
+                  <Divider />
+                  <Typography variant="h6">Workorder Assignees</Typography>
+                  <Stack direction="row" spacing={2} flexWrap="wrap">
+                    {job.workOrderAssignees.map((emp) => (
+                      <Chip variant="outlined" label={emp.empFullName} />
+                    ))}
+                  </Stack>
+                  <Divider />
+                </>
+              )}
 
               <TableContainer>
                 <Table>
@@ -238,27 +261,27 @@ export const WorkorderView = ({
                       <Table>
                         <TableBody>
                           <TableRow>
-                            <TableCell variant='head'>{fDate(payment.createdAt)}</TableCell>
+                            <TableCell variant="head">{fDate(payment.createdAt)}</TableCell>
                             <TableCell>{formatCurrency(payment.paymentAmount)}</TableCell>
                           </TableRow>
                           <TableRow>
-                            <TableCell variant='head'>Method</TableCell>
-                            <TableCell >{payment.paymentMaymentMethod}</TableCell>
+                            <TableCell variant="head">Method</TableCell>
+                            <TableCell>{payment.paymentMaymentMethod}</TableCell>
                           </TableRow>
                           {!commonUtil.stringIsEmptyOrSpaces(payment.paymentTransactionId) && (
                             <TableRow>
-                              <TableCell variant='head'>Transaction Id</TableCell>
+                              <TableCell variant="head">Transaction Id</TableCell>
                               <TableCell>{payment.paymentTransactionId}</TableCell>
                             </TableRow>
                           )}
                           {!commonUtil.stringIsEmptyOrSpaces(payment.paymentNotes) && (
                             <TableRow>
-                              <TableCell variant='head'>Notes</TableCell>
+                              <TableCell variant="head">Notes</TableCell>
                               <TableCell>{payment.paymentNotes}</TableCell>
                             </TableRow>
                           )}
                           <TableRow>
-                            <TableCell variant='head'>Collected By</TableCell>
+                            <TableCell variant="head">Collected By</TableCell>
                             <TableCell>{`${payment.paymentCollectedBy.userFirstName} ${payment.paymentCollectedBy.userLastName}`}</TableCell>
                           </TableRow>
                         </TableBody>

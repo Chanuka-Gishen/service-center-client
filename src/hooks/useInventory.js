@@ -16,6 +16,8 @@ const useInventory = () => {
   const [stockLogs, setStockLogs] = useState([]);
   const [stockLogsCount, setStockLogsCount] = useState(0);
   const [selectItems, setSelectItems] = useState([]);
+  const [invStockStats, setInvStockStats] = useState([]);
+  const [invStockStatsCount, setInvStockStatsCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingItem, setIsLoadingItem] = useState(true);
@@ -24,6 +26,7 @@ const useInventory = () => {
   const [isLoadingEdit, setIsLoadingEdit] = useState(false);
   const [isLoadingStockUpdate, setIsLoadingStockUpdate] = useState(false);
   const [isLoadingStockUpdateLogs, setIsLoadingStockUpdateLogs] = useState(false);
+  const [isLoadingStockAvailabilityStats, setIsLoadingStockAvailabilityStats] = useState(false);
 
   // Fetch all inventory items
   const fetchAllItems = async (params) => {
@@ -204,7 +207,6 @@ const useInventory = () => {
 
   // Get stock update logs
   const fetchStockUpdateLogs = async (params) => {
-    
     if (isLoadingStockUpdateLogs) return;
 
     setIsLoadingStockUpdateLogs(true);
@@ -229,6 +231,34 @@ const useInventory = () => {
       });
   };
 
+  // Get stock items statistics - status (low/empty)
+  const fetchStockStatistics = async (status) => {
+    if (isLoadingStockAvailabilityStats) return;
+
+    setIsLoadingStockAvailabilityStats(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEMS_STOCK_STATISTICS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        status,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setInvStockStats(res.data.responseData.data);
+          setInvStockStatsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingStockAvailabilityStats(false);
+      })
+      .finally(() => {
+        setIsLoadingStockAvailabilityStats(false);
+      });
+  };
+
   return {
     items,
     selectItems,
@@ -236,6 +266,8 @@ const useInventory = () => {
     itemsCount,
     stockLogs,
     stockLogsCount,
+    invStockStats,
+    invStockStatsCount,
     isLoading,
     isLoadingItem,
     isLoadingSelect,
@@ -243,13 +275,15 @@ const useInventory = () => {
     isLoadingEdit,
     isLoadingStockUpdate,
     isLoadingStockUpdateLogs,
+    isLoadingStockAvailabilityStats,
     fetchAllItems,
     fetchItemInfo,
     fetchItemsForSelection,
     addItems,
     updateItem,
     updateItemStock,
-    fetchStockUpdateLogs
+    fetchStockUpdateLogs,
+    fetchStockStatistics,
   };
 };
 

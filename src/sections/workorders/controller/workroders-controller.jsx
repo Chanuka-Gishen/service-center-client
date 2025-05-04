@@ -19,15 +19,17 @@ const WorkordersController = () => {
     isLoading,
     isLoadingJob,
     isLoadingUpdate,
+    isLoadingUpdateAssignee,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
     fetchActiveWorkOrders,
     fetchWorkOrderInfo,
     updateWorkOrder,
+    updateWorkorderAssignees,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
-    downloadInvoice
+    downloadInvoice,
   } = useWorkOrder();
   const { selectItems, isLoadingSelect, fetchItemsForSelection } = useInventory();
   const { isLoadingCreate, createPayment } = usePayment();
@@ -211,6 +213,17 @@ const WorkordersController = () => {
     }
   };
 
+  const handelUpdateWorkorderAssignees = async (values) => {
+    const isSuccess = await updateWorkorderAssignees(selectedId, values)
+
+    if (isSuccess) {
+      await fetchActiveWorkOrders();
+      setSelectedJob(null);
+      setSelectedId(null);
+    }
+
+  };
+
   const handleUpdateWorkOrder = async () => {
     commonUtil.validateFormik(formik);
 
@@ -221,7 +234,7 @@ const WorkordersController = () => {
         handleToggleUpdateDialog();
         await fetchActiveWorkOrders();
         setSelectedJob(null);
-        setSelectedId(null)
+        setSelectedId(null);
       }
     } else {
       enqueueSnackbar(SNACKBAR_MESSAGE.FILL_REQUIRED_FIELDS, { variant: SNACKBAR_VARIANT.ERROR });
@@ -262,6 +275,7 @@ const WorkordersController = () => {
       isLoading={isLoading}
       isLoadingJob={isLoadingJob}
       isLoadingUpdate={isLoadingUpdate}
+      isLoadingUpdateAssignee={isLoadingUpdateAssignee}
       isLoadingSelect={isLoadingSelect}
       isLoadingComplete={isLoadingComplete}
       isLoadingClosed={isLoadingClosed}
@@ -276,6 +290,7 @@ const WorkordersController = () => {
       handleUdpateWorkOrderStatusComplete={handleUdpateWorkOrderStatusComplete}
       handleUpdateWorkOrderStatusClosed={handleUpdateWorkOrderStatusClosed}
       handleAddPaymentRecord={handleAddPaymentRecord}
+      handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       handleUpdateWorkOrder={handleUpdateWorkOrder}
       downloadInvoice={downloadInvoice}
     />

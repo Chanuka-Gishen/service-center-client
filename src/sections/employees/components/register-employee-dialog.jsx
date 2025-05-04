@@ -31,6 +31,7 @@ import { EMPLOYMENT_TYPES } from 'src/constants/employment-types';
 import { DatePicker } from '@mui/x-date-pickers';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { SALLARY_FREQUENCY } from 'src/constants/sallary-frequency';
+import { EMP_ROLE_STAFF, EMP_ROLES } from 'src/constants/emp-role';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -82,6 +83,7 @@ export const RegisterEmployeeDialog = ({ open, isLoading, handleOpenClose, handl
           },
           empId: '',
           empJobTitle: '',
+          empRole: EMP_ROLE_STAFF,
           empEmploymentType: '',
           empHireDate: null,
           empSalary: 0,
@@ -130,7 +132,7 @@ export const RegisterEmployeeDialog = ({ open, isLoading, handleOpenClose, handl
                     helperText={touched.empFullName && errors.empFullName}
                   />
                 </Grid>
-                <Grid ize={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
                   <FormControl fullWidth required>
                     <InputLabel id="select-label">Gender</InputLabel>
                     <Select
@@ -177,6 +179,31 @@ export const RegisterEmployeeDialog = ({ open, isLoading, handleOpenClose, handl
                     </Select>
                     <FormHelperText error={touched.empMaritalStatus && errors.empMaritalStatus}>
                       {touched.empMaritalStatus && errors.empMaritalStatus}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="select-label">Role</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="simple-select"
+                      label="Role"
+                      name="empRole"
+                      required
+                      fullWidth
+                      value={values.empRole || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      {EMP_ROLES.map((item, index) => (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText error={touched.empRole && errors.empRole}>
+                      {touched.empRole && errors.empRole}
                     </FormHelperText>
                   </FormControl>
                 </Grid>

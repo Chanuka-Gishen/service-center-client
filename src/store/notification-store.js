@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 const useSnackbarStore = create((set) => ({
   notifications: [],
@@ -17,17 +17,13 @@ const useSnackbarStore = create((set) => ({
   closeSnackbar: (key, dismissAll = false) =>
     set((state) => ({
       notifications: state.notifications.map((notification) =>
-        dismissAll || notification.key === key
-          ? { ...notification, dismissed: true }
-          : notification
+        dismissAll || notification.key === key ? { ...notification, dismissed: true } : notification
       ),
     })),
 
   removeSnackbar: (key) =>
     set((state) => ({
-      notifications: state.notifications.filter(
-        (notification) => notification.key !== key
-      ),
+      notifications: [],
     })),
 }));
 

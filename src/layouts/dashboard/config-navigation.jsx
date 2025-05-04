@@ -20,13 +20,6 @@ const navConfig = [
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
   {
-    title: 'Inventory',
-    name: NAVBAR_ITEMS.INVENTORY,
-    path: 'inventory',
-    icon: <InventoryIcon />,
-    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
-  },
-  {
     title: 'Active Jobs',
     name: NAVBAR_ITEMS.WORKORDERS,
     path: 'workorders',
@@ -38,6 +31,13 @@ const navConfig = [
     name: NAVBAR_ITEMS.JOBS,
     path: 'jobs',
     icon: <WorkHistoryIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
+  },
+  {
+    title: 'Inventory',
+    name: NAVBAR_ITEMS.INVENTORY,
+    path: 'inventory',
+    icon: <InventoryIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
   {

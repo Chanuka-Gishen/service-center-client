@@ -3,7 +3,9 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   Container,
+  Divider,
   List,
   ListItemAvatar,
   ListItemButton,
@@ -17,6 +19,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
@@ -31,6 +35,8 @@ import {
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
 import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
 import { AddPaymentDialog } from '../components/add-payment-dialog';
+import { EditAssigneeButton } from 'src/components/edit-assignee-button';
+import commonUtil from 'src/utils/common-util';
 
 const LoadingStack = () => {
   return (
@@ -72,7 +78,8 @@ export const WorkordersView = ({
   isOpenPaymentDlg,
   isLoading,
   isLoadingJob,
-  isLoadingUpdat,
+  isLoadingUpdate,
+  isLoadingUpdateAssignee,
   isLoadingSelect,
   isLoadingComplete,
   isLoadingClosed,
@@ -87,9 +94,12 @@ export const WorkordersView = ({
   downloadInvoice,
   handleUdpateWorkOrderStatusComplete,
   handleUpdateWorkOrderStatusClosed,
+  handelUpdateWorkorderAssignees,
   handleAddPaymentRecord,
   handleChangeSearch,
 }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Container maxWidth="xl">
       <Grid container rowSpacing={4} columnSpacing={4}>
@@ -135,23 +145,48 @@ export const WorkordersView = ({
               gap={2}
               sx={{ bgcolor: 'background.paper', p: '10px' }}
             >
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Stack
+                direction={isSmallScreen ? 'column' : 'row'}
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">{selectedJob.workOrderCustomer.customerName}</Typography>
                 <Typography>{`Created At ${fDateTime(selectedJob.createdAt)}`}</Typography>
               </Stack>
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Stack
+                direction={isSmallScreen ? 'column' : 'row'}
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography>{`${selectedJob.workOrderVehicle.vehicleNumber} - ${selectedJob.workOrderVehicle.vehicleManufacturer} - ${selectedJob.workOrderVehicle.vehicleModel}`}</Typography>
                 <Typography>{`Updated At ${fDateTime(selectedJob.updatedAt)}`}</Typography>
               </Stack>
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Stack
+                direction={isSmallScreen ? 'column' : 'row'}
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography>{`Current Mileage - ${selectedJob.workOrderMileage} KM`}</Typography>
                 {selectedJob.workOrderStatus != WO_STATUS_OPEN && (
                   <Typography>
                     <b>#INVOICE NO</b>
-                    {` ${selectedJob.workOrderInvoiceNumber}`}
+                    {` ${selectedJob.workOrderInvoiceNumber ?? '-'}`}
                   </Typography>
                 )}
               </Stack>
+
+              {selectedJob.workOrderAssignees && selectedJob.workOrderAssignees.length > 0 && (
+                <>
+                  <Divider />
+                  <Typography variant="h6">Workorder Assignees</Typography>
+                  <Stack direction="row" spacing={2} flexWrap="wrap">
+                    {selectedJob.workOrderAssignees.map((emp) => (
+                      <Chip variant="outlined" label={emp.empFullName} />
+                    ))}
+                  </Stack>
+                  <Divider />
+                </>
+              )}
 
               <TableContainer>
                 <Table>
@@ -255,11 +290,16 @@ export const WorkordersView = ({
                   variant="contained"
                   size="large"
                   onClick={handleToggleUpdateDialog}
-                  disabled={isLoadingUpdat}
+                  disabled={isLoadingUpdate}
                 >
                   Edit Invoice
                 </Button>
               )}
+              <EditAssigneeButton
+                assignees={selectedJob.workOrderAssignees}
+                isLoading={isLoadingUpdateAssignee}
+                handleAssign={handelUpdateWorkorderAssignees}
+              />
               {selectedJob.workOrderPaymentStatus != PAY_STATUS_PAID && (
                 <Button
                   variant="contained"
@@ -271,16 +311,17 @@ export const WorkordersView = ({
                 </Button>
               )}
 
-              {selectedJob.workOrderStatus != WO_STATUS_OPEN && selectedJob.workOrderInvoiceNumber && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  disabled={isDownloading}
-                  onClick={() => downloadInvoice(selectedJob)}
-                >
-                  Download Invoice
-                </Button>
-              )}
+              {selectedJob.workOrderStatus != WO_STATUS_OPEN &&
+                selectedJob.workOrderInvoiceNumber && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    disabled={isDownloading}
+                    onClick={() => downloadInvoice(selectedJob)}
+                  >
+                    Download Invoice
+                  </Button>
+                )}
               {selectedJob.workOrderStatus != WO_STATUS_COMPLETED && (
                 <Button
                   variant="contained"
@@ -291,16 +332,17 @@ export const WorkordersView = ({
                   Complete Invoice
                 </Button>
               )}
-              {selectedJob.workOrderStatus === WO_STATUS_COMPLETED && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleToggleClosedDlg}
-                  disabled={isLoadingClosed}
-                >
-                  Close Invoice
-                </Button>
-              )}
+              {selectedJob.workOrderStatus === WO_STATUS_COMPLETED &&
+                !commonUtil.stringIsEmptyOrSpaces(selectedJob.workOrderInvoiceNumber) && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleToggleClosedDlg}
+                    disabled={isLoadingClosed}
+                  >
+                    Close Invoice
+                  </Button>
+                )}
             </Stack>
           </Grid>
         )}
@@ -313,7 +355,7 @@ export const WorkordersView = ({
           formik={formik}
           handleAddNewInventoryRow={handleAddNewInventoryRow}
           handleDeleteInventoryItem={handleDeleteInventoryItem}
-          isLoading={isLoadingUpdat}
+          isLoading={isLoadingUpdate}
           isLoadingItems={isLoadingSelect}
           handleOpenClose={handleToggleUpdateDialog}
           handleChangeSearch={handleChangeSearch}

@@ -1,3 +1,5 @@
+import { WO_TYPES } from 'src/constants/workorder-types';
+
 // SERVER URL
 const IP_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -25,22 +27,30 @@ export const BACKEND_API = {
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
   ITEM_UPDATE_LOGS: IP_URL + '/inventory/auth/stock-logs',
   ITEMS_INFO: IP_URL + '/inventory/auth/item',
+  ITEMS_STOCK_STATISTICS: IP_URL + '/inventory/auth/inv-stocks-status',
 
   WO_ALL: IP_URL + '/workorder/auth/list',
   WO_ACTIVE: IP_URL + '/workorder/auth/active-orders',
   WO_INFO: IP_URL + '/workorder/auth/info',
   WO_CREATE: IP_URL + '/workorder/auth/create',
   WO_UPDATE: IP_URL + '/workorder/auth/update',
+  WO_ASSIGNEES: IP_URL + '/workorder/auth/assign-emp',
   WO_DOWNLOAD_INVOICE: IP_URL + '/workorder/auth/download-invoice',
   WO_UPDATE_COMPLETED: IP_URL + '/workorder/auth/update-complete',
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
   WO_CUSTOMER: IP_URL + '/workorder/auth/customer-jobs',
   WO_CUSTOMER_PAYMENT_STATUS: IP_URL + '/workorder/auth/customer-payment-stats',
+  WO_CHART_REVENUE: IP_URL + '/workorder/auth/stat-revenue-chart',
+  WO_CHART_TOTAL_JOBS: IP_URL + '/workorder/auth/stat-total-jobs-chart',
+  WO_TODAY_REVENUE: IP_URL + '/workorder/auth/today-revenue',
+  WO_TOTAL_RECEIVABLES: IP_URL + '/workorder/auth/total-receivables',
+  WO_ACTIVE_JOBS_COUNT: IP_URL + '/workorder/auth/total-active-jobs',
 
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
   EMP_ALL: IP_URL + '/employee/auth/employees',
-  EMP_INFO: IP_URL + 'employee/auth/employee',
+  EMP_INFO: IP_URL + '/employee/auth/employee',
+  EMP_SELECT: IP_URL + '/employee/auth/selection',
 };
