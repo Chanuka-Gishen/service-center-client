@@ -246,6 +246,7 @@ export const Overview = ({
                   isLoading={isLoadingStockAvailabilityStats}
                   dataLength={invStockStats.length}
                   tableBody={<LowStocksRow data={invStockStats} />}
+                  enablePagination={false}
                 />
               </Paper>
             </Card>
