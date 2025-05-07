@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { InventoryItemView } from '../view/inventory-item-view';
 import useInventory from 'src/hooks/useInventory';
+import useSupplier from 'src/hooks/useSupplier';
 
 const logsTable = [
   'Movement Type',
@@ -30,6 +31,8 @@ const InventoryItemController = () => {
     fetchItemInfo,
     fetchStockUpdateLogs,
   } = useInventory();
+
+  const {suppliersOptions, isLoadingSuppliersOptions, fetchSuppliersForSelection} = useSupplier()
 
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   const isOpenOptions = Boolean(optionsAnchorEl);
@@ -118,6 +121,7 @@ const InventoryItemController = () => {
     if (id) {
       fetchItemInfo(id);
     }
+    fetchSuppliersForSelection()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -136,12 +140,14 @@ const InventoryItemController = () => {
       data={item}
       stockLogs={stockLogs}
       stockLogsCount={stockLogsCount}
+      suppliersOptions={suppliersOptions}
       initialValues={initialValues}
       optionsAnchorEl={optionsAnchorEl}
       isLoading={isLoadingItem}
       isLoadingEdit={isLoadingEdit}
       isLoadingStockUpdate={isLoadingStockUpdate}
       isLoadingStockUpdateLogs={isLoadingStockUpdateLogs}
+      isLoadingSuppliersOptions={isLoadingSuppliersOptions}
       isOpenOptions={isOpenOptions}
       isOpenUpdateDialog={isOpenUpdateDialog}
       isOpenUpdateStockDialog={isOpenUpdateStockDialog}

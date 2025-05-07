@@ -8,6 +8,7 @@ const useSupplier = () => {
   const sourceToken = axios.CancelToken.source();
 
   const [suppliers, setSuppliers] = useState([]);
+  const [suppliersOptions, setSuppliersOptions] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
 
@@ -15,6 +16,7 @@ const useSupplier = () => {
   const [isLoadingSupplier, setIsLoadingSupplier] = useState(true);
   const [isLoadingSupRegister, setIsLoadingSupRegister] = useState(false);
   const [isLoadingSupUpdate, setIsLoadingSupUpdate] = useState(false);
+  const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
 
   // Get all suppliers with filterss
   const getAllSuppliers = async (params) => {
@@ -101,16 +103,46 @@ const useSupplier = () => {
     return isSuccess;
   };
 
+  // Suppliers for selection
+  const fetchSuppliersForSelection = async (name) => {
+    if (isLoadingSuppliersOptions) return;
+
+    setIsLoadingSuppliersOptions(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_OPTIONS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        name,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSuppliersOptions(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSuppliersOptions(false);
+      })
+      .finally(() => {
+        setIsLoadingSuppliersOptions(false);
+      });
+  };
+
   return {
     suppliers,
     suppliersCount,
+    suppliersOptions,
     isLoadingSuppliers,
     isLoadingSupplier,
     isLoadingSupRegister,
     isLoadingSupUpdate,
+    isLoadingSuppliersOptions,
     getAllSuppliers,
     registerSupplier,
     updateSupplier,
+    fetchSuppliersForSelection,
   };
 };
 

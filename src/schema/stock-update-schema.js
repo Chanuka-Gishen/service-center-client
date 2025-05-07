@@ -12,6 +12,9 @@ export const StockUpdateSchema = Yup.object().shape({
   stockTotalValue: Yup.number()
     .min(0, 'Stock price cannot be negative')
     .required('Stock price is required'),
-  stockSupplier: Yup.string().nullable().notRequired(),
+  stockSupplier: Yup.object().shape({
+    _id: Yup.string().required(),
+    supplierName: Yup.string().required('Supplier name required'),
+  }),
   stockNotes: Yup.string().nullable().notRequired(),
 });

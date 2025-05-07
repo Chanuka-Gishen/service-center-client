@@ -58,4 +58,5 @@ export const BACKEND_API = {
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_ADD: IP_URL + '/supplier/auth/register',
   SUPPLIER_UPDATE: IP_URL + '/supplier/auth/update',
+  SUPPLIER_OPTIONS: IP_URL + '/supplier/auth/select-suppliers',
 };

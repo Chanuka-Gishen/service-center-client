@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -17,7 +18,14 @@ import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { STOCK_IN, STOCK_MV_TYPES } from 'src/constants/stock-movement-types';
 import { StockUpdateSchema } from 'src/schema/stock-update-schema';
 
-export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
+export const UpdateStockDialog = ({
+  open,
+  options,
+  isLoadingOptions,
+  isLoading,
+  handleOpenClose,
+  handleConfirm,
+}) => {
   return (
     <Dialog
       open={open}
@@ -31,7 +39,7 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
           stockMovementType: STOCK_IN,
           stockQuantity: 0,
           stockTotalValue: 0,
-          stockSupplier: '',
+          stockSupplier: null,
           stockNotes: '',
         }}
         validationSchema={StockUpdateSchema}
@@ -46,6 +54,7 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
           resetForm,
           handleSubmit,
           getFieldProps,
+          setFieldValue,
           handleChange,
           handleBlur,
         }) => (
@@ -105,16 +114,26 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-                  <TextField
-                    label="Stock Supplier"
-                    name="stockSupplier"
-                    fullWidth
-                    autoComplete="off"
-                    variant="outlined"
-                    {...getFieldProps('stockSupplier')}
-                    error={touched.stockSupplier && Boolean(errors.stockSupplier)}
-                    helperText={touched.stockSupplier && errors.stockSupplier}
-                  />
+                  <FormControl fullWidth required>
+                    <Autocomplete
+                      disablePortal
+                      options={options}
+                      getOptionLabel={(option) => option.supplierName}
+                      value={values.stockSupplier}
+                      loading={isLoadingOptions}
+                      filterSelectedOptions
+                      loadingText="Loading..."
+                      onChange={(event, newValue) => {
+                        console.log(newValue);
+                        
+                        setFieldValue('stockSupplier', newValue);
+                      }}
+                      renderInput={(params) => <TextField required {...params} label="Item Supplier" />}
+                    />
+                    <FormHelperText error={touched.stockSupplier && errors.stockSupplier}>
+                      {touched.stockSupplier && errors.stockSupplier}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
                   <TextField
