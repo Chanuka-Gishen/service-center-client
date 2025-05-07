@@ -31,7 +31,7 @@ const WorkordersController = () => {
     updateWorkOrderToClosed,
     downloadInvoice,
   } = useWorkOrder();
-  const { selectItems, isLoadingSelect, fetchItemsForSelection } = useInventory();
+  const { selectItems, isLoadingSelect, fetchItemsForInvoiceSelection } = useInventory();
   const { isLoadingCreate, createPayment } = usePayment();
 
   const [selectedId, setSelectedId] = useState(null);
@@ -141,7 +141,7 @@ const WorkordersController = () => {
       if (isOpenUpdate) {
         formik.resetForm();
       } else {
-        fetchItemsForSelection();
+        fetchItemsForInvoiceSelection();
         formik.setValues({
           _id: selectedJob._id,
           workOrderMileage: selectedJob.workOrderMileage,
@@ -242,7 +242,7 @@ const WorkordersController = () => {
   };
 
   useEffect(() => {
-    fetchItemsForSelection(queryParams);
+    fetchItemsForInvoiceSelection(queryParams);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memoizedSelectedFilters]);

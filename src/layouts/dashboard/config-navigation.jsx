@@ -7,6 +7,8 @@ import WorkIcon from '@mui/icons-material/Work';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import HailIcon from '@mui/icons-material/Hail';
+
 import { USER_ROLE } from 'src/constants/user-role';
 
 // ----------------------------------------------------------------------
@@ -45,6 +47,13 @@ const navConfig = [
     name: NAVBAR_ITEMS.CUSTOMERS,
     path: 'customers',
     icon: <GroupIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
+  },
+  {
+    title: 'Suppliers',
+    name: NAVBAR_ITEMS.SUPPLIERS,
+    path: 'suppliers',
+    icon: <HailIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
   {

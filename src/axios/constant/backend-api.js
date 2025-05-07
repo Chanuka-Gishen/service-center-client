@@ -22,6 +22,7 @@ export const BACKEND_API = {
 
   ITEMS: IP_URL + '/inventory/auth/items',
   ITEMS_SELECT: IP_URL + '/inventory/auth/items-select',
+  ITEMS_SELECT_PRODUCT: IP_URL + '/inventory/auth/select-products',
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEMS_EDIT: IP_URL + '/inventory/supAuth/update',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
@@ -53,4 +54,8 @@ export const BACKEND_API = {
   EMP_ALL: IP_URL + '/employee/auth/employees',
   EMP_INFO: IP_URL + '/employee/auth/employee',
   EMP_SELECT: IP_URL + '/employee/auth/selection',
+
+  SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
+  SUPPLIER_ADD: IP_URL + '/supplier/auth/register',
+  SUPPLIER_UPDATE: IP_URL + '/supplier/auth/update',
 };
