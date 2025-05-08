@@ -17,7 +17,7 @@ import {
 import { Formik } from 'formik';
 import Grid from '@mui/material/Grid2';
 
-import { PAY_METHODS } from 'src/constants/paymentMethods';
+import { PAY_METHODS } from 'src/constants/payment-methods';
 import { addPaymentSChema } from 'src/schema/add-payment-schema';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { formatCurrency } from 'src/utils/format-number';

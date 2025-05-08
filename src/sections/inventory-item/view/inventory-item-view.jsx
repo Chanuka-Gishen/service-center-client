@@ -83,12 +83,14 @@ export const InventoryItemView = ({
   data,
   stockLogs,
   stockLogsCount,
+  suppliersOptions,
   initialValues,
   optionsAnchorEl,
   isLoading,
   isLoadingEdit,
   isLoadingStockUpdate,
   isLoadingStockUpdateLogs,
+  isLoadingSuppliersOptions,
   isOpenOptions,
   isOpenUpdateDialog,
   isOpenUpdateStockDialog,
@@ -277,6 +279,8 @@ export const InventoryItemView = ({
           handleOpenClose={handleToggleStockUpdateDialog}
           handleConfirm={handleUpdateStock}
           isLoading={isLoadingStockUpdate}
+          options={suppliersOptions}
+          isLoadingOptions={isLoadingSuppliersOptions}
         />
       )}
     </Container>

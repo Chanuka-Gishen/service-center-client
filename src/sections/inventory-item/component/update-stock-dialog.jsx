@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -14,10 +15,18 @@ import {
 import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
+import { PAY_METHOD_CREDIT, PAY_METHODS } from 'src/constants/payment-methods';
 import { STOCK_IN, STOCK_MV_TYPES } from 'src/constants/stock-movement-types';
 import { StockUpdateSchema } from 'src/schema/stock-update-schema';
 
-export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
+export const UpdateStockDialog = ({
+  open,
+  options,
+  isLoadingOptions,
+  isLoading,
+  handleOpenClose,
+  handleConfirm,
+}) => {
   return (
     <Dialog
       open={open}
@@ -31,7 +40,9 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
           stockMovementType: STOCK_IN,
           stockQuantity: 0,
           stockTotalValue: 0,
-          stockSupplier: '',
+          stockPaymentPaidAmount: 0,
+          stockPaymentMethod: PAY_METHOD_CREDIT,
+          stockSupplier: null,
           stockNotes: '',
         }}
         validationSchema={StockUpdateSchema}
@@ -46,6 +57,7 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
           resetForm,
           handleSubmit,
           getFieldProps,
+          setFieldValue,
           handleChange,
           handleBlur,
         }) => (
@@ -73,6 +85,30 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
                     </Select>
                     <FormHelperText error={touched.stockMovementType && errors.stockMovementType}>
                       {touched.stockMovementType && errors.stockMovementType}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+                  <FormControl fullWidth required>
+                    <Autocomplete
+                      disablePortal
+                      options={options}
+                      getOptionLabel={(option) => option.supplierName}
+                      value={values.stockSupplier}
+                      loading={isLoadingOptions}
+                      filterSelectedOptions
+                      loadingText="Loading..."
+                      onChange={(event, newValue) => {
+                        console.log(newValue);
+
+                        setFieldValue('stockSupplier', newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField required {...params} label="Item Supplier" />
+                      )}
+                    />
+                    <FormHelperText error={touched.stockSupplier && errors.stockSupplier}>
+                      {touched.stockSupplier && errors.stockSupplier}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
@@ -106,15 +142,41 @@ export const UpdateStockDialog = ({ open, isLoading, handleOpenClose, handleConf
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
                   <TextField
-                    label="Stock Supplier"
-                    name="stockSupplier"
+                    label="Paid Amount"
+                    name="stockPaymentPaidAmount"
                     fullWidth
+                    required
                     autoComplete="off"
                     variant="outlined"
-                    {...getFieldProps('stockSupplier')}
-                    error={touched.stockSupplier && Boolean(errors.stockSupplier)}
-                    helperText={touched.stockSupplier && errors.stockSupplier}
+                    {...getFieldProps('stockPaymentPaidAmount')}
+                    error={touched.stockPaymentPaidAmount && Boolean(errors.stockPaymentPaidAmount)}
+                    helperText={touched.stockPaymentPaidAmount && errors.stockPaymentPaidAmount}
+                    slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="select-label">Payment Method</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="simple-select"
+                      label="Payment Method"
+                      name="stockPaymentMethod"
+                      required
+                      value={values.stockPaymentMethod || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      {PAY_METHODS.map((item, index) => (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText error={touched.stockPaymentMethod && errors.stockPaymentMethod}>
+                      {touched.stockPaymentMethod && errors.stockPaymentMethod}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
                   <TextField
