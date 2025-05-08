@@ -15,7 +15,9 @@ export const StockLogsRow = ({ data }) => {
           <TableCell>{item.stockPreviousQuantity}</TableCell>
           <TableCell>{item.stockNewQuantity}</TableCell>
           <TableCell>{formatCurrency(item.stockTotalValue)}</TableCell>
+          <TableCell>{formatCurrency(item.stockPaymentBalance)}</TableCell>
           <TableCell>{item.stockSupplier ? item.stockSupplier.supplierName : ' - '}</TableCell>
+          <TableCell>{item.stockPaymentStatus}</TableCell>
           <TableCell>{fDate(item.createdAt)}</TableCell>
         </TableRow>
       ))}

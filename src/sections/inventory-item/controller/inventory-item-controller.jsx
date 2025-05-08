@@ -10,7 +10,9 @@ const logsTable = [
   'Previous Quantity',
   'New Quantity',
   'Stock Value',
+  'Payment Balance',
   'Supplier',
+  'Payment Status',
   'Created At',
 ];
 

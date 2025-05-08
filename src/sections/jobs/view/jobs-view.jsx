@@ -15,7 +15,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { JobRow } from '../components/job-row';
-import { PAY_STATUS } from 'src/constants/paymentStatus';
+import { PAY_STATUS } from 'src/constants/payment-status';
 
 export const JobsView = ({
   tableTitles,

@@ -1,4 +1,4 @@
-import { PAY_METHODS } from 'src/constants/paymentMethods';
+import { PAY_METHODS } from 'src/constants/payment-methods';
 import * as Yup from 'yup';
 
 export const addPaymentSChema = Yup.object().shape({

@@ -5,7 +5,7 @@ import {
   PAY_STATUS_PARTIALLY_PAID,
   PAY_STATUS_UNPAID,
   PAY_STATUS_WRITTEN_OFF,
-} from 'src/constants/paymentStatus';
+} from 'src/constants/payment-status';
 import { fDate } from 'src/utils/format-time';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';

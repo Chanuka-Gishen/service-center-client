@@ -25,7 +25,7 @@ import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
 import { fDate, fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
-import { PAY_STATUS_PAID } from 'src/constants/paymentStatus';
+import { PAY_STATUS_PAID } from 'src/constants/payment-status';
 import commonUtil from 'src/utils/common-util';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
 
