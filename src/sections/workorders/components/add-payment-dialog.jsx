@@ -17,7 +17,7 @@ import {
 import { Formik } from 'formik';
 import Grid from '@mui/material/Grid2';
 
-import { PAY_METHODS } from 'src/constants/payment-methods';
+import { PAY_METHOD_CASH, PAY_METHODS } from 'src/constants/payment-methods';
 import { addPaymentSChema } from 'src/schema/add-payment-schema';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { formatCurrency } from 'src/utils/format-number';
@@ -33,7 +33,7 @@ export const AddPaymentDialog = ({ open, handleClose, data, isLoading, handleCon
       <Formik
         initialValues={{
           paymentAmount: 0,
-          paymentMaymentMethod: '',
+          paymentMethod: PAY_METHOD_CASH,
           paymentTransactionId: '',
           paymentNotes: '',
         }}
@@ -90,9 +90,9 @@ export const AddPaymentDialog = ({ open, handleClose, data, isLoading, handleCon
                       labelId="select-label"
                       id="simple-select"
                       label="Method"
-                      name="paymentMaymentMethod"
+                      name="paymentMethod"
                       required
-                      value={values.paymentMaymentMethod || ''}
+                      value={values.paymentMethod || ''}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
@@ -103,7 +103,7 @@ export const AddPaymentDialog = ({ open, handleClose, data, isLoading, handleCon
                       ))}
                     </Select>
                     <FormHelperText>
-                      {touched.paymentMaymentMethod && errors.paymentMaymentMethod}
+                      {touched.paymentMethod && errors.paymentMethod}
                     </FormHelperText>
                   </FormControl>
                 </Grid>

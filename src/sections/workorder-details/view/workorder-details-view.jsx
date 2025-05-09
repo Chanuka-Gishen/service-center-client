@@ -69,7 +69,7 @@ export const WorkorderView = ({
                 isLoading={isLoadingUpdateAssignee}
                 handleAssign={handelUpdateWorkorderAssignees}
               />
-              {job.workOrderPaymentStatus != PAY_STATUS_PAID && (
+              {job.workOrderPaymentStatus != PAY_STATUS_PAID && job.workOrderInvoiceNumber && (
                 <Button
                   variant="contained"
                   size="large"

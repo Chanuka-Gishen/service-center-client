@@ -299,16 +299,17 @@ export const WorkordersView = ({
                 isLoading={isLoadingUpdateAssignee}
                 handleAssign={handelUpdateWorkorderAssignees}
               />
-              {selectedJob.workOrderPaymentStatus != PAY_STATUS_PAID && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleTogglePaymentDlg}
-                  disabled={isLoadingCreate}
-                >
-                  Add Payment
-                </Button>
-              )}
+              {selectedJob.workOrderPaymentStatus != PAY_STATUS_PAID &&
+                selectedJob.workOrderInvoiceNumber && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleTogglePaymentDlg}
+                    disabled={isLoadingCreate}
+                  >
+                    Add Payment
+                  </Button>
+                )}
 
               {selectedJob.workOrderStatus != WO_STATUS_OPEN &&
                 selectedJob.workOrderInvoiceNumber && (
