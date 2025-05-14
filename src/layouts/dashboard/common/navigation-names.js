@@ -5,6 +5,7 @@ export const NAVBAR_ITEMS = {
   WORKORDERS: 'workorders',
   JOBS: 'jobs',
   SUPPLIERS: 'suppliers',
+  ACCOUNTS: 'accounts',
   EMPLOYEES: 'employees',
   USERS: 'users'
 };

@@ -8,6 +8,7 @@ import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import HailIcon from '@mui/icons-material/Hail';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 import { USER_ROLE } from 'src/constants/user-role';
 
@@ -55,6 +56,13 @@ const navConfig = [
     path: 'suppliers',
     icon: <HailIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
+  },
+  {
+    title: 'Accounts',
+    name: NAVBAR_ITEMS.ACCOUNTS,
+    path: 'accounts',
+    icon: <AccountBalanceIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
   },
   {
     title: 'Employees',

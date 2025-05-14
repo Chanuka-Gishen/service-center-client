@@ -47,5 +47,8 @@ export const NAVIGATION_ROUTES = {
   },
   suppliers:{
     base: '/suppliers'
+  },
+  accounts: {
+    base: '/accounts'
   }
 };

@@ -3,7 +3,7 @@ import { SuppliersView } from '../view/suppliers-view';
 import useSupplier from 'src/hooks/useSupplier';
 import useInventory from 'src/hooks/useInventory';
 
-const tableColumns = ['Supplier', 'Contact Person', 'Phone No', 'Products', 'Noted', 'Is Active'];
+const tableColumns = ['Supplier', 'Contact Person', 'Phone No', 'Products','Due Amount', 'Notes', 'Is Active'];
 
 const SuppliersController = () => {
   const { suppliers, suppliersCount, isLoadingSuppliers, getAllSuppliers, registerSupplier } =

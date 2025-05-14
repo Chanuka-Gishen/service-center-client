@@ -9,10 +9,39 @@ const usePayment = () => {
   const sourceToken = axios.CancelToken.source();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [payments, setPayments] = useState([]);
   const [woPayments, setWoPayments] = useState([]);
 
+  const [paymentsCount, setPaymentsCount] = useState(0);
+
+  const [isLoadingPayments, setIsLoadingPayments] = useState(true);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
+  const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
   const [isLoadingWoPayments, setIsLoadingWoPayments] = useState(false);
+
+  // Fetch all payments
+  const fetchPayments = async (params) => {
+    setIsLoadingPayments(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENTS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setPayments(res.data.responseData.data);
+          setPaymentsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingPayments(false);
+      })
+      .finally(() => {
+        setIsLoadingPayments(false);
+      });
+  };
 
   // Create Payments
   const createPayment = async (data) => {
@@ -47,6 +76,35 @@ const usePayment = () => {
     return isSuccess;
   };
 
+  // Create expenses payment
+  const createExpensesPayment = async (data) => {
+    if (isLoadingCreateExp) return;
+
+    let isSuccess = false;
+
+    setIsLoadingCreateExp(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_CREATE_EXP,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingCreateExp(false);
+      })
+      .finally(() => {
+        setIsLoadingCreateExp(false);
+      });
+
+    return isSuccess;
+  };
+
   // Fetch Workorder Payments
   const fetchWorkorderPayments = async (id) => {
     if (!id) return;
@@ -75,11 +133,17 @@ const usePayment = () => {
   };
 
   return {
+    payments,
+    paymentsCount,
     woPayments,
+    isLoadingPayments,
     isLoadingCreate,
+    isLoadingCreateExp,
     isLoadingWoPayments,
+    fetchPayments,
     createPayment,
-    fetchWorkorderPayments
+    createExpensesPayment,
+    fetchWorkorderPayments,
   };
 };
 

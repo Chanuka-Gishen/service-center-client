@@ -47,8 +47,10 @@ export const BACKEND_API = {
   WO_TOTAL_RECEIVABLES: IP_URL + '/workorder/auth/total-receivables',
   WO_ACTIVE_JOBS_COUNT: IP_URL + '/workorder/auth/total-active-jobs',
 
+  PAYMENTS: IP_URL + '/payment/auth/payments',
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
+  PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
   EMP_ALL: IP_URL + '/employee/auth/employees',

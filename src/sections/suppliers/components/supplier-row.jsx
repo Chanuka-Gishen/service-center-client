@@ -1,4 +1,5 @@
 import { Chip, TableCell, TableRow, Typography } from '@mui/material';
+import { formatCurrency } from 'src/utils/format-number';
 
 export const SupplierRow = ({ data }) => {
   return (
@@ -15,6 +16,7 @@ export const SupplierRow = ({ data }) => {
                 ))
               : <Typography key={index} variant='body2'>No Vehicles</Typography>}
           </TableCell>
+          <TableCell>{formatCurrency(item.supplierDueAmount)}</TableCell>
           <TableCell>{item.supplierNotes}</TableCell>
           <TableCell>
             <Chip
