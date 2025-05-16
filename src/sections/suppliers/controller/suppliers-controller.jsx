@@ -1,11 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
 import { SuppliersView } from '../view/suppliers-view';
 import useSupplier from 'src/hooks/useSupplier';
 import useInventory from 'src/hooks/useInventory';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
+import { useRouter } from 'src/routes/hooks';
 
-const tableColumns = ['Supplier', 'Contact Person', 'Phone No', 'Products','Due Amount', 'Notes', 'Is Active'];
+const tableColumns = [
+  'Supplier',
+  'Contact Person',
+  'Phone No',
+  'Products',
+  'Due Amount',
+  'Notes',
+  'Is Active',
+];
 
 const SuppliersController = () => {
+  const router = useRouter();
+
   const { suppliers, suppliersCount, isLoadingSuppliers, getAllSuppliers, registerSupplier } =
     useSupplier();
 
@@ -47,6 +60,12 @@ const SuppliersController = () => {
     setLimit(parseInt(event.target.value, 10));
   };
 
+  const handleRowClick = (id) => {
+    if (id) {
+      router.push(`${NAVIGATION_ROUTES.suppliers.details.id}${id}`);
+    }
+  };
+
   const handleToggleAddDialog = () => {
     setIsOpenAdd(!isOpenAdd);
   };
@@ -54,9 +73,9 @@ const SuppliersController = () => {
   const handleAddSupplier = async (values) => {
     const isSuccess = await registerSupplier(values);
 
-    if(isSuccess){
-      getAllSuppliers()
-      handleToggleAddDialog()
+    if (isSuccess) {
+      getAllSuppliers();
+      handleToggleAddDialog();
     }
   };
 
@@ -87,6 +106,7 @@ const SuppliersController = () => {
       isLoadingInvSelect={isLoadingInvSelect}
       handleChangeSearch={handleChangeSearch}
       handleInputChange={handleInputChange}
+      handleRowClick={handleRowClick}
       handleToggleAddDialog={handleToggleAddDialog}
       handleAddSupplier={handleAddSupplier}
       handleChangeRowsPerPage={handleChangeRowsPerPage}
