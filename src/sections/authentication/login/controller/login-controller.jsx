@@ -61,7 +61,7 @@ const LoginController = () => {
               router.push(NAVIGATION_ROUTES.set_password);
             } else {
               // Update login status - TODO
-              router.push(NAVIGATION_ROUTES.dashboard.main);
+              router.push(NAVIGATION_ROUTES.dashboard.base);
             }
           } else {
             enqueueSnackbar(data.responseMessage, {
