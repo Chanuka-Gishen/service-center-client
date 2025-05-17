@@ -21,6 +21,7 @@ export const SuppliersView = ({
   isLoadingInvSelect,
   handleChangeSearch,
   handleInputChange,
+  handleRowClick,
   handleToggleAddDialog,
   handleAddSupplier,
   handleChangeRowsPerPage,
@@ -63,7 +64,7 @@ export const SuppliersView = ({
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableBody={<SupplierRow data={suppliers} />}
+                tableBody={<SupplierRow data={suppliers} onClickRow={handleRowClick} />}
               />
             </Paper>
           </Card>

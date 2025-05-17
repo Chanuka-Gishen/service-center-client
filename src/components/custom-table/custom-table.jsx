@@ -48,7 +48,7 @@ export const CustomTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {dataLength > 5 && enablePagination && (
+      {documentCount > 5 && enablePagination && (
         <TablePagination
           page={page}
           component="div"

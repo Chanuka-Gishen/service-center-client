@@ -47,8 +47,10 @@ export const BACKEND_API = {
   WO_TOTAL_RECEIVABLES: IP_URL + '/workorder/auth/total-receivables',
   WO_ACTIVE_JOBS_COUNT: IP_URL + '/workorder/auth/total-active-jobs',
 
+  PAYMENTS: IP_URL + '/payment/auth/payments',
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
+  PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
   EMP_ALL: IP_URL + '/employee/auth/employees',
@@ -56,7 +58,11 @@ export const BACKEND_API = {
   EMP_SELECT: IP_URL + '/employee/auth/selection',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
+  SUPPLIER_INFO: IP_URL + '/supplier/auth/info',
   SUPPLIER_ADD: IP_URL + '/supplier/auth/register',
-  SUPPLIER_UPDATE: IP_URL + '/supplier/auth/update',
+  SUPPLIER_UPDATE: IP_URL + '/supplier/supAuth/update',
   SUPPLIER_OPTIONS: IP_URL + '/supplier/auth/select-suppliers',
+  SUPPLIER_PURCHASES: IP_URL + '/supplier/auth/supplier-purchases',
+  SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
+  SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment'
 };

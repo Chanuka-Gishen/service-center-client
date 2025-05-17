@@ -8,15 +8,23 @@ const useSupplier = () => {
   const sourceToken = axios.CancelToken.source();
 
   const [suppliers, setSuppliers] = useState([]);
+  const [supplier, setSupplier] = useState(null);
   const [suppliersOptions, setSuppliersOptions] = useState([]);
+  const [supplierStockMovements, setSupplierStockMovements] = useState([]);
+  const [supplierPayments, setSupplierPayments] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
+  const [supplierMovementCount, setSupplierMovementCount] = useState(0);
+  const [supplierPaymentsCount, setSupplierPaymentsCount] = useState(0);
 
   const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(true);
   const [isLoadingSupplier, setIsLoadingSupplier] = useState(true);
   const [isLoadingSupRegister, setIsLoadingSupRegister] = useState(false);
   const [isLoadingSupUpdate, setIsLoadingSupUpdate] = useState(false);
+  const [isLoadingAddSupPayment, setIsLoadingAddSupPayment] = useState(false);
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
+  const [isLoadingSupplierMovements, setIsLoadingSupplierMovements] = useState(false);
+  const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
 
   // Get all suppliers with filterss
   const getAllSuppliers = async (params) => {
@@ -39,6 +47,79 @@ const useSupplier = () => {
       })
       .finally(() => {
         setIsLoadingSuppliers(false);
+      });
+  };
+
+  // Fetch supplier info
+  const fetchSupplierInfo = async (id) => {
+    setIsLoadingSupplier(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSupplier(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSupplier(false);
+      })
+      .finally(() => {
+        setIsLoadingSupplier(false);
+      });
+  };
+
+  // Fetch supplier stock movements
+  const fetchSupplierStockMovements = async (params) => {
+    setIsLoadingSupplierMovements(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_PURCHASES,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSupplierStockMovements(res.data.responseData.data);
+          setSupplierMovementCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSupplierMovements(false);
+      })
+      .finally(() => {
+        setIsLoadingSupplierMovements(false);
+      });
+  };
+
+  // Fetch supplier recent payments made
+  const fetchSupplierRecentPayments = async (params) => {
+    setIsLoadingSupplierPayments(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_PAYMENTS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSupplierPayments(res.data.responseData.data);
+          setSupplierPaymentsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSupplierPayments(false);
+      })
+      .finally(() => {
+        setIsLoadingSupplierPayments(false);
       });
   };
 
@@ -81,7 +162,7 @@ const useSupplier = () => {
 
     await backendAuthApi({
       url: BACKEND_API.SUPPLIER_UPDATE,
-      method: 'POST',
+      method: 'PUT',
       cancelToken: sourceToken.token,
       params: {
         id,
@@ -98,6 +179,35 @@ const useSupplier = () => {
       })
       .finally(() => {
         setIsLoadingSupUpdate(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Create supplier payments
+  const createSupplierPayments = async (data) => {
+    if (isLoadingAddSupPayment) return;
+
+    let isSuccess = false;
+
+    setIsLoadingAddSupPayment(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_ADD_PAYMENTS,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingAddSupPayment(false);
+      })
+      .finally(() => {
+        setIsLoadingAddSupPayment(false);
       });
 
     return isSuccess;
@@ -132,17 +242,29 @@ const useSupplier = () => {
 
   return {
     suppliers,
+    supplier,
+    supplierStockMovements,
+    supplierPayments,
     suppliersCount,
+    supplierMovementCount,
+    supplierPaymentsCount,
     suppliersOptions,
     isLoadingSuppliers,
     isLoadingSupplier,
     isLoadingSupRegister,
     isLoadingSupUpdate,
+    isLoadingAddSupPayment,
     isLoadingSuppliersOptions,
+    isLoadingSupplierMovements,
+    isLoadingSupplierPayments,
     getAllSuppliers,
+    fetchSupplierInfo,
     registerSupplier,
     updateSupplier,
+    createSupplierPayments,
     fetchSuppliersForSelection,
+    fetchSupplierStockMovements,
+    fetchSupplierRecentPayments,
   };
 };
 
