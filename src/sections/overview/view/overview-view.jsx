@@ -5,6 +5,7 @@ import {
   Button,
   ButtonGroup,
   Card,
+  CircularProgress,
   Container,
   Paper,
   Stack,
@@ -23,6 +24,7 @@ import { CustomTable } from 'src/components/custom-table/custom-table';
 import { LowStocksRow } from '../components/low-stocks-row';
 import { ITEM_STS_LOW_STOCK, ITEM_STS_OUTOFSTOCK } from 'src/constants/item-status';
 import { formatCurrency } from 'src/utils/format-number';
+import { PendingPaymentsRow } from '../components/pending-payments-row';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +32,7 @@ export const Overview = ({
   selectedInvStatus,
   setSelectedInvStatus,
   stockTableColumns,
+  pendingPayColumns,
   invStockStats,
   invStockStatsCount,
   chartTotalRevenueData,
@@ -37,12 +40,14 @@ export const Overview = ({
   activeJobsCount,
   todayRevenue,
   totalReceivables,
+  pendingPayments,
   isLoadingChartRevenueData,
   isLoadingChartTotalJobs,
   isLoadingStockAvailabilityStats,
   isLoadingActiveJobsCount,
   isLoadingTodayRevenue,
   isLoadingReceivables,
+  isLoadingPendingPayments,
 }) => {
   const theme = useTheme();
   const { auth } = useAuthStore.getState();
@@ -186,7 +191,16 @@ export const Overview = ({
                 }}
               >
                 <Paper elevation={0} sx={{ p: '10px' }}>
-                  <Chart options={revenueOptions} series={revenueSeries} type="line" height={350} />
+                  {isLoadingChartRevenueData ? (
+                    <CircularProgress />
+                  ) : (
+                    <Chart
+                      options={revenueOptions}
+                      series={revenueSeries}
+                      type="line"
+                      height={350}
+                    />
+                  )}
                 </Paper>
               </Card>
             </Grid>
@@ -202,12 +216,16 @@ export const Overview = ({
                 }}
               >
                 <Paper elevation={0} sx={{ p: '10px' }}>
-                  <Chart
-                    options={orderCountOptions}
-                    series={orderCountSeries}
-                    type="line"
-                    height={350}
-                  />
+                  {isLoadingChartTotalJobs ? (
+                    <CircularProgress />
+                  ) : (
+                    <Chart
+                      options={orderCountOptions}
+                      series={orderCountSeries}
+                      type="line"
+                      height={350}
+                    />
+                  )}
                 </Paper>
               </Card>
             </Grid>
@@ -251,6 +269,22 @@ export const Overview = ({
               </Paper>
             </Card>
           </Box>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+          <Stack spacing={2}>
+            <Typography variant='h6'>Pending Cheque Payments</Typography>
+            <Card>
+              <Paper elevation={0}>
+                <CustomTable
+                  keys={pendingPayColumns}
+                  isLoading={isLoadingPendingPayments}
+                  dataLength={pendingPayments.length}
+                  tableBody={<PendingPaymentsRow data={pendingPayments} />}
+                  enablePagination={false}
+                />
+              </Paper>
+            </Card>
+          </Stack>
         </Grid>
       </Grid>
     </Container>

@@ -3,8 +3,10 @@ import { Overview } from '../view/overview-view';
 import useInventory from 'src/hooks/useInventory';
 import { ITEM_STS_OUTOFSTOCK } from 'src/constants/item-status';
 import useWorkOrder from 'src/hooks/useWorkorder';
+import usePayment from 'src/hooks/usePayment';
 
 const stockTableColumns = ['Code', 'Item', 'Quantity'];
+const pendingPayColumns = ['vehicle No', 'Customer Name', 'Amount', 'Transaction Id', 'Created At']
 
 const OverviewController = () => {
   const {
@@ -32,6 +34,8 @@ const OverviewController = () => {
     fetchTotalReceivables,
   } = useWorkOrder();
 
+  const {pendingPayments, isLoadingPendingPayments, fetchPendingPayments} = usePayment()
+
   const [selectedInvStatus, setSelectedInvStatus] = useState(ITEM_STS_OUTOFSTOCK);
 
   useEffect(() => {
@@ -46,6 +50,7 @@ const OverviewController = () => {
     fetchActiveJobsCount();
     fetchTodayTotalRevenue();
     fetchTotalReceivables();
+    fetchPendingPayments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,6 +59,7 @@ const OverviewController = () => {
       selectedInvStatus={selectedInvStatus}
       setSelectedInvStatus={setSelectedInvStatus}
       stockTableColumns={stockTableColumns}
+      pendingPayColumns={pendingPayColumns}
       invStockStats={invStockStats}
       invStockStatsCount={invStockStatsCount}
       chartTotalRevenueData={chartTotalRevenueData}
@@ -61,12 +67,14 @@ const OverviewController = () => {
       activeJobsCount={activeJobsCount}
       todayRevenue={todayRevenue}
       totalReceivables={totalReceivables}
+      pendingPayments={pendingPayments}
       isLoadingChartRevenueData={isLoadingChartRevenueData}
       isLoadingChartTotalJobs={isLoadingChartTotalJobs}
       isLoadingStockAvailabilityStats={isLoadingStockAvailabilityStats}
       isLoadingActiveJobsCount={isLoadingActiveJobsCount}
       isLoadingTodayRevenue={isLoadingTodayRevenue}
       isLoadingReceivables={isLoadingReceivables}
+      isLoadingPendingPayments={isLoadingPendingPayments}
     />
   );
 };
