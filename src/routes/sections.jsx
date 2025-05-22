@@ -22,6 +22,7 @@ export const WorkorderDetailsPage = lazy(() => import('src/pages/workorder-detai
 export const SuppliersPage = lazy(() => import('src/pages/suppliers'));
 export const SupplierInfoPage = lazy(() => import('src/pages/supplier-details'));
 export const AccountsPage = lazy(() => import('src/pages/accounts'));
+export const AccountsReportsPage = lazy(() => import('src/pages/accounts-reports'));
 export const EmployeesPage = lazy(() => import('src/pages/employees'));
 export const UsersPage = lazy(() => import('src/pages/users'));
 
@@ -72,6 +73,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.suppliers.base, element: <SuppliersPage /> },
         { path: NAVIGATION_ROUTES.suppliers.details.base, element: <SupplierInfoPage /> },
         { path: NAVIGATION_ROUTES.accounts.base, element: <AccountsPage /> },
+        { path: NAVIGATION_ROUTES.accounts_reports.base, element: <AccountsReportsPage /> },
         { path: NAVIGATION_ROUTES.employees.base, element: <EmployeesPage /> },
         { path: NAVIGATION_ROUTES.users.base, element: <UsersPage /> },
       ],

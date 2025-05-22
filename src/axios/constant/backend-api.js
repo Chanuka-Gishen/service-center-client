@@ -51,6 +51,10 @@ export const BACKEND_API = {
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
   PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
+  PAYMENT_SUMMARY: IP_URL + '/payment/auth/summary',
+  PAYMENT_FIN_SUMMARY: IP_URL + '/payment/auth/financial-summary',
+  PAYMENT_EXPENSES_SUMMARY: IP_URL + '/payment/auth/expense-summary',
+  PAYMENT_FINANCIAL_REPORT: IP_URL + '/payment//auth/generate-report',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
   EMP_ALL: IP_URL + '/employee/auth/employees',
@@ -64,5 +68,5 @@ export const BACKEND_API = {
   SUPPLIER_OPTIONS: IP_URL + '/supplier/auth/select-suppliers',
   SUPPLIER_PURCHASES: IP_URL + '/supplier/auth/supplier-purchases',
   SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
-  SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment'
+  SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment',
 };
