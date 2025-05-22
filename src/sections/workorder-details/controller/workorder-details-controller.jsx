@@ -21,16 +21,25 @@ const WorkorderController = () => {
     woPayments,
     isLoadingWoPayments,
     isLoadingCreate,
+    isLoadingPaymentComplete,
     createPayment,
     fetchWorkorderPayments,
+    processPaymentRecord,
   } = usePayment();
 
   const [job, setJob] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
+  const [isOpenProceedPayDlg, setIsOpenproceedPayDlg] = useState(false);
 
   const handleTogglePaymentDlg = () => {
     setIsOpenPaymentDlg(!isOpenPaymentDlg);
+  };
+
+  const handleTogglePaymentProceedDlg = (id = null) => {
+    setSelectedPayment(id);
+    setIsOpenproceedPayDlg(!isOpenProceedPayDlg);
   };
 
   const handleAddPaymentRecord = async (values) => {
@@ -44,6 +53,17 @@ const WorkorderController = () => {
     if (isSuccess) {
       handleTogglePaymentDlg();
       fetchWorkorder();
+      fetchWorkorderPayments();
+    }
+  };
+
+  const handleCompletePayment = async () => {
+    const isSuccess = await processPaymentRecord(selectedPayment);
+
+    if (isSuccess) {
+      handleTogglePaymentProceedDlg();
+      await fetchWorkorder();
+      await fetchWorkorderPayments(id);
     }
   };
 
@@ -81,10 +101,14 @@ const WorkorderController = () => {
       isLoadingCreate={isLoadingCreate}
       isLoadingWoPayments={isLoadingWoPayments}
       isLoadingUpdateAssignee={isLoadingUpdateAssignee}
+      isLoadingPaymentComplete={isLoadingPaymentComplete}
       isOpenPaymentDlg={isOpenPaymentDlg}
+      isOpenProceedPayDlg={isOpenProceedPayDlg}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
+      handleTogglePaymentProceedDlg={handleTogglePaymentProceedDlg}
       handleAddPaymentRecord={handleAddPaymentRecord}
       handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
+      handleCompletePayment={handleCompletePayment}
       downloadInvoice={downloadInvoice}
     />
   );

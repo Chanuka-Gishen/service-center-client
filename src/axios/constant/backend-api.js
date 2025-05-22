@@ -48,9 +48,11 @@ export const BACKEND_API = {
   WO_ACTIVE_JOBS_COUNT: IP_URL + '/workorder/auth/total-active-jobs',
 
   PAYMENTS: IP_URL + '/payment/auth/payments',
+  PAYMENTS_PENDING: IP_URL + '/payment/auth/pending-payments',
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
   PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
+  PAYMENT_COMPLETE_RECORD: IP_URL + '/payment/auth/complete-payment',
   PAYMENT_SUMMARY: IP_URL + '/payment/auth/summary',
   PAYMENT_FIN_SUMMARY: IP_URL + '/payment/auth/financial-summary',
   PAYMENT_EXPENSES_SUMMARY: IP_URL + '/payment/auth/expense-summary',

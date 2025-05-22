@@ -2,6 +2,7 @@ import React from 'react';
 
 import Grid from '@mui/material/Grid2';
 import {
+  Alert,
   Box,
   Breadcrumbs,
   Button,
@@ -10,6 +11,7 @@ import {
   CircularProgress,
   Container,
   Divider,
+  IconButton,
   Link,
   Stack,
   Table,
@@ -20,14 +22,22 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
+
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
 import { fDate, fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
-import { PAY_STATUS_PAID } from 'src/constants/payment-status';
+import {
+  PAY_STATUS_COMPLETED,
+  PAY_STATUS_PAID,
+  PAY_STATUS_PENDING,
+} from 'src/constants/payment-status';
 import commonUtil from 'src/utils/common-util';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
+import { PAY_METHOD_CHEQUE } from 'src/constants/payment-methods';
+import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
 
 export const WorkorderView = ({
   job,
@@ -37,10 +47,14 @@ export const WorkorderView = ({
   isLoadingCreate,
   isLoadingWoPayments,
   isLoadingUpdateAssignee,
+  isLoadingPaymentComplete,
   isOpenPaymentDlg,
+  isOpenProceedPayDlg,
   handleTogglePaymentDlg,
+  handleTogglePaymentProceedDlg,
   handleAddPaymentRecord,
   handelUpdateWorkorderAssignees,
+  handleCompletePayment,
   downloadInvoice,
 }) => {
   return (
@@ -93,6 +107,17 @@ export const WorkorderView = ({
             </Stack>
           </Grid>
         )}
+        {woPayments.map((item) => {
+          if (item.paymentStatus === PAY_STATUS_PENDING) {
+            return (
+              <Grid size={12}>
+                <Alert severity="warning">
+                  {`There is a pending cheque created at ${fDate(item.createdAt)}`}
+                </Alert>
+              </Grid>
+            );
+          }
+        })}
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 8, lg: 8 }}>
             <Box
@@ -266,7 +291,34 @@ export const WorkorderView = ({
                           </TableRow>
                           <TableRow>
                             <TableCell variant="head">Method</TableCell>
-                            <TableCell>{payment.paymentMaymentMethod}</TableCell>
+                            <TableCell>{payment.paymentMethod}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell variant="head">Status</TableCell>
+                            <TableCell>
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                              >
+                                <Chip
+                                  label={payment.paymentStatus}
+                                  color={
+                                    payment.paymentStatus === PAY_STATUS_COMPLETED
+                                      ? 'success'
+                                      : 'warning'
+                                  }
+                                />
+                                {payment.paymentStatus === PAY_STATUS_PENDING &&
+                                  payment.paymentMethod === PAY_METHOD_CHEQUE && (
+                                    <IconButton
+                                      onClick={() => handleTogglePaymentProceedDlg(payment._id)}
+                                    >
+                                      <PriceChangeIcon />
+                                    </IconButton>
+                                  )}
+                              </Stack>
+                            </TableCell>
                           </TableRow>
                           {!commonUtil.stringIsEmptyOrSpaces(payment.paymentTransactionId) && (
                             <TableRow>
@@ -301,6 +353,17 @@ export const WorkorderView = ({
           data={job}
           isLoading={isLoadingCreate}
           handleConfirm={handleAddPaymentRecord}
+        />
+      )}
+      {isOpenProceedPayDlg && (
+        <ConfirmationDialog
+          open={isOpenProceedPayDlg}
+          handleClose={handleTogglePaymentProceedDlg}
+          contentText={
+            'Please double check before completing this cheque payment. Once you proceed it cannot be reversed. The accounts will be updated if you wish to continue !'
+          }
+          handleSubmit={handleCompletePayment}
+          isLoading={isLoadingPaymentComplete}
         />
       )}
     </Container>

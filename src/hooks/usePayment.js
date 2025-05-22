@@ -11,6 +11,7 @@ const usePayment = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [payments, setPayments] = useState([]);
+  const [pendingPayments, setPendingPayments] = useState([]);
   const [woPayments, setWoPayments] = useState([]);
   const [accSummary, setAccSummary] = useState([]);
   const [finSummary, setFinSummary] = useState({ incomeData: [], expenseData: [] });
@@ -27,8 +28,10 @@ const usePayment = () => {
   const [paymentsCount, setPaymentsCount] = useState(0);
 
   const [isLoadingPayments, setIsLoadingPayments] = useState(true);
+  const [isLoadingPendingPayments, setIsLoadingPendingPayments] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
+  const [isLoadingPaymentComplete, setIsLoadingPaymentComplete] = useState(false);
   const [isLoadingWoPayments, setIsLoadingWoPayments] = useState(false);
   const [isLoadingAccSummary, setIsLoadingAccSummary] = useState(true);
   const [isLoadingFinSummary, setIsLoadingFinSummary] = useState(true);
@@ -56,6 +59,28 @@ const usePayment = () => {
       })
       .finally(() => {
         setIsLoadingPayments(false);
+      });
+  };
+
+  // Fetch pending payments - cheques
+  const fetchPendingPayments = async () => {
+    setIsLoadingPendingPayments(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENTS_PENDING,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setPendingPayments(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingPendingPayments(false);
+      })
+      .finally(() => {
+        setIsLoadingPendingPayments(false);
       });
   };
 
@@ -116,6 +141,35 @@ const usePayment = () => {
       })
       .finally(() => {
         setIsLoadingCreateExp(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Process payment record - Cheques
+  const processPaymentRecord = async (id) => {
+    let isSuccess = false;
+
+    setIsLoadingPaymentComplete(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_COMPLETE_RECORD,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingPaymentComplete(false);
+      })
+      .finally(() => {
+        setIsLoadingPaymentComplete(false);
       });
 
     return isSuccess;
@@ -246,13 +300,16 @@ const usePayment = () => {
   return {
     payments,
     paymentsCount,
+    pendingPayments,
     woPayments,
     accSummary,
     finSummary,
     expSummary,
     isLoadingPayments,
+    isLoadingPendingPayments,
     isLoadingCreate,
     isLoadingCreateExp,
+    isLoadingPaymentComplete,
     isLoadingWoPayments,
     isLoadingAccSummary,
     isLoadingFinSummary,
@@ -260,13 +317,15 @@ const usePayment = () => {
     isLoadingExpenseSummary,
     isLoadingFinReportDownload,
     fetchPayments,
+    fetchPendingPayments,
     createPayment,
     createExpensesPayment,
+    processPaymentRecord,
     fetchWorkorderPayments,
     fetchAccountsSummary,
     fetchFinancialSummary,
     fetchExpenseSummary,
-    downloadFinancialReport
+    downloadFinancialReport,
   };
 };
 
