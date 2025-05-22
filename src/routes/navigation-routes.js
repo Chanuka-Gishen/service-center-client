@@ -54,5 +54,8 @@ export const NAVIGATION_ROUTES = {
   },
   accounts: {
     base: '/accounts'
+  },
+  accounts_reports:{
+    base: '/reports'
   }
 };

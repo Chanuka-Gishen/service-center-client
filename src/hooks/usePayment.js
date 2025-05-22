@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+
 import { BACKEND_API } from 'src/axios/constant/backend-api';
 import { backendAuthApi } from 'src/axios/instance/backend-axios-instance';
 import responseUtil from 'src/utils/responseUtil';
@@ -11,6 +12,17 @@ const usePayment = () => {
 
   const [payments, setPayments] = useState([]);
   const [woPayments, setWoPayments] = useState([]);
+  const [accSummary, setAccSummary] = useState([]);
+  const [finSummary, setFinSummary] = useState({ incomeData: [], expenseData: [] });
+  const [expSummary, setExpSummary] = useState({
+    period: {
+      start: new Date(),
+      end: new Date(),
+      range: '7Days',
+    },
+    grandTotal: 0,
+    categories: [],
+  });
 
   const [paymentsCount, setPaymentsCount] = useState(0);
 
@@ -18,6 +30,10 @@ const usePayment = () => {
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
   const [isLoadingWoPayments, setIsLoadingWoPayments] = useState(false);
+  const [isLoadingAccSummary, setIsLoadingAccSummary] = useState(true);
+  const [isLoadingFinSummary, setIsLoadingFinSummary] = useState(true);
+  const [isLoadingExpenseSummary, setIsLoadingExpenseSummary] = useState(true);
+  const [isLoadingFinReportDownload, setIsLoadingFinReportDownload] = useState(false);
 
   // Fetch all payments
   const fetchPayments = async (params) => {
@@ -132,18 +148,125 @@ const usePayment = () => {
       });
   };
 
+  // Fetch accounts summary
+  const fetchAccountsSummary = async () => {
+    setIsLoadingAccSummary(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_SUMMARY,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setAccSummary(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingAccSummary(false);
+      })
+      .finally(() => {
+        setIsLoadingAccSummary(false);
+      });
+  };
+
+  // Fetch financial summary
+  const fetchFinancialSummary = async () => {
+    setIsLoadingFinSummary(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_FIN_SUMMARY,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setFinSummary(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingFinSummary(false);
+      })
+      .finally(() => {
+        setIsLoadingFinSummary(false);
+      });
+  };
+
+  // Fetch expense summary
+  const fetchExpenseSummary = async () => {
+    setIsLoadingExpenseSummary(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_EXPENSES_SUMMARY,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setExpSummary(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingExpenseSummary(false);
+      })
+      .finally(() => {
+        setIsLoadingExpenseSummary(false);
+      });
+  };
+
+  // Download financial report
+  const downloadFinancialReport = async (params) => {
+    setIsLoadingFinReportDownload(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_FINANCIAL_REPORT,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+      responseType: 'blob',
+    })
+      .then((res) => {
+        // Create a link element and trigger download
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `wijaya-auto-financial-report.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(() => {
+        setIsLoadingFinReportDownload(false);
+      })
+      .finally(() => {
+        setIsLoadingFinReportDownload(false);
+      });
+  };
+
   return {
     payments,
     paymentsCount,
     woPayments,
+    accSummary,
+    finSummary,
+    expSummary,
     isLoadingPayments,
     isLoadingCreate,
     isLoadingCreateExp,
     isLoadingWoPayments,
+    isLoadingAccSummary,
+    isLoadingFinSummary,
+    isLoadingFinSummary,
+    isLoadingExpenseSummary,
+    isLoadingFinReportDownload,
     fetchPayments,
     createPayment,
     createExpensesPayment,
     fetchWorkorderPayments,
+    fetchAccountsSummary,
+    fetchFinancialSummary,
+    fetchExpenseSummary,
+    downloadFinancialReport
   };
 };
 

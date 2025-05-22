@@ -9,6 +9,7 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import HailIcon from '@mui/icons-material/Hail';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 import { USER_ROLE } from 'src/constants/user-role';
 
@@ -63,6 +64,13 @@ const navConfig = [
     path: 'accounts',
     icon: <AccountBalanceIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
+  },
+  {
+    title: 'Accounts Reports',
+    name: NAVBAR_ITEMS.ACCOUNTS_REPORTS,
+    path: 'reports',
+    icon: <AssessmentIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
   {
     title: 'Employees',

@@ -9,8 +9,9 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { formatCurrency } from 'src/utils/format-number';
+import { fDate } from 'src/utils/format-time';
 
-const StatCard = ({ title, isLoading, value, icon, type = 'currency' }) => {
+const StatCard = ({ title, isLoading, value, lastUpdatedAt, icon, type = 'currency' }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -37,11 +38,14 @@ const StatCard = ({ title, isLoading, value, icon, type = 'currency' }) => {
             <Typography variant="subtitle2" color="textSecondary" gutterBottom>
               {title}
             </Typography>
-            {isLoading && <CircularProgress size='30px' />}
+            {isLoading && <CircularProgress size="30px" />}
             {!isLoading && (
-              <Typography variant="h4" component="div">
+              <Typography variant="h4">
                 {type === 'currency' ? formatCurrency(value) : value}
               </Typography>
+            )}
+            {lastUpdatedAt && (
+              <Typography variant="caption">{`Last update at ${fDate(new Date())}`}</Typography>
             )}
           </Box>
           <Box
