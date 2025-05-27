@@ -11,6 +11,8 @@ import {
   Select,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { CustomTable } from 'src/components/custom-table/custom-table';
@@ -18,6 +20,7 @@ import { AccountsRow } from '../components/accounts-row';
 import { PAYMENT_TYPES } from 'src/constants/payment-types';
 import { PAY_SC_COMBINED } from 'src/constants/payment-source';
 import { AddExpenseDialog } from '../components/add-expense-dialog';
+import { AddIncomeDialog } from '../components/add-income-dialog';
 
 export const AccountsView = ({
   tableTitles,
@@ -25,29 +28,45 @@ export const AccountsView = ({
   payments,
   paymentsCount,
   isOpenAdd,
+  isOpenAddIncome,
   isLoadingPayments,
   isLoadingCreateExp,
+  isLoadingCreateInc,
   limit,
   page,
   handleChangeSearchParam,
   handleDeleteSearchParam,
   handleToggleAddExpenseDialog,
+  handleToggleAddIncomeDialog,
   handleAddExpenseRecord,
+  handleAddIncomeRecord,
   handleChangePage,
   handleChangeRowsPerPage,
 }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth="xl">
       <Grid container spacing={4}>
         <Grid size={12}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack
+            direction={isSmallScreen ? 'column' : 'row'}
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={2}
+          >
             <Typography variant="h5">Manage Accounts</Typography>
-            <Button variant="contained" onClick={handleToggleAddExpenseDialog}>
-              Add Payment
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button variant="contained" onClick={handleToggleAddIncomeDialog}>
+                Add Income
+              </Button>
+              <Button variant="contained" onClick={handleToggleAddExpenseDialog}>
+                Add Expense
+              </Button>
+            </Stack>
           </Stack>
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="select-label">Payment Type</InputLabel>
             <Select
@@ -67,7 +86,7 @@ export const AccountsView = ({
             </Select>
           </FormControl>
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="select-label">Payment Source</InputLabel>
             <Select
@@ -126,6 +145,14 @@ export const AccountsView = ({
           handleOpenClose={handleToggleAddExpenseDialog}
           handleConfirm={handleAddExpenseRecord}
           isLoading={isLoadingCreateExp}
+        />
+      )}
+      {isOpenAddIncome && (
+        <AddIncomeDialog
+          open={isOpenAddIncome}
+          handleOpenClose={handleToggleAddIncomeDialog}
+          handleConfirm={handleAddIncomeRecord}
+          isLoading={isLoadingCreateInc}
         />
       )}
     </Container>

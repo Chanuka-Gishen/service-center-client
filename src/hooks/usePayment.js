@@ -31,6 +31,7 @@ const usePayment = () => {
   const [isLoadingPendingPayments, setIsLoadingPendingPayments] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
+  const [isLoadingCreateInc, setIsLoadingCreateInc] = useState(false);
   const [isLoadingPaymentComplete, setIsLoadingPaymentComplete] = useState(false);
   const [isLoadingWoPayments, setIsLoadingWoPayments] = useState(false);
   const [isLoadingAccSummary, setIsLoadingAccSummary] = useState(true);
@@ -141,6 +142,35 @@ const usePayment = () => {
       })
       .finally(() => {
         setIsLoadingCreateExp(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Create income record
+  const createIncomePayment = async (data) => {
+    if (isLoadingCreateInc) return;
+
+    let isSuccess = false;
+
+    setIsLoadingCreateInc(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_CREATE_INC,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingCreateInc(false);
+      })
+      .finally(() => {
+        setIsLoadingCreateInc(false);
       });
 
     return isSuccess;
@@ -309,6 +339,7 @@ const usePayment = () => {
     isLoadingPendingPayments,
     isLoadingCreate,
     isLoadingCreateExp,
+    isLoadingCreateInc,
     isLoadingPaymentComplete,
     isLoadingWoPayments,
     isLoadingAccSummary,
@@ -320,6 +351,7 @@ const usePayment = () => {
     fetchPendingPayments,
     createPayment,
     createExpensesPayment,
+    createIncomePayment,
     processPaymentRecord,
     fetchWorkorderPayments,
     fetchAccountsSummary,
