@@ -55,7 +55,6 @@ export const WorkOrderItemsSelect = ({
                     <TableCell>Code</TableCell>
                     <TableCell>Item</TableCell>
                     <TableCell>Quantity</TableCell>
-                    <TableCell>Price</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -69,7 +68,6 @@ export const WorkOrderItemsSelect = ({
                           <TableCell>{item.itemCode}</TableCell>
                           <TableCell>{item.itemName}</TableCell>
                           <TableCell>{item.itemQuantity}</TableCell>
-                          <TableCell>{item.itemSellingPrice}</TableCell>
                           <TableCell>
                             <IconButton
                               onClick={(e) => {

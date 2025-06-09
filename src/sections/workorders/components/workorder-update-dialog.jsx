@@ -48,7 +48,7 @@ export const WokrOrderUpdateDialog = ({
       </AppBar>
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <WokrOrderUpdateForm
               formik={formik}
               handleDeleteInventoryItem={handleDeleteInventoryItem}
@@ -56,7 +56,7 @@ export const WokrOrderUpdateDialog = ({
               isLoading={isLoading}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <WorkOrderItemsSelect
               isLoading={isLoadingItems}
               invItems={inventoryItems}
