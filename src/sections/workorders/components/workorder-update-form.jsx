@@ -29,7 +29,7 @@ export const WokrOrderUpdateForm = ({
   return (
     <FormikProvider value={formik}>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <TextField
             label="Vehicle Mileage"
             name="workOrderMileage"
@@ -43,7 +43,7 @@ export const WokrOrderUpdateForm = ({
             helperText={touched.workOrderMileage && errors.workOrderMileage}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <FormControl fullWidth required>
             <InputLabel id="select-label">Workorder Type</InputLabel>
             <Select
@@ -69,7 +69,7 @@ export const WokrOrderUpdateForm = ({
           </FormControl>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-          <Divider>Inventory Items</Divider>
+          <Divider sx={{ fontWeight: 'bold' }}>Inventory Items</Divider>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
           {values.workOrderServiceItems.map((item, index) => {
@@ -97,7 +97,7 @@ export const WokrOrderUpdateForm = ({
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <TextField
                     label="Item"
                     name={`workOrderServiceItems.${index}.inventoryItemName`}
@@ -118,9 +118,9 @@ export const WokrOrderUpdateForm = ({
                     }
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                <Grid size={{ xs: 12, md: 2 }}>
                   <TextField
-                    label="Quantity"
+                    label="Qty"
                     name={`workOrderServiceItems.${index}.quantity`}
                     type="number"
                     required
@@ -140,7 +140,7 @@ export const WokrOrderUpdateForm = ({
                     }
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <TextField
                     label="Unit Price"
                     name={`workOrderServiceItems.${index}.unitPrice`}
@@ -162,7 +162,7 @@ export const WokrOrderUpdateForm = ({
                     slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                <Grid size={{ xs: 12, md: 2 }}>
                   <TextField
                     label="Total Price"
                     name={`workOrderServiceItems.${index}.totalPrice`}
@@ -185,7 +185,7 @@ export const WokrOrderUpdateForm = ({
           })}
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-          <Divider>Custom Entries</Divider>
+          <Divider sx={{ fontWeight: 'bold' }}>Custom Entries</Divider>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
           <FieldArray name="workOrderCustomItems">
@@ -216,7 +216,7 @@ export const WokrOrderUpdateForm = ({
                       justifyContent="flex-start"
                       alignItems="center"
                     >
-                      <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+                      <Grid size={{ xs: 12, md: 4 }}>
                         <TextField
                           label="Item"
                           name={`workOrderCustomItems.${index}.inventoryItemName`}
@@ -237,9 +237,9 @@ export const WokrOrderUpdateForm = ({
                           }
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                      <Grid size={{ xs: 12, md: 2 }}>
                         <TextField
-                          label="Quantity"
+                          label="Qty"
                           name={`workOrderCustomItems.${index}.quantity`}
                           type="number"
                           required
@@ -259,7 +259,7 @@ export const WokrOrderUpdateForm = ({
                           }
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                      <Grid size={{ xs: 12, md: 3 }}>
                         <TextField
                           label="Item Unit Price"
                           name={`workOrderCustomItems.${index}.unitPrice`}
@@ -281,7 +281,7 @@ export const WokrOrderUpdateForm = ({
                           slotProps={{ input: { inputComponent: CurrencyInput } }}
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, sm: 12, lg: 3 }}>
+                      <Grid size={{ xs: 12, md: 2 }}>
                         <TextField
                           label="Item Selling Price"
                           name={`workOrderCustomItems.${index}.totalPrice`}
@@ -319,7 +319,7 @@ export const WokrOrderUpdateForm = ({
           </FieldArray>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-          <Divider>Chargers</Divider>
+          <Divider sx={{ fontWeight: 'bold' }}>Chargers</Divider>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TextField
