@@ -33,11 +33,16 @@ import {
   PAY_STATUS_COMPLETED,
   PAY_STATUS_PAID,
   PAY_STATUS_PENDING,
+  PAY_STATUS_REFUNDED,
 } from 'src/constants/payment-status';
 import commonUtil from 'src/utils/common-util';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
 import { PAY_METHOD_CHEQUE } from 'src/constants/payment-methods';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
+import useAuthStore from 'src/store/auth-store';
+import { USER_ROLE } from 'src/constants/user-role';
+import { RefundDialog } from '../components/refund-dialog';
+import { PAY_SC_INCOME } from 'src/constants/payment-source';
 
 export const WorkorderView = ({
   job,
@@ -48,15 +53,20 @@ export const WorkorderView = ({
   isLoadingWoPayments,
   isLoadingUpdateAssignee,
   isLoadingPaymentComplete,
+  isLoadingRefund,
   isOpenPaymentDlg,
   isOpenProceedPayDlg,
+  isOpenRefundDlg,
   handleTogglePaymentDlg,
   handleTogglePaymentProceedDlg,
+  handleToggleRefundDialog,
   handleAddPaymentRecord,
   handelUpdateWorkorderAssignees,
   handleCompletePayment,
+  handleIssueRefund,
   downloadInvoice,
 }) => {
+  const { auth } = useAuthStore.getState();
   return (
     <Container maxWidth="xl">
       <Grid container spacing={4}>
@@ -78,21 +88,34 @@ export const WorkorderView = ({
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
             <Stack spacing={1} direction="row">
+              {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
+                job.workOrderPaymentStatus != PAY_STATUS_REFUNDED && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleToggleRefundDialog}
+                    disabled={isLoadingRefund}
+                  >
+                    Issue Refund
+                  </Button>
+                )}
               <EditAssigneeButton
                 assignees={job.workOrderAssignees}
                 isLoading={isLoadingUpdateAssignee}
                 handleAssign={handelUpdateWorkorderAssignees}
               />
-              {job.workOrderPaymentStatus != PAY_STATUS_PAID && job.workOrderInvoiceNumber && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleTogglePaymentDlg}
-                  disabled={isLoadingCreate}
-                >
-                  Add Payment
-                </Button>
-              )}
+              {job.workOrderPaymentStatus != PAY_STATUS_PAID &&
+                job.workOrderPaymentStatus != PAY_STATUS_REFUNDED &&
+                job.workOrderInvoiceNumber && (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleTogglePaymentDlg}
+                    disabled={isLoadingCreate}
+                  >
+                    Add Payment
+                  </Button>
+                )}
 
               {job.workOrderStatus != WO_STATUS_OPEN && job.workOrderInvoiceNumber && (
                 <Button
@@ -280,14 +303,20 @@ export const WorkorderView = ({
             )}
             {!isLoading && woPayments.length > 0 && (
               <>
-                {woPayments.map((payment) => (
-                  <Card>
+                {woPayments.map((payment, index) => (
+                  <Card key={index}>
                     <TableContainer>
                       <Table>
                         <TableBody>
                           <TableRow>
                             <TableCell variant="head">{fDate(payment.createdAt)}</TableCell>
-                            <TableCell>{formatCurrency(payment.paymentAmount)}</TableCell>
+                            <TableCell>
+                              {formatCurrency(
+                                PAY_SC_INCOME.includes(payment.paymentSource)
+                                  ? payment.paymentAmount
+                                  : -payment.paymentAmount
+                              )}
+                            </TableCell>
                           </TableRow>
                           <TableRow>
                             <TableCell variant="head">Method</TableCell>
@@ -364,6 +393,14 @@ export const WorkorderView = ({
           }
           handleSubmit={handleCompletePayment}
           isLoading={isLoadingPaymentComplete}
+        />
+      )}
+      {isOpenRefundDlg && (
+        <RefundDialog
+          open={isOpenRefundDlg}
+          handleClose={handleToggleRefundDialog}
+          handleConfirm={handleIssueRefund}
+          isLoading={isLoadingRefund}
         />
       )}
     </Container>
