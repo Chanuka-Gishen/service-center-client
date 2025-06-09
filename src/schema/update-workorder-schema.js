@@ -11,7 +11,7 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
         inventoryItem: Yup.string().required('Inventory item ID is required'),
         inventoryItemName: Yup.string().required('Inventory item name is required'),
         quantity: Yup.number()
-          .min(1, 'Quantity must be at least 1')
+          .min(0.1, 'Quantity must be at least 0.1')
           .required('Quantity is required'),
         unitPrice: Yup.number()
           .min(0, 'Unit price cannot be negative')
@@ -28,7 +28,7 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
       Yup.object().shape({
         inventoryItemName: Yup.string().required('Custom item name is required'),
         quantity: Yup.number()
-          .min(1, 'Quantity must be at least 1')
+          .min(0.1, 'Quantity must be at least 0.1')
           .required('Quantity is required'),
         unitPrice: Yup.number()
           .min(0, 'Unit price cannot be negative')
