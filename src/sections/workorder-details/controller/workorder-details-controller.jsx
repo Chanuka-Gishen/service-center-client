@@ -21,8 +21,10 @@ const WorkorderController = () => {
     woPayments,
     isLoadingWoPayments,
     isLoadingCreate,
+    isLoadingRefund,
     isLoadingPaymentComplete,
     createPayment,
+    createRefoundRecord,
     fetchWorkorderPayments,
     processPaymentRecord,
   } = usePayment();
@@ -32,6 +34,7 @@ const WorkorderController = () => {
 
   const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
   const [isOpenProceedPayDlg, setIsOpenproceedPayDlg] = useState(false);
+  const [isOpenRefundDlg, setIsOpenRefundDlg] = useState(false);
 
   const handleTogglePaymentDlg = () => {
     setIsOpenPaymentDlg(!isOpenPaymentDlg);
@@ -40,6 +43,10 @@ const WorkorderController = () => {
   const handleTogglePaymentProceedDlg = (id = null) => {
     setSelectedPayment(id);
     setIsOpenproceedPayDlg(!isOpenProceedPayDlg);
+  };
+
+  const handleToggleRefundDialog = () => {
+    setIsOpenRefundDlg(!isOpenRefundDlg);
   };
 
   const handleAddPaymentRecord = async (values) => {
@@ -62,6 +69,20 @@ const WorkorderController = () => {
 
     if (isSuccess) {
       handleTogglePaymentProceedDlg();
+      await fetchWorkorder();
+      await fetchWorkorderPayments(id);
+    }
+  };
+
+  const handleIssueRefund = async (data) => {
+    const body = {
+      _id: id,
+      ...data,
+    };
+    const isSuccess = await createRefoundRecord(body);
+
+    if (isSuccess) {
+      handleToggleRefundDialog();
       await fetchWorkorder();
       await fetchWorkorderPayments(id);
     }
@@ -102,13 +123,17 @@ const WorkorderController = () => {
       isLoadingWoPayments={isLoadingWoPayments}
       isLoadingUpdateAssignee={isLoadingUpdateAssignee}
       isLoadingPaymentComplete={isLoadingPaymentComplete}
+      isLoadingRefund={isLoadingRefund}
       isOpenPaymentDlg={isOpenPaymentDlg}
       isOpenProceedPayDlg={isOpenProceedPayDlg}
+      isOpenRefundDlg={isOpenRefundDlg}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleTogglePaymentProceedDlg={handleTogglePaymentProceedDlg}
+      handleToggleRefundDialog={handleToggleRefundDialog}
       handleAddPaymentRecord={handleAddPaymentRecord}
       handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       handleCompletePayment={handleCompletePayment}
+      handleIssueRefund={handleIssueRefund}
       downloadInvoice={downloadInvoice}
     />
   );

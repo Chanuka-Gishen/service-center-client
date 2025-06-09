@@ -1,8 +1,8 @@
 import { Chip, TableCell, TableRow } from '@mui/material';
 import {
-  PAY_STATUS_OVERDUE,
   PAY_STATUS_PAID,
   PAY_STATUS_PARTIALLY_PAID,
+  PAY_STATUS_REFUNDED,
   PAY_STATUS_UNPAID,
   PAY_STATUS_WRITTEN_OFF,
 } from 'src/constants/payment-status';
@@ -14,34 +14,6 @@ import PendingIcon from '@mui/icons-material/Pending';
 import { formatCurrency } from 'src/utils/format-number';
 
 export const JobRow = ({ data, onClickRow }) => {
-  const paymentChipColor = () => {
-    switch (data.workOrderPaymentStatus) {
-      case PAY_STATUS_PAID:
-        return 'success';
-      case PAY_STATUS_UNPAID:
-        return 'error';
-      case PAY_STATUS_PARTIALLY_PAID:
-        return 'warning';
-      case PAY_STATUS_OVERDUE:
-        return 'error';
-      case PAY_STATUS_WRITTEN_OFF:
-        return 'info';
-      default:
-        return 'error';
-    }
-  };
-
-  const paymentIcon = () => {
-    switch (data.workOrderPaymentStatus) {
-      case PAY_STATUS_PAID:
-        return <CheckCircleIcon />;
-      case PAY_STATUS_UNPAID:
-        return <CancelIcon />;
-      default:
-        return <PendingIcon />;
-    }
-  };
-
   return (
     <>
       {data.map((item, index) => {
@@ -74,7 +46,7 @@ export const JobRow = ({ data, onClickRow }) => {
                     ? 'success'
                     : paymentStatus === PAY_STATUS_PARTIALLY_PAID
                       ? 'warning'
-                      : paymentStatus === PAY_STATUS_WRITTEN_OFF
+                      : [PAY_STATUS_WRITTEN_OFF, PAY_STATUS_REFUNDED].includes(paymentStatus)
                         ? 'info'
                         : 'error'
                 }
