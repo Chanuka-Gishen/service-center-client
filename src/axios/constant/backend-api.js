@@ -64,6 +64,8 @@ export const BACKEND_API = {
   EMP_ALL: IP_URL + '/employee/auth/employees',
   EMP_INFO: IP_URL + '/employee/auth/employee',
   EMP_SELECT: IP_URL + '/employee/auth/selection',
+  EMP_ATT_GET: IP_URL + '/employee/auth/emp-attendence',
+  EMP_ATT_ADD: IP_URL + '/employee/auth/add-emp-attendence',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',

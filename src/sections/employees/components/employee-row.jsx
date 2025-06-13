@@ -13,6 +13,7 @@ export const EmployeeRow = ({ data, onClickRow }) => {
           sx={{ cursor: 'pointer' }}
         >
           <TableCell>{item.empFullName}</TableCell>
+          <TableCell>{item.empId}</TableCell>
           <TableCell>{item.empRole}</TableCell>
           <TableCell>{item.empNic}</TableCell>
           <TableCell>{item.empPhone}</TableCell>

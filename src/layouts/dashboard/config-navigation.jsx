@@ -10,6 +10,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import HailIcon from '@mui/icons-material/Hail';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 
 import { USER_ROLE } from 'src/constants/user-role';
 
@@ -77,6 +78,13 @@ const navConfig = [
     name: NAVBAR_ITEMS.EMPLOYEES,
     path: 'employees',
     icon: <FolderSharedIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
+  },
+  {
+    title: 'Emp Attendence',
+    name: NAVBAR_ITEMS.EMP_ATTENDENCE,
+    path: 'emp-attendence',
+    icon: <ScheduleIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
   },
   {

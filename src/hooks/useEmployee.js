@@ -11,14 +11,18 @@ const useEmployee = () => {
 
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState(null);
+  const [attendences, setAttendences] = useState([]);
   const [empSelectables, setEmpSelectables] = useState([]);
 
   const [employeesCount, setEmployeesCount] = useState(0);
+  const [attendenceCount, setAttendenceCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const [isLoadingEmp, setIsLoadingEmp] = useState(false);
   const [isLoadingEmpSelect, setIsLoadingEmpSelect] = useState(false);
+  const [isLoadingAttendences, setIsLoadingAttendences] = useState(false);
+  const [isLoadingAddAttendences, setIsLoadingAddAttendences] = useState(false);
 
   // Register employee data
   const registerEmployee = async (data) => {
@@ -129,19 +133,81 @@ const useEmployee = () => {
       });
   };
 
+  // Fetch employees attendences
+  const fetchEmpAttendences = async (params) => {
+    if (isLoadingAttendences) return;
+
+    setIsLoadingAttendences(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_ATT_GET,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setAttendences(res.data.responseData.data);
+          setAttendenceCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingAttendences(false);
+      })
+      .finally(() => {
+        setIsLoadingAttendences(false);
+      });
+  };
+
+  // Add attendence records
+  const addAttendenceRecords = async (data) => {
+    setIsLoadingAddAttendences(true);
+
+    let isSuccess = false;
+
+    await backendAuthApi({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      url: BACKEND_API.EMP_ATT_ADD,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingAddAttendences(false);
+      })
+      .finally(() => {
+        setIsLoadingAddAttendences(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     isLoading,
     isLoadingEmp,
     isLoadingRegister,
     isLoadingEmpSelect,
+    isLoadingAttendences,
+    isLoadingAddAttendences,
     employee,
     employees,
     empSelectables,
     employeesCount,
+    attendences,
+    attendenceCount,
     registerEmployee,
     fetchAllEmployees,
     fetchEmployee,
     fetchEmployeeForSelect,
+    fetchEmpAttendences,
+    addAttendenceRecords,
   };
 };
 

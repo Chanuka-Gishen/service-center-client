@@ -182,7 +182,7 @@ Nav.propTypes = {
 function NavItem({ item, selected, handleSelect }) {
   const router = useRouter();
 
-  const active = item.name === selected;
+  const active = selected.includes(item.name);
 
   const handleClick = () => {
     handleSelect(item.name);

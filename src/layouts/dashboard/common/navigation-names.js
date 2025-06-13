@@ -8,5 +8,6 @@ export const NAVBAR_ITEMS = {
   ACCOUNTS: 'accounts',
   ACCOUNTS_REPORTS: 'Reports',
   EMPLOYEES: 'employees',
+  EMP_ATTENDENCE: 'emp-attendence',
   USERS: 'users'
 };

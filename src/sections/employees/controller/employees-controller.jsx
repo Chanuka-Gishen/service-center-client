@@ -5,6 +5,7 @@ import useEmployee from 'src/hooks/useEmployee';
 const EmployeesController = () => {
   const tableKeys = [
     'Name',
+    'Emp ID',
     'Role',
     'NIC',
     'Mobile Number',

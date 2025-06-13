@@ -97,7 +97,7 @@ export const EmployeeValidationSchema = Yup.object().shape({
     })
     .required(),
 
-  employeeId: Yup.string().nullable().notRequired(),
+  empId: Yup.string().required('Employee Id Required'),
 
   empJobTitle: Yup.string().required('Job title is required'),
 

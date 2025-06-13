@@ -23,9 +23,9 @@ export const NAVIGATION_ROUTES = {
   },
   inventory: {
     base: '/inventory',
-    details:{
-      base: '/inventory/details'
-    }
+    details: {
+      base: '/inventory/details',
+    },
   },
   workorders: {
     base: '/workorders',
@@ -42,20 +42,23 @@ export const NAVIGATION_ROUTES = {
       base: '/employees/details',
     },
   },
-  users:{
-    base: '/users'
+  empAttendence: {
+    base: '/emp-attendence',
   },
-  suppliers:{
+  users: {
+    base: '/users',
+  },
+  suppliers: {
     base: '/suppliers',
-    details:{
+    details: {
       base: '/suppliers/details/:id',
       id: '/suppliers/details/',
-    }
+    },
   },
   accounts: {
-    base: '/accounts'
+    base: '/accounts',
   },
-  accounts_reports:{
-    base: '/reports'
-  }
+  accounts_reports: {
+    base: '/reports',
+  },
 };
