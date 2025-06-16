@@ -9,7 +9,7 @@ export const EmployeeRow = ({ data, onClickRow }) => {
         <TableRow
           key={index}
           hover={true}
-          onClick={() => onClickRow(item)}
+          onClick={() => onClickRow(item._id)}
           sx={{ cursor: 'pointer' }}
         >
           <TableCell>{item.empFullName}</TableCell>

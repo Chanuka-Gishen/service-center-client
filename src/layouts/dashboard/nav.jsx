@@ -95,7 +95,7 @@ export default function Nav({ openNav, onCloseNav }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant="dot"
       >
-        <Avatar src={'assets/main-logo.png'} alt="photoURL" />
+        <Avatar src={'/assets/main-logo.png'} alt="photoURL" />
       </StyledBadge>
 
       <Box sx={{ ml: 2 }}>
@@ -113,7 +113,13 @@ export default function Nav({ openNav, onCloseNav }) {
       {navConfig
         .filter((item) => item.permissions.includes(user.userRole))
         .map((item) => (
-          <NavItem key={item.title} item={item} selected={selected} handleSelect={handleSelect} />
+          <NavItem
+            key={item.title}
+            item={item}
+            selected={selected}
+            pathName={pathname}
+            handleSelect={handleSelect}
+          />
         ))}
     </Stack>
   );
@@ -179,10 +185,10 @@ Nav.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item, selected, handleSelect }) {
+function NavItem({ item, selected, pathName, handleSelect }) {
   const router = useRouter();
 
-  const active = selected.includes(item.name);
+  const active = pathName.includes(item.name);
 
   const handleClick = () => {
     handleSelect(item.name);

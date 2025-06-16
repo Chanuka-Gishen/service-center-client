@@ -39,7 +39,8 @@ export const NAVIGATION_ROUTES = {
   employees: {
     base: '/employees',
     details: {
-      base: '/employees/details',
+      base: '/employees/details/:id',
+      id: '/employees/details/',
     },
   },
   empAttendence: {

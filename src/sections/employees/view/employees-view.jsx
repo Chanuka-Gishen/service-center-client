@@ -17,6 +17,7 @@ export const EmployeesView = ({
   isLoadingRegister,
   handleChangeSearch,
   handleToggleRegisterDialog,
+  handleOnClickRow,
   handleRegisterEmployee,
   handleChangePage,
   handleChangeRowsPerPage,
@@ -46,7 +47,7 @@ export const EmployeesView = ({
                 limit={limit}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableBody={<EmployeeRow data={employees} onClickRow={null} />}
+                tableBody={<EmployeeRow data={employees} onClickRow={handleOnClickRow} />}
               />
             </Paper>
           </Card>

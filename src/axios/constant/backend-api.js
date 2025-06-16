@@ -61,11 +61,14 @@ export const BACKEND_API = {
   PAYMENT_FINANCIAL_REPORT: IP_URL + '/payment//auth/generate-report',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
+  EMP_UPDATE: IP_URL + '/employee/supAuth/update',
   EMP_ALL: IP_URL + '/employee/auth/employees',
   EMP_INFO: IP_URL + '/employee/auth/employee',
   EMP_SELECT: IP_URL + '/employee/auth/selection',
-  EMP_ATT_GET: IP_URL + '/employee/auth/emp-attendence',
+  EMP_ATT_GET: IP_URL + '/employee/auth/attendence',
+  EMP_ATT: IP_URL + '/employee/auth/emp-attendence',
   EMP_ATT_ADD: IP_URL + '/employee/auth/add-emp-attendence',
+  EMP_WORKORDERS: IP_URL + '/workorder/auth/emp-jobs',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',

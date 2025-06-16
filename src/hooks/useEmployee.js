@@ -11,18 +11,25 @@ const useEmployee = () => {
 
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState(null);
+  const [empJobs, setEmpJobs] = useState([]);
   const [attendences, setAttendences] = useState([]);
+  const [empAttendences, setEmpAttendences] = useState([]);
   const [empSelectables, setEmpSelectables] = useState([]);
 
   const [employeesCount, setEmployeesCount] = useState(0);
+  const [empJobsCount, setEmpJobsCount] = useState(0);
   const [attendenceCount, setAttendenceCount] = useState(0);
+  const [empAttCount, setEmpAttCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
-  const [isLoadingEmp, setIsLoadingEmp] = useState(false);
+  const [isLoadingUpdateEmp, setIsLoadingUpdateEmp] = useState(false);
+  const [isLoadingEmp, setIsLoadingEmp] = useState(true);
+  const [isLoadingEmpJobs, setIsLoadingEmpJobs] = useState(true);
   const [isLoadingEmpSelect, setIsLoadingEmpSelect] = useState(false);
   const [isLoadingAttendences, setIsLoadingAttendences] = useState(false);
   const [isLoadingAddAttendences, setIsLoadingAddAttendences] = useState(false);
+  const [isLoadingEmpAtt, setIsLoadingEmpAtt] = useState(true);
 
   // Register employee data
   const registerEmployee = async (data) => {
@@ -56,6 +63,36 @@ const useEmployee = () => {
     return isSuccess;
   };
 
+  // Update employee data
+  const updateEmployee = async (data) => {
+    let isSuccess = false;
+    setIsLoadingUpdateEmp(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_UPDATE,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        } else {
+          enqueueSnackbar(res.data.responseMessage, {
+            variant: responseUtil.findResponseType(res.data.responseCode),
+          });
+        }
+      })
+      .catch(() => {
+        setIsLoadingUpdateEmp(false);
+      })
+      .finally(() => {
+        setIsLoadingUpdateEmp(false);
+      });
+
+    return isSuccess;
+  };
+
   // Fetch all employees
   const fetchAllEmployees = async (params) => {
     if (isLoading) return;
@@ -84,8 +121,6 @@ const useEmployee = () => {
 
   // Fetch employee data
   const fetchEmployee = async (id) => {
-    if (isLoadingEmp) return;
-
     setIsLoadingEmp(true);
 
     await backendAuthApi({
@@ -189,24 +224,80 @@ const useEmployee = () => {
     return isSuccess;
   };
 
+  // Employee Jobs
+  const fetchEmpJobs = async (params) => {
+    if (params?.id) {
+      await backendAuthApi({
+        url: BACKEND_API.EMP_WORKORDERS,
+        method: 'GET',
+        cancelToken: sourceToken.token,
+        params,
+      })
+        .then((res) => {
+          if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+            setEmpJobs(res.data.responseData.data);
+            setEmpJobsCount(res.data.responseData.count);
+          }
+        })
+        .catch(() => {
+          setIsLoadingEmpJobs(false);
+        })
+        .finally(() => {
+          setIsLoadingEmpJobs(false);
+        });
+    }
+  };
+
+  // Employee attendence records
+  const fetchEmpAttendence = async (params) => {
+    await backendAuthApi({
+      url: BACKEND_API.EMP_ATT,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setEmpAttendences(res.data.responseData.data);
+          setEmpAttCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingEmpAtt(false);
+      })
+      .finally(() => {
+        setIsLoadingEmpAtt(false);
+      });
+  };
+
   return {
     isLoading,
     isLoadingEmp,
+    isLoadingEmpJobs,
     isLoadingRegister,
+    isLoadingUpdateEmp,
     isLoadingEmpSelect,
     isLoadingAttendences,
     isLoadingAddAttendences,
+    isLoadingEmpAtt,
     employee,
     employees,
+    empJobs,
+    empAttendences,
+    empAttCount,
     empSelectables,
     employeesCount,
+    empJobsCount,
     attendences,
     attendenceCount,
     registerEmployee,
+    updateEmployee,
     fetchAllEmployees,
     fetchEmployee,
     fetchEmployeeForSelect,
     fetchEmpAttendences,
+    fetchEmpJobs,
+    fetchEmpAttendence,
     addAttendenceRecords,
   };
 };
