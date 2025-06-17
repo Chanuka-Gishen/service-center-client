@@ -21,12 +21,14 @@ const WorkorderController = () => {
     woPayments,
     isLoadingWoPayments,
     isLoadingCreate,
+    isLoadingDeleteWoPay,
     isLoadingRefund,
     isLoadingPaymentComplete,
     createPayment,
     createRefoundRecord,
     fetchWorkorderPayments,
     processPaymentRecord,
+    deleteWoPayment,
   } = usePayment();
 
   const [job, setJob] = useState(null);
@@ -35,6 +37,7 @@ const WorkorderController = () => {
   const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
   const [isOpenProceedPayDlg, setIsOpenproceedPayDlg] = useState(false);
   const [isOpenRefundDlg, setIsOpenRefundDlg] = useState(false);
+  const [isOpenDeletePayment, setIsOpenDeletePayment] = useState(false);
 
   const handleTogglePaymentDlg = () => {
     setIsOpenPaymentDlg(!isOpenPaymentDlg);
@@ -49,6 +52,11 @@ const WorkorderController = () => {
     setIsOpenRefundDlg(!isOpenRefundDlg);
   };
 
+  const handleToggleDeletePaymentDlg = (id = null) => {
+    setSelectedPayment(id);
+    setIsOpenDeletePayment(!isOpenDeletePayment);
+  };
+
   const handleAddPaymentRecord = async (values) => {
     const data = {
       paymentworkOrder: job._id,
@@ -61,6 +69,16 @@ const WorkorderController = () => {
       handleTogglePaymentDlg();
       fetchWorkorder();
       fetchWorkorderPayments();
+    }
+  };
+
+  const handleDeletePaymentRecord = async () => {
+    const isSuccess = await deleteWoPayment(selectedPayment);
+
+    if (isSuccess) {
+      handleToggleDeletePaymentDlg();
+      await fetchWorkorder();
+      await fetchWorkorderPayments(id);
     }
   };
 
@@ -121,19 +139,23 @@ const WorkorderController = () => {
       isDownloading={isDownloading}
       isLoadingCreate={isLoadingCreate}
       isLoadingWoPayments={isLoadingWoPayments}
+      isLoadingDeleteWoPay={isLoadingDeleteWoPay}
       isLoadingUpdateAssignee={isLoadingUpdateAssignee}
       isLoadingPaymentComplete={isLoadingPaymentComplete}
       isLoadingRefund={isLoadingRefund}
       isOpenPaymentDlg={isOpenPaymentDlg}
       isOpenProceedPayDlg={isOpenProceedPayDlg}
       isOpenRefundDlg={isOpenRefundDlg}
+      isOpenDeletePayment={isOpenDeletePayment}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleTogglePaymentProceedDlg={handleTogglePaymentProceedDlg}
       handleToggleRefundDialog={handleToggleRefundDialog}
+      handleToggleDeletePaymentDlg={handleToggleDeletePaymentDlg}
       handleAddPaymentRecord={handleAddPaymentRecord}
       handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       handleCompletePayment={handleCompletePayment}
       handleIssueRefund={handleIssueRefund}
+      handleDeletePaymentRecord={handleDeletePaymentRecord}
       downloadInvoice={downloadInvoice}
     />
   );
