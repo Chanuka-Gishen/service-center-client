@@ -381,13 +381,15 @@ export const WorkorderView = ({
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      <IconButton
-                        onClick={() => handleToggleDeletePaymentDlg(payment._id)}
-                        loading={isLoadingDeleteWoPay}
-                        disabled={isLoadingDeleteWoPay}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
+                      {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+                        <IconButton
+                          onClick={() => handleToggleDeletePaymentDlg(payment._id)}
+                          loading={isLoadingDeleteWoPay}
+                          disabled={isLoadingDeleteWoPay}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      )}
                     </Box>
                   </Card>
                 ))}
