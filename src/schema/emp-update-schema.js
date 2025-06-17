@@ -16,7 +16,11 @@ import {
 } from 'src/constants/relationship-constants';
 import * as Yup from 'yup';
 
-export const EmployeeValidationSchema = Yup.object().shape({
+export const EmployeeUpdateValidationSchema = Yup.object().shape({
+  _id: Yup.string()
+    .required('ID is required')
+    .matches(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+
   empFullName: Yup.string()
     .required('Full name is required')
     .max(100, 'Full name cannot exceed 100 characters')

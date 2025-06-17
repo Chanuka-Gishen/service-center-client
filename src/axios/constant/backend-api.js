@@ -26,6 +26,7 @@ export const BACKEND_API = {
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEMS_EDIT: IP_URL + '/inventory/supAuth/update',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
+  ITEM_UPDATE_STOCK_BULK: IP_URL + '/inventory/auth/bulk-stock-update',
   ITEM_UPDATE_LOGS: IP_URL + '/inventory/auth/stock-logs',
   ITEMS_INFO: IP_URL + '/inventory/auth/item',
   ITEMS_STOCK_STATISTICS: IP_URL + '/inventory/auth/inv-stocks-status',
@@ -51,6 +52,7 @@ export const BACKEND_API = {
   PAYMENTS_PENDING: IP_URL + '/payment/auth/pending-payments',
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
+  PAYMENT_WO_DELETE: IP_URL + '/payment/supAuth/delete-wo-payment',
   PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
   PAYMENT_CREATE_INC: IP_URL + '/payment/auth/add-income',
   PAYMENT_CREATE_REFUND: IP_URL + '/payment/supAuth/refund-payment',
@@ -61,9 +63,14 @@ export const BACKEND_API = {
   PAYMENT_FINANCIAL_REPORT: IP_URL + '/payment//auth/generate-report',
 
   EMP_REGISTER: IP_URL + '/employee/auth/register',
+  EMP_UPDATE: IP_URL + '/employee/supAuth/update',
   EMP_ALL: IP_URL + '/employee/auth/employees',
   EMP_INFO: IP_URL + '/employee/auth/employee',
   EMP_SELECT: IP_URL + '/employee/auth/selection',
+  EMP_ATT_GET: IP_URL + '/employee/auth/attendence',
+  EMP_ATT: IP_URL + '/employee/auth/emp-attendence',
+  EMP_ATT_ADD: IP_URL + '/employee/auth/add-emp-attendence',
+  EMP_WORKORDERS: IP_URL + '/workorder/auth/emp-jobs',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',
@@ -73,4 +80,5 @@ export const BACKEND_API = {
   SUPPLIER_PURCHASES: IP_URL + '/supplier/auth/supplier-purchases',
   SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
   SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment',
+  SUPPLIER_ITEMS_INFO: IP_URL + '/supplier/auth/supplier-items',
 };

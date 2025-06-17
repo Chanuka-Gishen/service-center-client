@@ -30,6 +30,7 @@ const usePayment = () => {
   const [isLoadingPayments, setIsLoadingPayments] = useState(true);
   const [isLoadingPendingPayments, setIsLoadingPendingPayments] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
+  const [isLoadingDeleteWoPay, setIsLoadingDeleteWoPay] = useState(false);
   const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
   const [isLoadingCreateInc, setIsLoadingCreateInc] = useState(false);
   const [isLoadingRefund, setIsLoadingRefund] = useState(false);
@@ -116,6 +117,37 @@ const usePayment = () => {
         setIsLoadingCreate(false);
       });
 
+    return isSuccess;
+  };
+
+  // Delete WO payment
+  const deleteWoPayment = async (id) => {
+    let isSuccess = false;
+    if (id) {
+      setIsLoadingDeleteWoPay(true);
+
+      await backendAuthApi({
+        url: BACKEND_API.PAYMENT_WO_DELETE,
+        method: 'DELETE',
+        cancelToken: sourceToken.token,
+        params: { id },
+      })
+        .then((res) => {
+          if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+            isSuccess = true;
+          } else {
+            enqueueSnackbar(res.data.responseMessage, {
+              variant: responseUtil.findResponseType(res.data.responseCode),
+            });
+          }
+        })
+        .catch(() => {
+          setIsLoadingDeleteWoPay(false);
+        })
+        .finally(() => {
+          setIsLoadingDeleteWoPay(false);
+        });
+    }
     return isSuccess;
   };
 
@@ -366,6 +398,7 @@ const usePayment = () => {
     isLoadingPayments,
     isLoadingPendingPayments,
     isLoadingCreate,
+    isLoadingDeleteWoPay,
     isLoadingCreateExp,
     isLoadingCreateInc,
     isLoadingRefund,
@@ -379,6 +412,7 @@ const usePayment = () => {
     fetchPayments,
     fetchPendingPayments,
     createPayment,
+    deleteWoPayment,
     createExpensesPayment,
     createIncomePayment,
     createRefoundRecord,

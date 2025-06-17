@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { BACKEND_API } from 'src/axios/constant/backend-api';
 import { backendAuthApi } from 'src/axios/instance/backend-axios-instance';
@@ -12,6 +13,7 @@ const useSupplier = () => {
   const [suppliersOptions, setSuppliersOptions] = useState([]);
   const [supplierStockMovements, setSupplierStockMovements] = useState([]);
   const [supplierPayments, setSupplierPayments] = useState([]);
+  const [supplierItems, setSupplierItems] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
   const [supplierMovementCount, setSupplierMovementCount] = useState(0);
@@ -25,6 +27,8 @@ const useSupplier = () => {
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
   const [isLoadingSupplierMovements, setIsLoadingSupplierMovements] = useState(false);
   const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
+  const [isLoadingSupplierItems, setIsLoadingSupplierItems] = useState(false);
+  const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
 
   // Get all suppliers with filterss
   const getAllSuppliers = async (params) => {
@@ -240,6 +244,60 @@ const useSupplier = () => {
       });
   };
 
+  // Supplier products/items info
+  const fetchSupplierItemsInfo = async (id) => {
+    setIsLoadingSupplierItems(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_ITEMS_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSupplierItems(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSupplierItems(false);
+      })
+      .finally(() => {
+        setIsLoadingSupplierItems(false);
+      });
+  };
+
+  // Add stock bulks
+  const addStockBulks = async (id, data) => {
+    let isSuccess = false;
+    setIsLoadingAddStockBulk(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.ITEM_UPDATE_STOCK_BULK,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params: { id },
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        } else {
+          enqueueSnackbar(res.data.responseMessage, {
+            variant: responseUtil.findResponseType(res.data.responseCode),
+          });
+        }
+      })
+      .catch(() => {
+        setIsLoadingAddStockBulk(false);
+      })
+      .finally(() => {
+        setIsLoadingAddStockBulk(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     suppliers,
     supplier,
@@ -249,6 +307,7 @@ const useSupplier = () => {
     supplierMovementCount,
     supplierPaymentsCount,
     suppliersOptions,
+    supplierItems,
     isLoadingSuppliers,
     isLoadingSupplier,
     isLoadingSupRegister,
@@ -257,14 +316,18 @@ const useSupplier = () => {
     isLoadingSuppliersOptions,
     isLoadingSupplierMovements,
     isLoadingSupplierPayments,
+    isLoadingSupplierItems,
+    isLoadingAddStockBulk,
     getAllSuppliers,
     fetchSupplierInfo,
     registerSupplier,
     updateSupplier,
+    addStockBulks,
     createSupplierPayments,
     fetchSuppliersForSelection,
     fetchSupplierStockMovements,
     fetchSupplierRecentPayments,
+    fetchSupplierItemsInfo,
   };
 };
 

@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { EmployeesView } from '../view/employees-view';
 import useEmployee from 'src/hooks/useEmployee';
+import { useRouter } from 'src/routes/hooks';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 
 const EmployeesController = () => {
   const tableKeys = [
     'Name',
+    'Emp ID',
     'Role',
     'NIC',
     'Mobile Number',
@@ -14,6 +17,8 @@ const EmployeesController = () => {
     'Joined Date',
     'Terminated Date',
   ];
+
+  const router = useRouter();
 
   const {
     isLoading,
@@ -56,6 +61,12 @@ const EmployeesController = () => {
     setLimit(parseInt(event.target.value, 10));
   };
 
+  const handleOnClickRow = (id) => {
+    if (id) {
+      router.push(`${NAVIGATION_ROUTES.employees.details.id}${id}`);
+    }
+  };
+
   const handleToggleRegisterDialog = () => {
     setIsOpenRegisterDialog(!isOpenRegisterDialog);
   };
@@ -86,6 +97,7 @@ const EmployeesController = () => {
       isLoadingRegister={isLoadingRegister}
       handleChangeSearch={handleChangeSearch}
       handleToggleRegisterDialog={handleToggleRegisterDialog}
+      handleOnClickRow={handleOnClickRow}
       handleRegisterEmployee={handleRegisterEmployee}
       handleChangePage={handleChangePage}
       handleChangeRowsPerPage={handleChangeRowsPerPage}

@@ -23,6 +23,7 @@ import {
   Typography,
 } from '@mui/material';
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
@@ -51,19 +52,23 @@ export const WorkorderView = ({
   isDownloading,
   isLoadingCreate,
   isLoadingWoPayments,
+  isLoadingDeleteWoPay,
   isLoadingUpdateAssignee,
   isLoadingPaymentComplete,
   isLoadingRefund,
   isOpenPaymentDlg,
   isOpenProceedPayDlg,
   isOpenRefundDlg,
+  isOpenDeletePayment,
   handleTogglePaymentDlg,
   handleTogglePaymentProceedDlg,
   handleToggleRefundDialog,
+  handleToggleDeletePaymentDlg,
   handleAddPaymentRecord,
   handelUpdateWorkorderAssignees,
   handleCompletePayment,
   handleIssueRefund,
+  handleDeletePaymentRecord,
   downloadInvoice,
 }) => {
   const { auth } = useAuthStore.getState();
@@ -305,69 +310,87 @@ export const WorkorderView = ({
               <>
                 {woPayments.map((payment, index) => (
                   <Card key={index}>
-                    <TableContainer>
-                      <Table>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell variant="head">{fDate(payment.createdAt)}</TableCell>
-                            <TableCell>
-                              {formatCurrency(
-                                PAY_SC_INCOME.includes(payment.paymentSource)
-                                  ? payment.paymentAmount
-                                  : -payment.paymentAmount
-                              )}
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell variant="head">Method</TableCell>
-                            <TableCell>{payment.paymentMethod}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell variant="head">Status</TableCell>
-                            <TableCell>
-                              <Stack
-                                direction="row"
-                                alignItems="center"
-                                justifyContent="space-between"
-                              >
-                                <Chip
-                                  label={payment.paymentStatus}
-                                  color={
-                                    payment.paymentStatus === PAY_STATUS_COMPLETED
-                                      ? 'success'
-                                      : 'warning'
-                                  }
-                                />
-                                {payment.paymentStatus === PAY_STATUS_PENDING &&
-                                  payment.paymentMethod === PAY_METHOD_CHEQUE && (
-                                    <IconButton
-                                      onClick={() => handleTogglePaymentProceedDlg(payment._id)}
-                                    >
-                                      <PriceChangeIcon />
-                                    </IconButton>
-                                  )}
-                              </Stack>
-                            </TableCell>
-                          </TableRow>
-                          {!commonUtil.stringIsEmptyOrSpaces(payment.paymentTransactionId) && (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        spacing: 2,
+                      }}
+                    >
+                      <TableContainer>
+                        <Table>
+                          <TableBody>
                             <TableRow>
-                              <TableCell variant="head">Transaction Id</TableCell>
-                              <TableCell>{payment.paymentTransactionId}</TableCell>
+                              <TableCell variant="head">{fDate(payment.createdAt)}</TableCell>
+                              <TableCell>
+                                {formatCurrency(
+                                  PAY_SC_INCOME.includes(payment.paymentSource)
+                                    ? payment.paymentAmount
+                                    : -payment.paymentAmount
+                                )}
+                              </TableCell>
                             </TableRow>
-                          )}
-                          {!commonUtil.stringIsEmptyOrSpaces(payment.paymentNotes) && (
                             <TableRow>
-                              <TableCell variant="head">Notes</TableCell>
-                              <TableCell>{payment.paymentNotes}</TableCell>
+                              <TableCell variant="head">Method</TableCell>
+                              <TableCell>{payment.paymentMethod}</TableCell>
                             </TableRow>
-                          )}
-                          <TableRow>
-                            <TableCell variant="head">Collected By</TableCell>
-                            <TableCell>{`${payment.paymentCollectedBy.userFirstName} ${payment.paymentCollectedBy.userLastName}`}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                            <TableRow>
+                              <TableCell variant="head">Status</TableCell>
+                              <TableCell>
+                                <Stack
+                                  direction="row"
+                                  alignItems="center"
+                                  justifyContent="space-between"
+                                >
+                                  <Chip
+                                    label={payment.paymentStatus}
+                                    color={
+                                      payment.paymentStatus === PAY_STATUS_COMPLETED
+                                        ? 'success'
+                                        : 'warning'
+                                    }
+                                  />
+                                  {payment.paymentStatus === PAY_STATUS_PENDING &&
+                                    payment.paymentMethod === PAY_METHOD_CHEQUE && (
+                                      <IconButton
+                                        onClick={() => handleTogglePaymentProceedDlg(payment._id)}
+                                      >
+                                        <PriceChangeIcon />
+                                      </IconButton>
+                                    )}
+                                </Stack>
+                              </TableCell>
+                            </TableRow>
+                            {!commonUtil.stringIsEmptyOrSpaces(payment.paymentTransactionId) && (
+                              <TableRow>
+                                <TableCell variant="head">Transaction Id</TableCell>
+                                <TableCell>{payment.paymentTransactionId}</TableCell>
+                              </TableRow>
+                            )}
+                            {!commonUtil.stringIsEmptyOrSpaces(payment.paymentNotes) && (
+                              <TableRow>
+                                <TableCell variant="head">Notes</TableCell>
+                                <TableCell>{payment.paymentNotes}</TableCell>
+                              </TableRow>
+                            )}
+                            <TableRow>
+                              <TableCell variant="head">Collected By</TableCell>
+                              <TableCell>{`${payment.paymentCollectedBy.userFirstName} ${payment.paymentCollectedBy.userLastName}`}</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+                        <IconButton
+                          onClick={() => handleToggleDeletePaymentDlg(payment._id)}
+                          loading={isLoadingDeleteWoPay}
+                          disabled={isLoadingDeleteWoPay}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      )}
+                    </Box>
                   </Card>
                 ))}
               </>
@@ -401,6 +424,17 @@ export const WorkorderView = ({
           handleClose={handleToggleRefundDialog}
           handleConfirm={handleIssueRefund}
           isLoading={isLoadingRefund}
+        />
+      )}
+      {isOpenDeletePayment && (
+        <ConfirmationDialog
+          open={isOpenDeletePayment}
+          handleClose={handleToggleDeletePaymentDlg}
+          contentText={
+            'Are you sure that you want to delete this payment record? The accounts will be updated in completion'
+          }
+          handleSubmit={handleDeletePaymentRecord}
+          isLoading={isLoadingDeleteWoPay}
         />
       )}
     </Container>
