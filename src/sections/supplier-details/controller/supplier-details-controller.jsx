@@ -5,6 +5,7 @@ import { SupplierDetailsView } from '../view/supplier-details-view';
 import useSupplier from 'src/hooks/useSupplier';
 import usePagination from 'src/hooks/usePagination';
 import useInventory from 'src/hooks/useInventory';
+import { PAY_METHOD_CASH } from 'src/constants/payment-methods';
 
 const stockMvColumns = [
   'Item',
@@ -26,17 +27,23 @@ const SupplierDetailsController = () => {
     supplierMovementCount,
     supplierPayments,
     supplierPaymentsCount,
+    supplierItems,
     isLoadingSupplier,
     isLoadingSupUpdate,
     isLoadingSupplierMovements,
     isLoadingSupplierPayments,
     isLoadingAddSupPayment,
+    isLoadingSupplierItems,
+    isLoadingAddStockBulk,
     fetchSupplierInfo,
     fetchSupplierStockMovements,
     fetchSupplierRecentPayments,
     createSupplierPayments,
     updateSupplier,
+    addStockBulks,
+    fetchSupplierItemsInfo,
   } = useSupplier();
+
   const { selectInvItems, isLoadingInvSelect, fetchItemsForSelection } = useInventory();
 
   const movementPagination = usePagination();
@@ -55,11 +62,13 @@ const SupplierDetailsController = () => {
   };
 
   const [initialValues, setInitialValues] = useState({});
+  const [grmInitialValues, setGrmInitialValues] = useState({});
 
   const [selectedRow, setSelectedRow] = useState(null);
 
   const [isOpenUpdateSupplier, setIsOpenUpdateSupplier] = useState(false);
   const [isOpenAddPayment, setIsOpenAddPayment] = useState(false);
+  const [isOpenAddBulk, setIsOpenAddBulk] = useState(false);
 
   const handleToggleUpdateSupplier = () => {
     if (!isOpenUpdateSupplier) {
@@ -78,6 +87,25 @@ const SupplierDetailsController = () => {
   const handleToggleAddPayment = (row = null) => {
     setSelectedRow(row);
     setIsOpenAddPayment(!isOpenAddPayment);
+  };
+
+  const handleToggleAddBulk = () => {
+    if (!isOpenAddBulk) {
+      setGrmInitialValues({
+        stockPaymentMethod: PAY_METHOD_CASH,
+        stockNotes: '',
+        stockItems: supplierItems.map((item) => ({
+          _id: item._id,
+          stockQuantity: 0,
+          stockTotalValue: 0,
+          stockPaymentPaidAmount: 0,
+        })),
+      });
+    } else {
+      setGrmInitialValues({});
+    }
+
+    setIsOpenAddBulk(!isOpenAddBulk);
   };
 
   const handleAddSupplierPayment = async (values) => {
@@ -101,6 +129,18 @@ const SupplierDetailsController = () => {
     if (isSuccess) {
       handleToggleUpdateSupplier();
       fetchSupplierInfo(id);
+      fetchSupplierItemsInfo(id);
+    }
+  };
+
+  const handleAddBulkStock = async (values) => {
+    const isSuccess = await addStockBulks(id, values);
+
+    if (isSuccess) {
+      handleToggleAddBulk();
+      await fetchSupplierInfo(id);
+      await fetchSupplierStockMovements(paramsMv);
+      await fetchSupplierRecentPayments(paramsPay);
     }
   };
 
@@ -108,6 +148,7 @@ const SupplierDetailsController = () => {
     if (id) {
       fetchSupplierInfo(id);
       fetchItemsForSelection();
+      fetchSupplierItemsInfo(id);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,27 +175,34 @@ const SupplierDetailsController = () => {
       stockMvColumns={stockMvColumns}
       paymentColumns={paymentColumns}
       initialValues={initialValues}
+      grmInitialValues={grmInitialValues}
       selectedRow={selectedRow}
       selectInvItems={selectInvItems}
       supplier={supplier}
+      supplierItems={supplierItems}
       supplierStockMovements={supplierStockMovements}
       supplierPayments={supplierPayments}
       supplierMovementCount={supplierMovementCount}
       supplierPaymentsCount={supplierPaymentsCount}
       isOpenUpdateSupplier={isOpenUpdateSupplier}
       isOpenAddPayment={isOpenAddPayment}
+      isOpenAddBulk={isOpenAddBulk}
       isLoadingInvSelect={isLoadingInvSelect}
       isLoadingSupplier={isLoadingSupplier}
       isLoadingSupplierMovements={isLoadingSupplierMovements}
       isLoadingSupplierPayments={isLoadingSupplierPayments}
       isLoadingAddSupPayment={isLoadingAddSupPayment}
       isLoadingSupUpdate={isLoadingSupUpdate}
+      isLoadingSupplierItems={isLoadingSupplierItems}
+      isLoadingAddStockBulk={isLoadingAddStockBulk}
       movementPagination={movementPagination}
       paymentsPagination={paymentsPagination}
       handleToggleUpdateSupplier={handleToggleUpdateSupplier}
       handleToggleAddPayment={handleToggleAddPayment}
+      handleToggleAddBulk={handleToggleAddBulk}
       handleAddSupplierPayment={handleAddSupplierPayment}
       handleUpdateSupplierInfo={handleUpdateSupplierInfo}
+      handleAddBulkStock={handleAddBulkStock}
     />
   );
 };

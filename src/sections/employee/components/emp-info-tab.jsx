@@ -4,6 +4,8 @@ import commonUtil from 'src/utils/common-util';
 import { formatCurrency } from 'src/utils/format-number';
 import { fDate } from 'src/utils/format-time';
 import { EmpUpdateDialog } from './emp-update-dialog';
+import useAuthStore from 'src/store/auth-store';
+import { USER_ROLE } from 'src/constants/user-role';
 
 export const EmpInfoTab = ({
   employee,
@@ -13,15 +15,19 @@ export const EmpInfoTab = ({
   handleToggleUpdateDlg,
   handleUpdateEmpInfo,
 }) => {
+  const { auth } = useAuthStore();
   return (
     <Grid container>
-      <Grid size={12}>
-        <Stack direction="row" justifyContent="flex-end" alignItems="center" sx={{ mt: '10px' }}>
-          <Button variant="contained" onClick={handleToggleUpdateDlg}>
-            Update Info
-          </Button>
-        </Stack>
-      </Grid>
+      {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+        <Grid size={12}>
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" sx={{ mt: '10px' }}>
+            <Button variant="contained" onClick={handleToggleUpdateDlg}>
+              Update Info
+            </Button>
+          </Stack>
+        </Grid>
+      )}
+
       <Grid size={{ xs: 12, md: 6 }}>
         <Table>
           <TableBody>

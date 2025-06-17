@@ -26,6 +26,7 @@ export const BACKEND_API = {
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEMS_EDIT: IP_URL + '/inventory/supAuth/update',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',
+  ITEM_UPDATE_STOCK_BULK: IP_URL + '/inventory/auth/bulk-stock-update',
   ITEM_UPDATE_LOGS: IP_URL + '/inventory/auth/stock-logs',
   ITEMS_INFO: IP_URL + '/inventory/auth/item',
   ITEMS_STOCK_STATISTICS: IP_URL + '/inventory/auth/inv-stocks-status',
@@ -78,4 +79,5 @@ export const BACKEND_API = {
   SUPPLIER_PURCHASES: IP_URL + '/supplier/auth/supplier-purchases',
   SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
   SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment',
+  SUPPLIER_ITEMS_INFO: IP_URL + '/supplier/auth/supplier-items',
 };

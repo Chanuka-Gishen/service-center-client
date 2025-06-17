@@ -26,32 +26,40 @@ import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
 import { SupplierPaymentDialog } from '../components/supplier-payment-dialog';
 import { UpdateSupplierDialog } from '../components/update-supplier-dialog';
+import { AddBulkStockDialog } from '../components/add-bulk-stock-dialog';
 
 export const SupplierDetailsView = ({
   stockMvColumns,
   paymentColumns,
   initialValues,
+  grmInitialValues,
   selectInvItems,
   selectedRow,
   supplier,
+  supplierItems,
   supplierStockMovements,
   supplierPayments,
   supplierMovementCount,
   supplierPaymentsCount,
   isOpenUpdateSupplier,
   isOpenAddPayment,
+  isOpenAddBulk,
   isLoadingInvSelect,
   isLoadingSupplier,
   isLoadingSupplierMovements,
   isLoadingSupplierPayments,
   isLoadingAddSupPayment,
   isLoadingSupUpdate,
+  isLoadingSupplierItems,
+  isLoadingAddStockBulk,
   movementPagination,
   paymentsPagination,
   handleToggleUpdateSupplier,
   handleToggleAddPayment,
+  handleToggleAddBulk,
   handleAddSupplierPayment,
   handleUpdateSupplierInfo,
+  handleAddBulkStock,
 }) => {
   const { auth } = useAuthStore();
 
@@ -116,7 +124,7 @@ export const SupplierDetailsView = ({
                           <TableCell>
                             {Array.isArray(supplier.supplierProducts) &&
                             supplier.supplierProducts.length > 0 ? (
-                              <Stack direction="row" columnGap={2} rowGap={2} flexWrap='wrap'>
+                              <Stack direction="row" columnGap={2} rowGap={2} flexWrap="wrap">
                                 {supplier.supplierProducts.map((product, index) => (
                                   <Chip
                                     key={index}
@@ -169,7 +177,15 @@ export const SupplierDetailsView = ({
           </Stack>
         </Grid>
         <Grid size={12}>
-          <Typography variant="h5">Stock Movements</Typography>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h5">Stock Movements</Typography>
+            {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
+            supplier.supplierProducts.length > 0 ? (
+              <Button variant="contained" onClick={handleToggleAddBulk}>
+                Add Stocks
+              </Button>
+            ) : null}
+          </Stack>
         </Grid>
         <Grid size={12}>
           <Card>
@@ -213,6 +229,16 @@ export const SupplierDetailsView = ({
           isLoading={isLoadingSupUpdate}
           isLoadingOptions={isLoadingInvSelect}
           handleConfirm={handleUpdateSupplierInfo}
+        />
+      )}
+      {isOpenAddBulk && (
+        <AddBulkStockDialog
+          open={isOpenAddBulk}
+          stockItems={supplierItems}
+          initialValues={grmInitialValues}
+          handleOpenClose={handleToggleAddBulk}
+          handleConfirm={handleAddBulkStock}
+          isLoading={isLoadingAddStockBulk}
         />
       )}
     </Container>
