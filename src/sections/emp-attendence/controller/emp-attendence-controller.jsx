@@ -30,7 +30,34 @@ const EmpAttendenceController = () => {
 
   const [isOpenUploadDlg, setIsOpenUploadDialog] = useState(false);
 
-  const queryParams = { page: pagination.page, limit: pagination.limit };
+  const [searchParams, setSearchParams] = useState({
+    empId: '',
+    name: '',
+    date: null,
+  });
+
+  const queryParams = { page: pagination.page, limit: pagination.limit, ...searchParams };
+
+  const handleChangeSearchParam = (event) => {
+    setSearchParams({
+      ...searchParams,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleChangeSearchParamDate = (date) => {
+    setSearchParams({
+      ...searchParams,
+      date: date,
+    });
+  };
+
+  const handleDeleteSearchParam = (filterName) => {
+    setSearchParams((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: filterName === 'date' ? null : '',
+    }));
+  };
 
   const handleToggleUploadDialog = () => {
     if (isOpenUploadDlg) setSelectedFile(null);
@@ -60,12 +87,13 @@ const EmpAttendenceController = () => {
     fetchEmpAttendences(queryParams);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.page, pagination.limit]);
+  }, [pagination.page, pagination.limit, searchParams]);
 
   return (
     <EmpAttendenceView
       tableHeaders={tableHeaders}
       pagination={pagination}
+      searchParams={searchParams}
       attendences={attendences}
       attendenceCount={attendenceCount}
       isOpenUploadDlg={isOpenUploadDlg}
@@ -73,6 +101,9 @@ const EmpAttendenceController = () => {
       isLoadingAttendences={isLoadingAttendences}
       isLoadingAddAttendences={isLoadingAddAttendences}
       fetchEmpAttendences={fetchEmpAttendences}
+      handleChangeSearchParam={handleChangeSearchParam}
+      handleChangeSearchParamDate={handleChangeSearchParamDate}
+      handleDeleteSearchParam={handleDeleteSearchParam}
       handleToggleUploadDialog={handleToggleUploadDialog}
       handleSelectFile={handleSelectFile}
       handleAddAttendenceRecords={handleAddAttendenceRecords}

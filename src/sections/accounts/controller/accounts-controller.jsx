@@ -34,6 +34,7 @@ const AccountsController = () => {
   const [searchParams, setSearchParams] = useState({
     type: '',
     source: '',
+    date: null,
   });
 
   //------------------
@@ -56,10 +57,17 @@ const AccountsController = () => {
     });
   };
 
+  const handleChangeSearchParamDate = (date) => {
+    setSearchParams({
+      ...searchParams,
+      date: date,
+    });
+  };
+
   const handleDeleteSearchParam = (filterName) => {
     setSearchParams((prevFilters) => ({
       ...prevFilters,
-      [filterName]: '',
+      [filterName]: filterName === 'date' ? null : '',
     }));
   };
 
@@ -108,6 +116,7 @@ const AccountsController = () => {
       limit={limit}
       page={page}
       handleChangeSearchParam={handleChangeSearchParam}
+      handleChangeSearchParamDate={handleChangeSearchParamDate}
       handleDeleteSearchParam={handleDeleteSearchParam}
       handleToggleAddExpenseDialog={handleToggleAddExpenseDialog}
       handleToggleAddIncomeDialog={handleToggleAddIncomeDialog}

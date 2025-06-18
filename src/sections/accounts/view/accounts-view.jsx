@@ -21,6 +21,8 @@ import { PAYMENT_TYPES } from 'src/constants/payment-types';
 import { PAY_SC_COMBINED } from 'src/constants/payment-source';
 import { AddExpenseDialog } from '../components/add-expense-dialog';
 import { AddIncomeDialog } from '../components/add-income-dialog';
+import { DatePicker } from '@mui/x-date-pickers';
+import { fDate } from 'src/utils/format-time';
 
 export const AccountsView = ({
   tableTitles,
@@ -35,6 +37,7 @@ export const AccountsView = ({
   limit,
   page,
   handleChangeSearchParam,
+  handleChangeSearchParamDate,
   handleDeleteSearchParam,
   handleToggleAddExpenseDialog,
   handleToggleAddIncomeDialog,
@@ -66,7 +69,7 @@ export const AccountsView = ({
             </Stack>
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 4 }}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <FormControl fullWidth>
             <InputLabel id="select-label">Payment Type</InputLabel>
             <Select
@@ -86,7 +89,7 @@ export const AccountsView = ({
             </Select>
           </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 4 }}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <FormControl fullWidth>
             <InputLabel id="select-label">Payment Source</InputLabel>
             <Select
@@ -106,7 +109,24 @@ export const AccountsView = ({
             </Select>
           </FormControl>
         </Grid>
-        {(searchParams.type || searchParams.source) && (
+        <Grid size={{ xs: 12, md: 3 }}>
+          <FormControl required fullWidth>
+            <DatePicker
+              maxDate={new Date()}
+              slotProps={{
+                textField: {
+                  //disabled: true,
+                },
+                field: { clearable: true },
+              }}
+              label="Date"
+              name="date"
+              value={searchParams.date}
+              onChange={(date) => handleChangeSearchParamDate(date)}
+            />
+          </FormControl>
+        </Grid>
+        {(searchParams.type || searchParams.source || searchParams.date) && (
           <Grid size={12}>
             <Stack direction="row" spacing={2} flexWrap="wrap">
               {searchParams.type && (
@@ -116,6 +136,12 @@ export const AccountsView = ({
                 <Chip
                   label={searchParams.source}
                   onDelete={() => handleDeleteSearchParam('source')}
+                />
+              )}
+              {searchParams.date && (
+                <Chip
+                  label={fDate(searchParams.date)}
+                  onDelete={() => handleDeleteSearchParam('date')}
                 />
               )}
             </Stack>
