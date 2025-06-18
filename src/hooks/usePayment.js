@@ -11,6 +11,7 @@ const usePayment = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [payments, setPayments] = useState([]);
+  const [deletedPayments, setDeletedPayments] = useState([]);
   const [pendingPayments, setPendingPayments] = useState([]);
   const [woPayments, setWoPayments] = useState([]);
   const [accSummary, setAccSummary] = useState([]);
@@ -26,8 +27,10 @@ const usePayment = () => {
   });
 
   const [paymentsCount, setPaymentsCount] = useState(0);
+  const [deletedPaymentsCount, setDeletedPaymentsCount] = useState(0);
 
   const [isLoadingPayments, setIsLoadingPayments] = useState(true);
+  const [isLoadingDeletedPayments, setIsLoadingDeletedPayments] = useState(true);
   const [isLoadingPendingPayments, setIsLoadingPendingPayments] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingDeleteWoPay, setIsLoadingDeleteWoPay] = useState(false);
@@ -40,6 +43,7 @@ const usePayment = () => {
   const [isLoadingFinSummary, setIsLoadingFinSummary] = useState(true);
   const [isLoadingExpenseSummary, setIsLoadingExpenseSummary] = useState(true);
   const [isLoadingFinReportDownload, setIsLoadingFinReportDownload] = useState(false);
+  const [isLoadingDeleteManPayment, setIsLoadingDeleteManPayment] = useState(false);
 
   // Fetch all payments
   const fetchPayments = async (params) => {
@@ -62,6 +66,32 @@ const usePayment = () => {
       })
       .finally(() => {
         setIsLoadingPayments(false);
+      });
+  };
+
+  const fetchDeletedPayments = async (params) => {
+    setIsLoadingDeletedPayments(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENTS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        ...params,
+        isDeleted: true,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setDeletedPayments(res.data.responseData.data);
+          setDeletedPaymentsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingDeletedPayments(false);
+      })
+      .finally(() => {
+        setIsLoadingDeletedPayments(false);
       });
   };
 
@@ -116,6 +146,39 @@ const usePayment = () => {
       .finally(() => {
         setIsLoadingCreate(false);
       });
+
+    return isSuccess;
+  };
+
+  // Delete payment record - manually created
+  const deleteManualPayment = async (id) => {
+    let isSuccess = false;
+
+    if (id) {
+      setIsLoadingDeleteManPayment(true);
+
+      await backendAuthApi({
+        url: BACKEND_API.PAYMENT_DELETE,
+        method: 'DELETE',
+        cancelToken: sourceToken.token,
+        params: { id },
+      })
+        .then((res) => {
+          if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+            isSuccess = true;
+          }
+
+          enqueueSnackbar(res.data.responseMessage, {
+            variant: responseUtil.findResponseType(res.data.responseCode),
+          });
+        })
+        .catch(() => {
+          setIsLoadingDeleteManPayment(false);
+        })
+        .finally(() => {
+          setIsLoadingDeleteManPayment(false);
+        });
+    }
 
     return isSuccess;
   };
@@ -389,15 +452,19 @@ const usePayment = () => {
 
   return {
     payments,
+    deletedPayments,
     paymentsCount,
+    deletedPaymentsCount,
     pendingPayments,
     woPayments,
     accSummary,
     finSummary,
     expSummary,
     isLoadingPayments,
+    isLoadingDeletedPayments,
     isLoadingPendingPayments,
     isLoadingCreate,
+    isLoadingDeleteManPayment,
     isLoadingDeleteWoPay,
     isLoadingCreateExp,
     isLoadingCreateInc,
@@ -410,8 +477,10 @@ const usePayment = () => {
     isLoadingExpenseSummary,
     isLoadingFinReportDownload,
     fetchPayments,
+    fetchDeletedPayments,
     fetchPendingPayments,
     createPayment,
+    deleteManualPayment,
     deleteWoPayment,
     createExpensesPayment,
     createIncomePayment,
