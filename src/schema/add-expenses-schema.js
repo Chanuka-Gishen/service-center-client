@@ -31,6 +31,6 @@ export const expensePaymentSchema = Yup.object().shape({
 
   paymentDate: Yup.date()
     .required('Payment date required')
-    .max(new Date(), 'Payment date cannot be in the future')
+    .max(new Date(new Date().setHours(23, 59, 59, 999)), 'Payment date cannot be in the future')
     .typeError('Invalid date format'),
 });

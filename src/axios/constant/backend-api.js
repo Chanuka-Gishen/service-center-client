@@ -52,6 +52,7 @@ export const BACKEND_API = {
   PAYMENTS_PENDING: IP_URL + '/payment/auth/pending-payments',
   PAYMENT_WO: IP_URL + '/payment/auth/wo-payments',
   PAYMENT_CREATE: IP_URL + '/payment/auth/add',
+  PAYMENT_DELETE: IP_URL + '/payment/supAuth/delete-payment',
   PAYMENT_WO_DELETE: IP_URL + '/payment/supAuth/delete-wo-payment',
   PAYMENT_CREATE_EXP: IP_URL + '/payment/auth/add-expenses',
   PAYMENT_CREATE_INC: IP_URL + '/payment/auth/add-income',

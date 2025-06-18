@@ -143,6 +143,7 @@ export const AddExpenseDialog = ({ open, isLoading, handleOpenClose, handleConfi
                       value={values.paymentDate}
                       onChange={(date) => setFieldValue('paymentDate', date, true)}
                     />
+                    <FormHelperText>{touched.paymentDate && errors.paymentDate}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
