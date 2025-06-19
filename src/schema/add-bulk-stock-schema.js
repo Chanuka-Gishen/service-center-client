@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 
 const stockItemSchema = Yup.object().shape({
   _id: Yup.string().required('Item ID is required'),
+  itemName: Yup.string().required('Item name is required'),
   stockQuantity: Yup.number()
     .min(0, 'Quantity cannot be negative')
     .required('Quantity is required'),

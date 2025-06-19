@@ -1,31 +1,16 @@
 import {
-  Autocomplete,
-  Box,
   Button,
-  Chip,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
-  Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
-import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { supplierSchema } from 'src/schema/supplier-schema';
 
-export const AddSupplierDialog = ({
-  open,
-  isLoading,
-  handleOpenClose,
-  handleConfirm,
-  options,
-  inputValue,
-  handleInputChange,
-  isLoadingItems,
-}) => {
+export const AddSupplierDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
   return (
     <Dialog
       open={open}
@@ -39,7 +24,6 @@ export const AddSupplierDialog = ({
           supplierName: '',
           supplierContactPerson: '',
           supplierPhone: '',
-          supplierProducts: [],
           supplierNotes: '',
           supplierIsActive: true,
         }}
@@ -48,17 +32,7 @@ export const AddSupplierDialog = ({
           handleConfirm(values);
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          resetForm,
-          handleSubmit,
-          getFieldProps,
-          handleChange,
-          handleBlur,
-          setFieldValue,
-        }) => (
+        {({ errors, touched, resetForm, handleSubmit, getFieldProps }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -97,27 +71,6 @@ export const AddSupplierDialog = ({
                     {...getFieldProps('supplierPhone')}
                     error={touched.supplierPhone && Boolean(errors.supplierPhone)}
                     helperText={touched.supplierPhone && errors.supplierPhone}
-                  />
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-                  <Autocomplete
-                    multiple
-                    options={options}
-                    getOptionLabel={(option) => option.itemName}
-                    filterSelectedOptions
-                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                    value={values.supplierProducts}
-                    onChange={(event, value) => {
-                      setFieldValue('supplierProducts', value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Supplier Products"
-                        placeholder="Select Products"
-                      />
-                    )}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 12 }}>

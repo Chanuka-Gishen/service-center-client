@@ -1,5 +1,4 @@
 import {
-  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -15,10 +14,8 @@ export const UpdateSupplierDialog = ({
   open,
   initialValues,
   isLoading,
-  isLoadingOptions,
   handleOpenClose,
   handleConfirm,
-  options,
 }) => {
   return (
     <Dialog
@@ -35,17 +32,7 @@ export const UpdateSupplierDialog = ({
           handleConfirm(values);
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          resetForm,
-          handleSubmit,
-          getFieldProps,
-          handleChange,
-          handleBlur,
-          setFieldValue,
-        }) => (
+        {({ errors, touched, resetForm, handleSubmit, getFieldProps }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -84,29 +71,6 @@ export const UpdateSupplierDialog = ({
                     {...getFieldProps('supplierPhone')}
                     error={touched.supplierPhone && Boolean(errors.supplierPhone)}
                     helperText={touched.supplierPhone && errors.supplierPhone}
-                  />
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
-                  <Autocomplete
-                    multiple
-                    options={options}
-                    getOptionLabel={(option) => option.itemName}
-                    filterSelectedOptions
-                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                    value={values.supplierProducts}
-                    loading={isLoadingOptions}
-                    loadingText="Loading..."
-                    onChange={(event, value) => {
-                      setFieldValue('supplierProducts', value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Supplier Products"
-                        placeholder="Select Products"
-                      />
-                    )}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 12 }}>

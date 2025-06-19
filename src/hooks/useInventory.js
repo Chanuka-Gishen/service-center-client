@@ -16,14 +16,12 @@ const useInventory = () => {
   const [stockLogs, setStockLogs] = useState([]);
   const [stockLogsCount, setStockLogsCount] = useState(0);
   const [selectItems, setSelectItems] = useState([]);
-  const [selectInvItems, setSelectInvItems] = useState([]);
   const [invStockStats, setInvStockStats] = useState([]);
   const [invStockStatsCount, setInvStockStatsCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingItem, setIsLoadingItem] = useState(true);
   const [isLoadingSelect, setIsLoadingSelect] = useState(false);
-  const [isLoadingInvSelect, setIsLoadingInvSelect] = useState(false);
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
   const [isLoadingEdit, setIsLoadingEdit] = useState(false);
   const [isLoadingStockUpdate, setIsLoadingStockUpdate] = useState(false);
@@ -103,31 +101,6 @@ const useInventory = () => {
       })
       .finally(() => {
         setIsLoadingSelect(false);
-      });
-  };
-
-  // Fetch inventory items for selection (_d, itemName Only)
-  const fetchItemsForSelection = async (params) => {
-    if (isLoadingInvSelect) return;
-
-    setIsLoadingInvSelect(true);
-
-    await backendAuthApi({
-      url: BACKEND_API.ITEMS_SELECT_PRODUCT,
-      method: 'GET',
-      cancelToken: sourceToken.token,
-      params,
-    })
-      .then((res) => {
-        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
-          setSelectInvItems(res.data.responseData);
-        }
-      })
-      .catch(() => {
-        setIsLoadingInvSelect(false);
-      })
-      .then(() => {
-        setIsLoadingInvSelect(false);
       });
   };
 
@@ -289,7 +262,6 @@ const useInventory = () => {
   return {
     items,
     selectItems,
-    selectInvItems,
     item,
     itemsCount,
     stockLogs,
@@ -299,7 +271,6 @@ const useInventory = () => {
     isLoading,
     isLoadingItem,
     isLoadingSelect,
-    isLoadingInvSelect,
     isLoadingAdd,
     isLoadingEdit,
     isLoadingStockUpdate,
@@ -308,7 +279,6 @@ const useInventory = () => {
     fetchAllItems,
     fetchItemInfo,
     fetchItemsForInvoiceSelection,
-    fetchItemsForSelection,
     addItems,
     updateItem,
     updateItemStock,

@@ -22,7 +22,6 @@ export const BACKEND_API = {
 
   ITEMS: IP_URL + '/inventory/auth/items',
   ITEMS_SELECT: IP_URL + '/inventory/auth/items-select',
-  ITEMS_SELECT_PRODUCT: IP_URL + '/inventory/auth/select-products',
   ITEMS_ADD: IP_URL + '/inventory/auth/create',
   ITEMS_EDIT: IP_URL + '/inventory/supAuth/update',
   ITEM_UPDATE_STOCK: IP_URL + '/inventory/auth/update-stocks',

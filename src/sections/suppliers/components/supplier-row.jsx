@@ -1,4 +1,4 @@
-import { Chip, TableCell, TableRow, Typography } from '@mui/material';
+import { Chip, TableCell, TableRow } from '@mui/material';
 import { formatCurrency } from 'src/utils/format-number';
 
 export const SupplierRow = ({ data, onClickRow }) => {
@@ -14,7 +14,7 @@ export const SupplierRow = ({ data, onClickRow }) => {
           <TableCell>{item.supplierName}</TableCell>
           <TableCell>{item.supplierContactPerson}</TableCell>
           <TableCell>{item.supplierPhone}</TableCell>
-          <TableCell>
+          {/* <TableCell>
             {Array.isArray(item.supplierProducts) && item.supplierProducts.length > 0 ? (
               item.supplierProducts.map((v, index) => (
                 <Typography key={index} variant="body2">
@@ -26,7 +26,7 @@ export const SupplierRow = ({ data, onClickRow }) => {
                 No Products
               </Typography>
             )}
-          </TableCell>
+          </TableCell> */}
           <TableCell>{formatCurrency(item.supplierDueAmount)}</TableCell>
           <TableCell>{item.supplierNotes}</TableCell>
           <TableCell>

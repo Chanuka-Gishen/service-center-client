@@ -99,8 +99,6 @@ export const UpdateStockDialog = ({
                       filterSelectedOptions
                       loadingText="Loading..."
                       onChange={(event, newValue) => {
-                        console.log(newValue);
-
                         setFieldValue('stockSupplier', newValue);
                       }}
                       renderInput={(params) => (

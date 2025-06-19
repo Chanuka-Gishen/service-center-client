@@ -33,10 +33,10 @@ export const SupplierDetailsView = ({
   paymentColumns,
   initialValues,
   grmInitialValues,
-  selectInvItems,
+  filters,
   selectedRow,
+  selectItems,
   supplier,
-  supplierItems,
   supplierStockMovements,
   supplierPayments,
   supplierMovementCount,
@@ -44,19 +44,21 @@ export const SupplierDetailsView = ({
   isOpenUpdateSupplier,
   isOpenAddPayment,
   isOpenAddBulk,
-  isLoadingInvSelect,
   isLoadingSupplier,
   isLoadingSupplierMovements,
   isLoadingSupplierPayments,
   isLoadingAddSupPayment,
   isLoadingSupUpdate,
-  isLoadingSupplierItems,
   isLoadingAddStockBulk,
+  isLoadingSelect,
   movementPagination,
   paymentsPagination,
+  handleChangeSearch,
+  handleSelectItem,
   handleToggleUpdateSupplier,
   handleToggleAddPayment,
   handleToggleAddBulk,
+  handleRemoveItem,
   handleAddSupplierPayment,
   handleUpdateSupplierInfo,
   handleAddBulkStock,
@@ -117,35 +119,6 @@ export const SupplierDetailsView = ({
                             >
                               {formatCurrency(supplier.supplierDueAmount)}
                             </Typography>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell variant="head">Products</TableCell>
-                          <TableCell>
-                            {Array.isArray(supplier.supplierProducts) &&
-                            supplier.supplierProducts.length > 0 ? (
-                              <Stack direction="row" columnGap={2} rowGap={2} flexWrap="wrap">
-                                {supplier.supplierProducts.map((product, index) => (
-                                  <Chip
-                                    key={index}
-                                    label={product.itemName || 'Unnamed Product'}
-                                    size="small"
-                                    sx={{
-                                      maxWidth: '100%',
-                                      '& .MuiChip-label': {
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                      },
-                                    }}
-                                  />
-                                ))}
-                              </Stack>
-                            ) : (
-                              <Typography variant="caption" color="text.secondary">
-                                No products
-                              </Typography>
-                            )}
                           </TableCell>
                         </TableRow>
                       </TableBody>
@@ -225,20 +198,23 @@ export const SupplierDetailsView = ({
           open={isOpenUpdateSupplier}
           initialValues={initialValues}
           handleOpenClose={handleToggleUpdateSupplier}
-          options={selectInvItems}
           isLoading={isLoadingSupUpdate}
-          isLoadingOptions={isLoadingInvSelect}
           handleConfirm={handleUpdateSupplierInfo}
         />
       )}
       {isOpenAddBulk && (
         <AddBulkStockDialog
           open={isOpenAddBulk}
-          stockItems={supplierItems}
+          filters={filters}
+          selectItems={selectItems}
           initialValues={grmInitialValues}
+          handleChangeSearch={handleChangeSearch}
+          handleSelectItem={handleSelectItem}
           handleOpenClose={handleToggleAddBulk}
+          handelRemoveItem={handleRemoveItem}
           handleConfirm={handleAddBulkStock}
           isLoading={isLoadingAddStockBulk}
+          isLoadingSelect={isLoadingSelect}
         />
       )}
     </Container>
