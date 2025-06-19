@@ -7,16 +7,16 @@ export const supplierSchema = Yup.object({
 
   supplierPhone: Yup.string().trim().notRequired().default(''),
 
-  supplierProducts: Yup.array()
-    .of(
-      Yup.object({
-        _id: Yup.string()
-          .required('Product ID is required')
-          .matches(/^[0-9a-fA-F]{24}$/, 'Invalid product ID format'),
-        itemName: Yup.string().required('Product name is required'),
-      })
-    )
-    .notRequired(),
+  // supplierProducts: Yup.array()
+  //   .of(
+  //     Yup.object({
+  //       _id: Yup.string()
+  //         .required('Product ID is required')
+  //         .matches(/^[0-9a-fA-F]{24}$/, 'Invalid product ID format'),
+  //       itemName: Yup.string().required('Product name is required'),
+  //     })
+  //   )
+  //   .notRequired(),
 
   supplierNotes: Yup.string().trim().notRequired().default(''),
 

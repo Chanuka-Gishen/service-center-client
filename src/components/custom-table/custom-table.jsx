@@ -72,6 +72,6 @@ CustomTable.propTypes = {
   rowerPerPage: PropTypes.array,
   page: PropTypes.number,
   limit: PropTypes.number,
-  handleChangePage: PropTypes.func.isRequired,
-  handleChangeRowsPerPage: PropTypes.func.isRequired,
+  handleChangePage: PropTypes.func,
+  handleChangeRowsPerPage: PropTypes.func,
 };

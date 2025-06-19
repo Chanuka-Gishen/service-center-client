@@ -6,23 +6,13 @@ import useInventory from 'src/hooks/useInventory';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { useRouter } from 'src/routes/hooks';
 
-const tableColumns = [
-  'Supplier',
-  'Contact Person',
-  'Phone No',
-  'Products',
-  'Due Amount',
-  'Notes',
-  'Is Active',
-];
+const tableColumns = ['Supplier', 'Contact Person', 'Phone No', 'Due Amount', 'Notes', 'Is Active'];
 
 const SuppliersController = () => {
   const router = useRouter();
 
   const { suppliers, suppliersCount, isLoadingSuppliers, getAllSuppliers, registerSupplier } =
     useSupplier();
-
-  const { selectInvItems, isLoadingInvSelect, fetchItemsForSelection } = useInventory();
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -32,7 +22,6 @@ const SuppliersController = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     name: '',
   });
-  const [inputValueItemName, setInputValueItemName] = useState('');
 
   const memoizedSelectedFilters = useMemo(() => selectedFilters, [selectedFilters]);
 
@@ -45,10 +34,6 @@ const SuppliersController = () => {
       ...prevFilters,
       [e.target.name]: e.target.value,
     }));
-  };
-
-  const handleInputChange = (event, newInputValue) => {
-    setInputValueItemName(newInputValue);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -80,12 +65,6 @@ const SuppliersController = () => {
   };
 
   useEffect(() => {
-    fetchItemsForSelection();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     getAllSuppliers(queryParams);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,16 +75,12 @@ const SuppliersController = () => {
       tableColumns={tableColumns}
       suppliers={suppliers}
       suppliersCount={suppliersCount}
-      selectInvItems={selectInvItems}
-      inputValueItemName={inputValueItemName}
       selectedFilters={selectedFilters}
       limit={limit}
       page={page}
       isOpenAdd={isOpenAdd}
       isLoadingSuppliers={isLoadingSuppliers}
-      isLoadingInvSelect={isLoadingInvSelect}
       handleChangeSearch={handleChangeSearch}
-      handleInputChange={handleInputChange}
       handleRowClick={handleRowClick}
       handleToggleAddDialog={handleToggleAddDialog}
       handleAddSupplier={handleAddSupplier}

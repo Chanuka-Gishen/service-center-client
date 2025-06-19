@@ -11,16 +11,12 @@ export const SuppliersView = ({
   tableColumns,
   suppliers,
   suppliersCount,
-  selectInvItems,
-  inputValueItemName,
   selectedFilters,
   limit,
   page,
   isOpenAdd,
   isLoadingSuppliers,
-  isLoadingInvSelect,
   handleChangeSearch,
-  handleInputChange,
   handleRowClick,
   handleToggleAddDialog,
   handleAddSupplier,
@@ -76,10 +72,6 @@ export const SuppliersView = ({
           handleOpenClose={handleToggleAddDialog}
           handleConfirm={handleAddSupplier}
           isLoading={false}
-          isLoadingItems={isLoadingInvSelect}
-          handleInputChange={handleInputChange}
-          inputValue={inputValueItemName}
-          options={selectInvItems}
         />
       )}
     </Container>

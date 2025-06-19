@@ -3,8 +3,6 @@ import { formatCurrency } from 'src/utils/format-number';
 import { fDate } from 'src/utils/format-time';
 
 export const SupplierMovementsRow = ({ data, selectedRow, onClickRow }) => {
-  console.log(selectedRow);
-
   return (
     <>
       {data.map((item, index) => (
