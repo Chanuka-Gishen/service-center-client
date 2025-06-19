@@ -145,11 +145,11 @@ const SupplierDetailsController = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      fetchSupplierInfo(id);
-      fetchItemsForSelection();
-      fetchSupplierItemsInfo(id);
-    }
+    if (!id) return;
+
+    fetchSupplierInfo(id);
+    fetchItemsForSelection();
+    fetchSupplierItemsInfo(id);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
