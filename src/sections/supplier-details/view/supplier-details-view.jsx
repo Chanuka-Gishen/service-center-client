@@ -152,8 +152,7 @@ export const SupplierDetailsView = ({
         <Grid size={12}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h5">Stock Movements</Typography>
-            {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
-            supplier?.supplierProducts.length > 0 ? (
+            {auth.user.userRole === USER_ROLE.SUPER_ADMIN ? (
               <Button variant="contained" onClick={handleToggleAddBulk}>
                 Add Stocks
               </Button>
