@@ -11,12 +11,12 @@ const useSupplier = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
   const [suppliersOptions, setSuppliersOptions] = useState([]);
-  const [supplierStockMovements, setSupplierStockMovements] = useState([]);
+  const [supplierGrnRecords, setSupplierGrnRecords] = useState([]);
   const [supplierPayments, setSupplierPayments] = useState([]);
   const [supplierItems, setSupplierItems] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
-  const [supplierMovementCount, setSupplierMovementCount] = useState(0);
+  const [supplierGrnCount, setSupplierGrnCount] = useState(0);
   const [supplierPaymentsCount, setSupplierPaymentsCount] = useState(0);
 
   const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(true);
@@ -25,7 +25,7 @@ const useSupplier = () => {
   const [isLoadingSupUpdate, setIsLoadingSupUpdate] = useState(false);
   const [isLoadingAddSupPayment, setIsLoadingAddSupPayment] = useState(false);
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
-  const [isLoadingSupplierMovements, setIsLoadingSupplierMovements] = useState(false);
+  const [isLoadingSupplierGrnRecords, setIsLoadingSupplierGrnRecords] = useState(false);
   const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
   const [isLoadingSupplierItems, setIsLoadingSupplierItems] = useState(false);
   const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
@@ -79,9 +79,9 @@ const useSupplier = () => {
       });
   };
 
-  // Fetch supplier stock movements
-  const fetchSupplierStockMovements = async (params) => {
-    setIsLoadingSupplierMovements(true);
+  // Fetch supplier GRN records
+  const fetchSupplierGrnRecords = async (params) => {
+    setIsLoadingSupplierGrnRecords(true);
 
     await backendAuthApi({
       url: BACKEND_API.SUPPLIER_PURCHASES,
@@ -91,15 +91,15 @@ const useSupplier = () => {
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
-          setSupplierStockMovements(res.data.responseData.data);
-          setSupplierMovementCount(res.data.responseData.count);
+          setSupplierGrnRecords(res.data.responseData.data);
+          setSupplierGrnCount(res.data.responseData.count);
         }
       })
       .catch(() => {
-        setIsLoadingSupplierMovements(false);
+        setIsLoadingSupplierGrnRecords(false);
       })
       .finally(() => {
-        setIsLoadingSupplierMovements(false);
+        setIsLoadingSupplierGrnRecords(false);
       });
   };
 
@@ -301,10 +301,10 @@ const useSupplier = () => {
   return {
     suppliers,
     supplier,
-    supplierStockMovements,
+    supplierGrnRecords,
     supplierPayments,
     suppliersCount,
-    supplierMovementCount,
+    supplierGrnCount,
     supplierPaymentsCount,
     suppliersOptions,
     supplierItems,
@@ -314,7 +314,7 @@ const useSupplier = () => {
     isLoadingSupUpdate,
     isLoadingAddSupPayment,
     isLoadingSuppliersOptions,
-    isLoadingSupplierMovements,
+    isLoadingSupplierGrnRecords,
     isLoadingSupplierPayments,
     isLoadingSupplierItems,
     isLoadingAddStockBulk,
@@ -325,7 +325,7 @@ const useSupplier = () => {
     addStockBulks,
     createSupplierPayments,
     fetchSuppliersForSelection,
-    fetchSupplierStockMovements,
+    fetchSupplierGrnRecords,
     fetchSupplierRecentPayments,
     fetchSupplierItemsInfo,
   };

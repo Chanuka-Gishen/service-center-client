@@ -9,13 +9,13 @@ import { PAY_METHOD_CASH } from 'src/constants/payment-methods';
 import debounce from 'lodash.debounce';
 
 const stockMvColumns = [
-  'Item',
-  'Type',
-  'Quantity',
+  'Code',
   'Total Value',
   'Paid Amount',
   'Due Amount',
-  'Date',
+  'Discount',
+  'Payment Status',
+  'çreatedAt',
 ];
 const paymentColumns = ['Method', 'Amount', 'Date'];
 
@@ -24,19 +24,19 @@ const SupplierDetailsController = () => {
 
   const {
     supplier,
-    supplierStockMovements,
-    supplierMovementCount,
+    supplierGrnRecords,
+    supplierGrnCount,
     supplierPayments,
     supplierPaymentsCount,
     supplierItems,
     isLoadingSupplier,
     isLoadingSupUpdate,
-    isLoadingSupplierMovements,
+    isLoadingSupplierGrnRecords,
     isLoadingSupplierPayments,
     isLoadingAddSupPayment,
     isLoadingAddStockBulk,
     fetchSupplierInfo,
-    fetchSupplierStockMovements,
+    fetchSupplierGrnRecords,
     fetchSupplierRecentPayments,
     createSupplierPayments,
     updateSupplier,
@@ -50,9 +50,9 @@ const SupplierDetailsController = () => {
 
   const [initialValues, setInitialValues] = useState({});
   const initValues = {
-    stockPaymentMethod: PAY_METHOD_CASH,
-    stockNotes: '',
-    stockItems: [],
+    grnReceivedDate: new Date(),
+    grnDiscountAmount: 0,
+    grnItems: [],
   };
   const [grmInitialValues, setGrmInitialValues] = useState(initValues);
 
@@ -89,20 +89,19 @@ const SupplierDetailsController = () => {
   const handleSelectItem = (selectedItem) => {
     if (!selectedItem) return;
 
-    const exists = grmInitialValues.stockItems.some((item) => item._id === selectedItem._id);
+    const exists = grmInitialValues.grnItems.some((item) => item._id === selectedItem._id);
 
     if (!exists) {
       const newItem = {
         _id: selectedItem._id,
         itemName: selectedItem.itemName,
         stockQuantity: 1,
-        stockTotalValue: 0,
-        stockPaymentPaidAmount: 0,
+        stockUnitPrice: 0,
       };
 
       setGrmInitialValues((prev) => ({
         ...prev,
-        stockItems: [...prev.stockItems, newItem],
+        grnItems: [...prev.grnItems, newItem],
       }));
     }
   };
@@ -110,7 +109,7 @@ const SupplierDetailsController = () => {
   const handleRemoveItem = (_idToRemove) => {
     setGrmInitialValues((prev) => ({
       ...prev,
-      stockItems: prev.stockItems.filter((item) => item._id !== _idToRemove),
+      grnItems: prev.grnItems.filter((item) => item._id !== _idToRemove),
     }));
   };
 
@@ -153,7 +152,7 @@ const SupplierDetailsController = () => {
     if (isSuccess) {
       handleToggleAddPayment();
       await fetchSupplierInfo(id);
-      await fetchSupplierStockMovements(paramsMv);
+      await fetchSupplierGrnRecords(paramsMv);
       await fetchSupplierRecentPayments(paramsPay);
     }
   };
@@ -174,7 +173,7 @@ const SupplierDetailsController = () => {
     if (isSuccess) {
       handleToggleAddBulk();
       await fetchSupplierInfo(id);
-      await fetchSupplierStockMovements(paramsMv);
+      await fetchSupplierGrnRecords(paramsMv);
       await fetchSupplierRecentPayments(paramsPay);
     }
   };
@@ -192,7 +191,7 @@ const SupplierDetailsController = () => {
 
   useEffect(() => {
     if (id) {
-      fetchSupplierStockMovements(paramsMv);
+      fetchSupplierGrnRecords(paramsMv);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -225,16 +224,16 @@ const SupplierDetailsController = () => {
       selectItems={selectItems}
       supplier={supplier}
       supplierItems={supplierItems}
-      supplierStockMovements={supplierStockMovements}
+      supplierGrnRecords={supplierGrnRecords}
       supplierPayments={supplierPayments}
-      supplierMovementCount={supplierMovementCount}
+      supplierGrnCount={supplierGrnCount}
       supplierPaymentsCount={supplierPaymentsCount}
       isOpenUpdateSupplier={isOpenUpdateSupplier}
       isOpenAddPayment={isOpenAddPayment}
       isOpenAddBulk={isOpenAddBulk}
       isLoadingSupplier={isLoadingSupplier}
       isLoadingSelect={isLoadingSelect}
-      isLoadingSupplierMovements={isLoadingSupplierMovements}
+      isLoadingSupplierGrnRecords={isLoadingSupplierGrnRecords}
       isLoadingSupplierPayments={isLoadingSupplierPayments}
       isLoadingAddSupPayment={isLoadingAddSupPayment}
       isLoadingSupUpdate={isLoadingSupUpdate}
