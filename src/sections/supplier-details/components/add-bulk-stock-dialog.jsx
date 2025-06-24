@@ -116,7 +116,7 @@ export const AddBulkStockDialog = ({
                       variant="h6"
                       component="div"
                     >
-                      Bulk Stock Entry
+                      Goods Received Note (GRN)
                     </Typography>
                   </Box>
                   <Box flexGrow={1} />

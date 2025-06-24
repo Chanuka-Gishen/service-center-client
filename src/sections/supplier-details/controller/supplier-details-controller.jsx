@@ -7,6 +7,8 @@ import usePagination from 'src/hooks/usePagination';
 import useInventory from 'src/hooks/useInventory';
 import { PAY_METHOD_CASH } from 'src/constants/payment-methods';
 import debounce from 'lodash.debounce';
+import { useRouter } from 'src/routes/hooks';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 
 const stockMvColumns = [
   'Code',
@@ -15,12 +17,14 @@ const stockMvColumns = [
   'Due Amount',
   'Discount',
   'Payment Status',
-  'çreatedAt',
+  'Created At',
 ];
 const paymentColumns = ['Method', 'Amount', 'Date'];
 
 const SupplierDetailsController = () => {
   const { id } = useParams();
+
+  const router = useRouter();
 
   const {
     supplier,
@@ -33,12 +37,10 @@ const SupplierDetailsController = () => {
     isLoadingSupUpdate,
     isLoadingSupplierGrnRecords,
     isLoadingSupplierPayments,
-    isLoadingAddSupPayment,
     isLoadingAddStockBulk,
     fetchSupplierInfo,
     fetchSupplierGrnRecords,
     fetchSupplierRecentPayments,
-    createSupplierPayments,
     updateSupplier,
     addStockBulks,
   } = useSupplier();
@@ -56,11 +58,9 @@ const SupplierDetailsController = () => {
   };
   const [grmInitialValues, setGrmInitialValues] = useState(initValues);
 
-  const [selectedRow, setSelectedRow] = useState(null);
   const [filters, setFilters] = useState({ name: '' });
 
   const [isOpenUpdateSupplier, setIsOpenUpdateSupplier] = useState(false);
-  const [isOpenAddPayment, setIsOpenAddPayment] = useState(false);
   const [isOpenAddBulk, setIsOpenAddBulk] = useState(false);
 
   const paramsMv = {
@@ -96,7 +96,7 @@ const SupplierDetailsController = () => {
         _id: selectedItem._id,
         itemName: selectedItem.itemName,
         stockQuantity: 1,
-        stockUnitPrice: 0,
+        stockUnitPrice: selectedItem.itemBuyingPrice,
       };
 
       setGrmInitialValues((prev) => ({
@@ -113,6 +113,12 @@ const SupplierDetailsController = () => {
     }));
   };
 
+  const handleRowClick = (rowId) => {
+    if (rowId && id) {
+      router.push(`${NAVIGATION_ROUTES.suppliers.details.id}${id}/${rowId}`);
+    }
+  };
+
   const handleToggleUpdateSupplier = () => {
     if (!isOpenUpdateSupplier) {
       setInitialValues({
@@ -127,11 +133,6 @@ const SupplierDetailsController = () => {
     setIsOpenUpdateSupplier(!isOpenUpdateSupplier);
   };
 
-  const handleToggleAddPayment = (row = null) => {
-    setSelectedRow(row);
-    setIsOpenAddPayment(!isOpenAddPayment);
-  };
-
   const handleToggleAddBulk = () => {
     if (isOpenAddBulk) {
       setFilters({
@@ -140,21 +141,6 @@ const SupplierDetailsController = () => {
       setGrmInitialValues(initValues);
     }
     setIsOpenAddBulk(!isOpenAddBulk);
-  };
-
-  const handleAddSupplierPayment = async (values) => {
-    const data = {
-      paymentStockMovement: selectedRow._id,
-      ...values,
-    };
-    const isSuccess = await createSupplierPayments(data);
-
-    if (isSuccess) {
-      handleToggleAddPayment();
-      await fetchSupplierInfo(id);
-      await fetchSupplierGrnRecords(paramsMv);
-      await fetchSupplierRecentPayments(paramsPay);
-    }
   };
 
   const handleUpdateSupplierInfo = async (values) => {
@@ -220,7 +206,6 @@ const SupplierDetailsController = () => {
       initialValues={initialValues}
       grmInitialValues={grmInitialValues}
       filters={filters}
-      selectedRow={selectedRow}
       selectItems={selectItems}
       supplier={supplier}
       supplierItems={supplierItems}
@@ -229,24 +214,21 @@ const SupplierDetailsController = () => {
       supplierGrnCount={supplierGrnCount}
       supplierPaymentsCount={supplierPaymentsCount}
       isOpenUpdateSupplier={isOpenUpdateSupplier}
-      isOpenAddPayment={isOpenAddPayment}
       isOpenAddBulk={isOpenAddBulk}
       isLoadingSupplier={isLoadingSupplier}
       isLoadingSelect={isLoadingSelect}
       isLoadingSupplierGrnRecords={isLoadingSupplierGrnRecords}
       isLoadingSupplierPayments={isLoadingSupplierPayments}
-      isLoadingAddSupPayment={isLoadingAddSupPayment}
       isLoadingSupUpdate={isLoadingSupUpdate}
       isLoadingAddStockBulk={isLoadingAddStockBulk}
       movementPagination={movementPagination}
       paymentsPagination={paymentsPagination}
       handleChangeSearch={handleChangeSearch}
       handleSelectItem={handleSelectItem}
+      handleRowClick={handleRowClick}
       handleToggleUpdateSupplier={handleToggleUpdateSupplier}
-      handleToggleAddPayment={handleToggleAddPayment}
       handleToggleAddBulk={handleToggleAddBulk}
       handleRemoveItem={handleRemoveItem}
-      handleAddSupplierPayment={handleAddSupplierPayment}
       handleUpdateSupplierInfo={handleUpdateSupplierInfo}
       handleAddBulkStock={handleAddBulkStock}
     />

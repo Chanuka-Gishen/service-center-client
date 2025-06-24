@@ -10,6 +10,8 @@ const useSupplier = () => {
 
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
+  const [grnInfo, setGrnInfo] = useState(null);
+  const [grnPayments, setGrnPayments] = useState([]);
   const [suppliersOptions, setSuppliersOptions] = useState([]);
   const [supplierGrnRecords, setSupplierGrnRecords] = useState([]);
   const [supplierPayments, setSupplierPayments] = useState([]);
@@ -17,6 +19,7 @@ const useSupplier = () => {
 
   const [suppliersCount, setSuppliersCount] = useState(0);
   const [supplierGrnCount, setSupplierGrnCount] = useState(0);
+  const [grnPaymentsCount, setGrnPaymentsCount] = useState(0);
   const [supplierPaymentsCount, setSupplierPaymentsCount] = useState(0);
 
   const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(true);
@@ -26,6 +29,8 @@ const useSupplier = () => {
   const [isLoadingAddSupPayment, setIsLoadingAddSupPayment] = useState(false);
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
   const [isLoadingSupplierGrnRecords, setIsLoadingSupplierGrnRecords] = useState(false);
+  const [isLoadingGrnInfo, setIsLoadingGrnInfo] = useState(true);
+  const [isLoadingGrnPayments, setIsLoadingGrnPayments] = useState(false);
   const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
   const [isLoadingSupplierItems, setIsLoadingSupplierItems] = useState(false);
   const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
@@ -84,7 +89,7 @@ const useSupplier = () => {
     setIsLoadingSupplierGrnRecords(true);
 
     await backendAuthApi({
-      url: BACKEND_API.SUPPLIER_PURCHASES,
+      url: BACKEND_API.SUPPLIER_GRN_RECORDS,
       method: 'GET',
       cancelToken: sourceToken.token,
       params,
@@ -100,6 +105,29 @@ const useSupplier = () => {
       })
       .finally(() => {
         setIsLoadingSupplierGrnRecords(false);
+      });
+  };
+
+  // Fetch supplier Grn record info
+  const fetchGrnInfo = async (id) => {
+    setIsLoadingGrnInfo(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_GRN_RECORD_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setGrnInfo(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingGrnInfo(false);
+      })
+      .finally(() => {
+        setIsLoadingGrnInfo(false);
       });
   };
 
@@ -302,6 +330,7 @@ const useSupplier = () => {
     suppliers,
     supplier,
     supplierGrnRecords,
+    grnInfo,
     supplierPayments,
     suppliersCount,
     supplierGrnCount,
@@ -315,6 +344,7 @@ const useSupplier = () => {
     isLoadingAddSupPayment,
     isLoadingSuppliersOptions,
     isLoadingSupplierGrnRecords,
+    isLoadingGrnInfo,
     isLoadingSupplierPayments,
     isLoadingSupplierItems,
     isLoadingAddStockBulk,
@@ -326,6 +356,7 @@ const useSupplier = () => {
     createSupplierPayments,
     fetchSuppliersForSelection,
     fetchSupplierGrnRecords,
+    fetchGrnInfo,
     fetchSupplierRecentPayments,
     fetchSupplierItemsInfo,
   };

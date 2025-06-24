@@ -22,7 +22,7 @@ import { addPaymentSChema } from 'src/schema/add-payment-schema';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { formatCurrency } from 'src/utils/format-number';
 
-export const SupplierPaymentDialog = ({ open, handleClose, data, isLoading, handleConfirm }) => {
+export const GrnAddPaymentDialog = ({ open, handleClose, data, isLoading, handleConfirm }) => {
   return (
     <Dialog
       open={open}
@@ -60,11 +60,11 @@ export const SupplierPaymentDialog = ({ open, handleClose, data, isLoading, hand
                     <Divider> Payment Status </Divider>
                     <Stack direction="row" spacing={2}>
                       <Typography variant="subtitle1">Total Amount :</Typography>
-                      <Typography>{formatCurrency(data.stockTotalValue)}</Typography>
+                      <Typography>{formatCurrency(data.grnSubTotalValue)}</Typography>
                     </Stack>
                     <Stack direction="row" spacing={2}>
                       <Typography variant="subtitle1">Balance Amount :</Typography>
-                      <Typography>{formatCurrency(data.stockPaymentBalance)}</Typography>
+                      <Typography>{formatCurrency(data.grnDueAmount)}</Typography>
                     </Stack>
                     <Divider> New Payment </Divider>
                   </Stack>
@@ -102,9 +102,7 @@ export const SupplierPaymentDialog = ({ open, handleClose, data, isLoading, hand
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText>
-                      {touched.paymentMethod && errors.paymentMethod}
-                    </FormHelperText>
+                    <FormHelperText>{touched.paymentMethod && errors.paymentMethod}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>

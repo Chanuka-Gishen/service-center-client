@@ -54,6 +54,10 @@ export const NAVIGATION_ROUTES = {
     details: {
       base: '/suppliers/details/:id',
       id: '/suppliers/details/',
+      info: {
+        base: '/suppliers/details/:supId/:id',
+        id: '/suppliers/details/:supId/',
+      },
     },
   },
   accounts: {

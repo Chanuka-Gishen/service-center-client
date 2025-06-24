@@ -24,7 +24,6 @@ import { SupplierGrnRow } from '../components/supplier-grn-row';
 import { RecentPaymentsRow } from '../components/recent-payments-row';
 import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
-import { SupplierPaymentDialog } from '../components/supplier-payment-dialog';
 import { UpdateSupplierDialog } from '../components/update-supplier-dialog';
 import { AddBulkStockDialog } from '../components/add-bulk-stock-dialog';
 
@@ -34,7 +33,6 @@ export const SupplierDetailsView = ({
   initialValues,
   grmInitialValues,
   filters,
-  selectedRow,
   selectItems,
   supplier,
   supplierGrnRecords,
@@ -42,12 +40,10 @@ export const SupplierDetailsView = ({
   supplierGrnCount,
   supplierPaymentsCount,
   isOpenUpdateSupplier,
-  isOpenAddPayment,
   isOpenAddBulk,
   isLoadingSupplier,
   isLoadingSupplierGrnRecords,
   isLoadingSupplierPayments,
-  isLoadingAddSupPayment,
   isLoadingSupUpdate,
   isLoadingAddStockBulk,
   isLoadingSelect,
@@ -55,11 +51,10 @@ export const SupplierDetailsView = ({
   paymentsPagination,
   handleChangeSearch,
   handleSelectItem,
+  handleRowClick,
   handleToggleUpdateSupplier,
-  handleToggleAddPayment,
   handleToggleAddBulk,
   handleRemoveItem,
-  handleAddSupplierPayment,
   handleUpdateSupplierInfo,
   handleAddBulkStock,
 }) => {
@@ -171,21 +166,12 @@ export const SupplierDetailsView = ({
                 page={movementPagination.page}
                 handleChangePage={movementPagination.handleChangePage}
                 handleChangeRowsPerPage={movementPagination.handleChangeRowsPerPage}
-                tableBody={<SupplierGrnRow data={supplierGrnRecords} onClickRow={null} />}
+                tableBody={<SupplierGrnRow data={supplierGrnRecords} onClickRow={handleRowClick} />}
               />
             </Paper>
           </Card>
         </Grid>
       </Grid>
-      {isOpenAddPayment && selectedRow && (
-        <SupplierPaymentDialog
-          open={isOpenAddPayment}
-          data={selectedRow}
-          handleClose={handleToggleAddPayment}
-          handleConfirm={handleAddSupplierPayment}
-          isLoading={isLoadingAddSupPayment}
-        />
-      )}
       {isOpenUpdateSupplier && (
         <UpdateSupplierDialog
           open={isOpenUpdateSupplier}
