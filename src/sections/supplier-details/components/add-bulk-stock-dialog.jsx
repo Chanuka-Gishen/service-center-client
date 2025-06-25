@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import {
+  Alert,
   AppBar,
   Autocomplete,
   Box,
@@ -31,12 +32,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import { addBulkStockSchema } from 'src/schema/add-bulk-stock-schema';
+import { addGrnSchema } from 'src/schema/add-grn-schema';
 import { PAY_METHODS } from 'src/constants/payment-methods';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import SummaryCard from './summary-card-bulk';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { SelectItemsRow } from './select-items-row';
+import { DatePicker } from '@mui/x-date-pickers';
 
 const selectItemsHeaders = ['Item Code', 'Item Name'];
 
@@ -70,7 +72,7 @@ export const AddBulkStockDialog = ({
     >
       <Formik
         initialValues={initialValues}
-        validationSchema={addBulkStockSchema}
+        validationSchema={addGrnSchema}
         onSubmit={(values) => {
           handleConfirm(values);
         }}
@@ -114,7 +116,7 @@ export const AddBulkStockDialog = ({
                       variant="h6"
                       component="div"
                     >
-                      Bulk Stock Entry
+                      Goods Received Note (GRN)
                     </Typography>
                   </Box>
                   <Box flexGrow={1} />
@@ -131,8 +133,16 @@ export const AddBulkStockDialog = ({
             </AppBar>
             <DialogContent>
               <Grid container spacing={4} sx={{ mt: 1 }}>
+                {values.grnItems.length <= 0 && (
+                  <Grid size={12}>
+                    <Alert variant="outlined" severity="warning">
+                      Stock Items Not Selected
+                    </Alert>
+                  </Grid>
+                )}
+
                 <Grid size={12}>
-                  <SummaryCard selectedItems={values.stockItems} />
+                  <SummaryCard selectedItems={values.grnItems} />
                 </Grid>
                 <Grid size={{ xs: 12, md: 4 }}>
                   <Box
@@ -182,72 +192,49 @@ export const AddBulkStockDialog = ({
                 <Grid size={{ xs: 12, md: 8 }}>
                   <Grid container spacing={2} alignItems="center">
                     <Grid size={{ xs: 12, sm: 4 }}>
-                      <FormControl fullWidth required>
-                        <InputLabel id="select-label">Payment Method</InputLabel>
-                        <Select
-                          labelId="select-label"
-                          id="simple-select"
-                          label="Payment Method"
-                          name="stockPaymentMethod"
-                          required
-                          value={values.stockPaymentMethod || ''}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        >
-                          {PAY_METHODS.map((item, index) => (
-                            <MenuItem key={index} value={item}>
-                              {item}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                      <FormControl required fullWidth>
+                        <DatePicker
+                          maxDate={new Date()}
+                          slotProps={{
+                            textField: {
+                              required: true,
+                            },
+                          }}
+                          label="Received Date"
+                          value={values.grnReceivedDate}
+                          onChange={(date) => setFieldValue('grnReceivedDate', date, true)}
+                        />
                         <FormHelperText
-                          error={touched.stockPaymentMethod && errors.stockPaymentMethod}
+                          error={touched.grnReceivedDate && Boolean(errors.grnReceivedDate)}
                         >
-                          {touched.stockPaymentMethod && errors.stockPaymentMethod}
+                          {touched.grnReceivedDate && errors.grnReceivedDate}
                         </FormHelperText>
                       </FormControl>
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 8 }}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                       <TextField
-                        label="Notes"
-                        name="stockNotes"
+                        label="Discount Amount"
+                        name={'grnDiscountAmount'}
                         fullWidth
-                        multiline
-                        rows={2}
+                        required
                         autoComplete="off"
                         variant="outlined"
-                        {...getFieldProps('stockNotes')}
-                        error={touched.stockNotes && Boolean(errors.stockNotes)}
-                        helperText={touched.stockNotes && errors.stockNotes}
+                        {...getFieldProps('grnDiscountAmount')}
+                        error={touched.grnDiscountAmount && Boolean(errors.grnDiscountAmount)}
+                        helperText={touched.grnDiscountAmount && errors.grnDiscountAmount}
+                        slotProps={{ input: { inputComponent: CurrencyInput } }}
                       />
                     </Grid>
                     <>
-                      {values.stockItems.map((item, index) => {
+                      {values.grnItems.map((item, index) => {
                         // Calculate error states once to avoid repetition
                         const stockQtyError =
-                          touched.stockItems?.[index]?.stockQuantity &&
-                          errors.stockItems?.[index]?.stockQuantity;
+                          touched.grnItems?.[index]?.stockQuantity &&
+                          errors.grnItems?.[index]?.stockQuantity;
 
-                        const totalValueError =
-                          touched.stockItems?.[index]?.stockTotalValue &&
-                          errors.stockItems?.[index]?.stockTotalValue;
-
-                        const paidAmountError =
-                          touched.stockItems?.[index]?.stockPaymentPaidAmount &&
-                          errors.stockItems?.[index]?.stockPaymentPaidAmount;
-
-                        const isPaid = item.stockTotalValue === item.stockPaymentPaidAmount;
-
-                        const handleFixPaidAmount = () => {
-                          if (isPaid) {
-                            setFieldValue(`stockItems.${index}.stockPaymentPaidAmount`, 0);
-                          } else {
-                            setFieldValue(
-                              `stockItems.${index}.stockPaymentPaidAmount`,
-                              item.stockTotalValue
-                            );
-                          }
-                        };
+                        const unitPriceError =
+                          touched.grnItems?.[index]?.stockUnitPrice &&
+                          errors.grnItems?.[index]?.stockUnitPrice;
 
                         return (
                           <Fragment key={index}>
@@ -257,81 +244,67 @@ export const AddBulkStockDialog = ({
                             <Grid size={{ xs: 12, sm: 2 }}>
                               <TextField
                                 label="Qty"
-                                name={`stockItems.${index}.stockQuantity`}
+                                name={`grnItems.${index}.stockQuantity`}
                                 fullWidth
                                 required
                                 type="number"
                                 autoComplete="off"
                                 variant="outlined"
-                                {...getFieldProps(`stockItems.${index}.stockQuantity`)}
+                                {...getFieldProps(`grnItems.${index}.stockQuantity`)}
                                 error={stockQtyError}
                                 helperText={
-                                  (touched.stockItems &&
-                                    touched.stockItems[index] &&
-                                    touched.stockItems[index].stockQuantity &&
-                                    errors.stockItems &&
-                                    errors.stockItems[index] &&
-                                    errors.stockItems[index].stockQuantity) ||
+                                  (touched.grnItems &&
+                                    touched.grnItems[index] &&
+                                    touched.grnItems[index].stockQuantity &&
+                                    errors.grnItems &&
+                                    errors.grnItems[index] &&
+                                    errors.grnItems[index].stockQuantity) ||
                                   ''
                                 }
+                              />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 4 }}>
+                              <TextField
+                                label="Unit Price"
+                                name={`grnItems.${index}.stockUnitPrice`}
+                                fullWidth
+                                required
+                                autoComplete="off"
+                                variant="outlined"
+                                {...getFieldProps(`grnItems.${index}.stockUnitPrice`)}
+                                error={unitPriceError}
+                                helperText={
+                                  (touched.grnItems &&
+                                    touched.grnItems[index] &&
+                                    touched.grnItems[index].stockUnitPrice &&
+                                    errors.grnItems &&
+                                    errors.grnItems[index] &&
+                                    errors.grnItems[index].stockUnitPrice) ||
+                                  ''
+                                }
+                                slotProps={{ input: { inputComponent: CurrencyInput } }}
                               />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 4 }}>
                               <TextField
                                 label="Total Value"
-                                name={`stockItems.${index}.stockTotalValue`}
                                 fullWidth
                                 required
                                 autoComplete="off"
                                 variant="outlined"
-                                {...getFieldProps(`stockItems.${index}.stockTotalValue`)}
-                                error={totalValueError}
-                                helperText={
-                                  (touched.stockItems &&
-                                    touched.stockItems[index] &&
-                                    touched.stockItems[index].stockTotalValue &&
-                                    errors.stockItems &&
-                                    errors.stockItems[index] &&
-                                    errors.stockItems[index].stockTotalValue) ||
-                                  ''
+                                value={
+                                  values.grnItems[index].stockUnitPrice *
+                                  values.grnItems[index].stockQuantity
                                 }
+                                disabled={true}
                                 slotProps={{ input: { inputComponent: CurrencyInput } }}
                               />
                             </Grid>
-                            <Grid size={{ xs: 12, sm: 4 }}>
-                              <TextField
-                                label="Paid Amount"
-                                name={`stockItems.${index}.stockPaymentPaidAmount`}
-                                fullWidth
-                                required
-                                autoComplete="off"
-                                variant="outlined"
-                                {...getFieldProps(`stockItems.${index}.stockPaymentPaidAmount`)}
-                                error={paidAmountError}
-                                helperText={
-                                  (touched.stockItems &&
-                                    touched.stockItems[index] &&
-                                    touched.stockItems[index].stockPaymentPaidAmount &&
-                                    errors.stockItems &&
-                                    errors.stockItems[index] &&
-                                    errors.stockItems[index].stockPaymentPaidAmount) ||
-                                  ''
-                                }
-                                slotProps={{ input: { inputComponent: CurrencyInput } }}
-                              />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 1 }}>
-                              <IconButton onClick={handleFixPaidAmount}>
-                                {isPaid ? (
-                                  <CheckCircleIcon sx={{ color: '#388E3C' }} />
-                                ) : (
-                                  <CloseIcon sx={{ color: '#D32F2F' }} />
-                                )}
-                              </IconButton>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 1 }}>
+                            <Grid size={{ xs: 12, sm: 2 }}>
                               <Button
                                 variant="contained"
+                                fullWidth
+                                startIcon={<CancelIcon />}
                                 onClick={() => handelRemoveItem(item._id)}
                               >
                                 Remove

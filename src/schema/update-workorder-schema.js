@@ -40,6 +40,17 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
     )
     .required('Custom items are required'),
 
+  workOrderCustomChargers: Yup.array()
+    .of(
+      Yup.object().shape({
+        chargeName: Yup.string().required('Custom charge name is required'),
+        chargeAmount: Yup.number()
+          .min(0, 'Charge amount cannot be negative')
+          .required('Charge amount is required'),
+      })
+    )
+    .required('Custom chargers are required'),
+
   workOrderServiceCharge: Yup.number()
     .min(0, 'Service charge cannot be negative')
     .required('Service charge is required'),

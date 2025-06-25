@@ -20,11 +20,10 @@ import Grid from '@mui/material/Grid2';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { formatCurrency } from 'src/utils/format-number';
 import { CustomTable } from 'src/components/custom-table/custom-table';
-import { SupplierMovementsRow } from '../components/supplier-movements-row';
+import { SupplierGrnRow } from '../components/supplier-grn-row';
 import { RecentPaymentsRow } from '../components/recent-payments-row';
 import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
-import { SupplierPaymentDialog } from '../components/supplier-payment-dialog';
 import { UpdateSupplierDialog } from '../components/update-supplier-dialog';
 import { AddBulkStockDialog } from '../components/add-bulk-stock-dialog';
 
@@ -34,20 +33,17 @@ export const SupplierDetailsView = ({
   initialValues,
   grmInitialValues,
   filters,
-  selectedRow,
   selectItems,
   supplier,
-  supplierStockMovements,
+  supplierGrnRecords,
   supplierPayments,
-  supplierMovementCount,
+  supplierGrnCount,
   supplierPaymentsCount,
   isOpenUpdateSupplier,
-  isOpenAddPayment,
   isOpenAddBulk,
   isLoadingSupplier,
-  isLoadingSupplierMovements,
+  isLoadingSupplierGrnRecords,
   isLoadingSupplierPayments,
-  isLoadingAddSupPayment,
   isLoadingSupUpdate,
   isLoadingAddStockBulk,
   isLoadingSelect,
@@ -55,11 +51,10 @@ export const SupplierDetailsView = ({
   paymentsPagination,
   handleChangeSearch,
   handleSelectItem,
+  handleRowClick,
   handleToggleUpdateSupplier,
-  handleToggleAddPayment,
   handleToggleAddBulk,
   handleRemoveItem,
-  handleAddSupplierPayment,
   handleUpdateSupplierInfo,
   handleAddBulkStock,
 }) => {
@@ -151,7 +146,7 @@ export const SupplierDetailsView = ({
         </Grid>
         <Grid size={12}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h5">Stock Movements</Typography>
+            <Typography variant="h5">Good Received Notes (GRN)</Typography>
             {auth.user.userRole === USER_ROLE.SUPER_ADMIN ? (
               <Button variant="contained" onClick={handleToggleAddBulk}>
                 Add Stocks
@@ -164,34 +159,19 @@ export const SupplierDetailsView = ({
             <Paper elevation={0}>
               <CustomTable
                 keys={stockMvColumns}
-                isLoading={isLoadingSupplierMovements}
-                dataLength={supplierStockMovements.length}
-                documentCount={supplierMovementCount}
+                isLoading={isLoadingSupplierGrnRecords}
+                dataLength={supplierGrnRecords.length}
+                documentCount={supplierGrnCount}
                 limit={movementPagination.limit}
                 page={movementPagination.page}
                 handleChangePage={movementPagination.handleChangePage}
                 handleChangeRowsPerPage={movementPagination.handleChangeRowsPerPage}
-                tableBody={
-                  <SupplierMovementsRow
-                    data={supplierStockMovements}
-                    selectedRow={selectedRow}
-                    onClickRow={handleToggleAddPayment}
-                  />
-                }
+                tableBody={<SupplierGrnRow data={supplierGrnRecords} onClickRow={handleRowClick} />}
               />
             </Paper>
           </Card>
         </Grid>
       </Grid>
-      {isOpenAddPayment && selectedRow && (
-        <SupplierPaymentDialog
-          open={isOpenAddPayment}
-          data={selectedRow}
-          handleClose={handleToggleAddPayment}
-          handleConfirm={handleAddSupplierPayment}
-          isLoading={isLoadingAddSupPayment}
-        />
-      )}
       {isOpenUpdateSupplier && (
         <UpdateSupplierDialog
           open={isOpenUpdateSupplier}

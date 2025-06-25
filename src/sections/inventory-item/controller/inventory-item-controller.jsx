@@ -10,9 +10,7 @@ const logsTable = [
   'Previous Quantity',
   'New Quantity',
   'Stock Value',
-  'Payment Balance',
   'Supplier',
-  'Payment Status',
   'Created At',
 ];
 
@@ -34,7 +32,7 @@ const InventoryItemController = () => {
     fetchStockUpdateLogs,
   } = useInventory();
 
-  const {suppliersOptions, isLoadingSuppliersOptions, fetchSuppliersForSelection} = useSupplier()
+  const { suppliersOptions, isLoadingSuppliersOptions, fetchSuppliersForSelection } = useSupplier();
 
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   const isOpenOptions = Boolean(optionsAnchorEl);
@@ -105,7 +103,7 @@ const InventoryItemController = () => {
 
     if (isSuccess) {
       handleToggleStockUpdateDialog();
-      fetchItemInfo(item._id)
+      fetchItemInfo(item._id);
       fetchStockUpdateLogs(params);
     }
   };
@@ -123,7 +121,7 @@ const InventoryItemController = () => {
     if (id) {
       fetchItemInfo(id);
     }
-    fetchSuppliersForSelection()
+    fetchSuppliersForSelection();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

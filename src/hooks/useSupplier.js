@@ -10,13 +10,16 @@ const useSupplier = () => {
 
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
+  const [grnInfo, setGrnInfo] = useState(null);
+  const [grnPayments, setGrnPayments] = useState([]);
   const [suppliersOptions, setSuppliersOptions] = useState([]);
-  const [supplierStockMovements, setSupplierStockMovements] = useState([]);
+  const [supplierGrnRecords, setSupplierGrnRecords] = useState([]);
   const [supplierPayments, setSupplierPayments] = useState([]);
   const [supplierItems, setSupplierItems] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
-  const [supplierMovementCount, setSupplierMovementCount] = useState(0);
+  const [supplierGrnCount, setSupplierGrnCount] = useState(0);
+  const [grnPaymentsCount, setGrnPaymentsCount] = useState(0);
   const [supplierPaymentsCount, setSupplierPaymentsCount] = useState(0);
 
   const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(true);
@@ -25,7 +28,9 @@ const useSupplier = () => {
   const [isLoadingSupUpdate, setIsLoadingSupUpdate] = useState(false);
   const [isLoadingAddSupPayment, setIsLoadingAddSupPayment] = useState(false);
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
-  const [isLoadingSupplierMovements, setIsLoadingSupplierMovements] = useState(false);
+  const [isLoadingSupplierGrnRecords, setIsLoadingSupplierGrnRecords] = useState(false);
+  const [isLoadingGrnInfo, setIsLoadingGrnInfo] = useState(true);
+  const [isLoadingGrnPayments, setIsLoadingGrnPayments] = useState(false);
   const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
   const [isLoadingSupplierItems, setIsLoadingSupplierItems] = useState(false);
   const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
@@ -79,27 +84,50 @@ const useSupplier = () => {
       });
   };
 
-  // Fetch supplier stock movements
-  const fetchSupplierStockMovements = async (params) => {
-    setIsLoadingSupplierMovements(true);
+  // Fetch supplier GRN records
+  const fetchSupplierGrnRecords = async (params) => {
+    setIsLoadingSupplierGrnRecords(true);
 
     await backendAuthApi({
-      url: BACKEND_API.SUPPLIER_PURCHASES,
+      url: BACKEND_API.SUPPLIER_GRN_RECORDS,
       method: 'GET',
       cancelToken: sourceToken.token,
       params,
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
-          setSupplierStockMovements(res.data.responseData.data);
-          setSupplierMovementCount(res.data.responseData.count);
+          setSupplierGrnRecords(res.data.responseData.data);
+          setSupplierGrnCount(res.data.responseData.count);
         }
       })
       .catch(() => {
-        setIsLoadingSupplierMovements(false);
+        setIsLoadingSupplierGrnRecords(false);
       })
       .finally(() => {
-        setIsLoadingSupplierMovements(false);
+        setIsLoadingSupplierGrnRecords(false);
+      });
+  };
+
+  // Fetch supplier Grn record info
+  const fetchGrnInfo = async (id) => {
+    setIsLoadingGrnInfo(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_GRN_RECORD_INFO,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setGrnInfo(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingGrnInfo(false);
+      })
+      .finally(() => {
+        setIsLoadingGrnInfo(false);
       });
   };
 
@@ -301,10 +329,11 @@ const useSupplier = () => {
   return {
     suppliers,
     supplier,
-    supplierStockMovements,
+    supplierGrnRecords,
+    grnInfo,
     supplierPayments,
     suppliersCount,
-    supplierMovementCount,
+    supplierGrnCount,
     supplierPaymentsCount,
     suppliersOptions,
     supplierItems,
@@ -314,7 +343,8 @@ const useSupplier = () => {
     isLoadingSupUpdate,
     isLoadingAddSupPayment,
     isLoadingSuppliersOptions,
-    isLoadingSupplierMovements,
+    isLoadingSupplierGrnRecords,
+    isLoadingGrnInfo,
     isLoadingSupplierPayments,
     isLoadingSupplierItems,
     isLoadingAddStockBulk,
@@ -325,7 +355,8 @@ const useSupplier = () => {
     addStockBulks,
     createSupplierPayments,
     fetchSuppliersForSelection,
-    fetchSupplierStockMovements,
+    fetchSupplierGrnRecords,
+    fetchGrnInfo,
     fetchSupplierRecentPayments,
     fetchSupplierItemsInfo,
   };

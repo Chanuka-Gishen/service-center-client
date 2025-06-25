@@ -28,9 +28,9 @@ export const SummaryCard = ({ selectedItems }) => {
     .filter((item) => item)
     .reduce((sum, item) => {
       const value =
-        typeof item.stockTotalValue === 'number'
-          ? item.stockTotalValue
-          : Number(item.stockTotalValue) || 0;
+        typeof item.stockUnitPrice === 'number'
+          ? item.stockQuantity * item.stockUnitPrice
+          : Number(item.stockQuantity * item.stockUnitPrice) || 0;
       return sum + value;
     }, 0);
 

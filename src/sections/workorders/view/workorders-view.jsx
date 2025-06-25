@@ -221,36 +221,55 @@ export const WorkordersView = ({
                       <TableCell colSpan={3}>Notes</TableCell>
                       <TableCell align="right">{selectedJob.workOrderNotes}</TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={3}>
-                        Service Charge
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderServiceCharge)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={3}>
-                        Other Charges
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderOtherChargers)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={3}>
-                        Discount Percentage
-                      </TableCell>
-                      <TableCell align="right">{`${selectedJob.workOrderDiscountPercentage} %`}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={3}>
-                        Cash Discount
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderDiscountCash)}
-                      </TableCell>
-                    </TableRow>
+                    {(selectedJob.workOrderCustomChargers || []).map((customCharge, index) => (
+                      <TableRow key={index}>
+                        <TableCell align="right" colSpan={3}>
+                          {customCharge.chargeName}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customCharge.chargeAmount)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {selectedJob.workOrderServiceCharge > 0 && (
+                      <TableRow>
+                        <TableCell align="right" colSpan={3}>
+                          Service Charge
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(selectedJob.workOrderServiceCharge)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {selectedJob.workOrderOtherChargers > 0 && (
+                      <TableRow>
+                        <TableCell align="right" colSpan={3}>
+                          Other Charges
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(selectedJob.workOrderOtherChargers)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {selectedJob.workOrderDiscountPercentage > 0 && (
+                      <TableRow>
+                        <TableCell align="right" colSpan={3}>
+                          Discount Percentage
+                        </TableCell>
+                        <TableCell align="right">{`${selectedJob.workOrderDiscountPercentage} %`}</TableCell>
+                      </TableRow>
+                    )}
+                    {selectedJob.workOrderDiscountCash > 0 && (
+                      <TableRow>
+                        <TableCell align="right" colSpan={3}>
+                          Cash Discount
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(selectedJob.workOrderDiscountCash)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+
                     <TableRow>
                       <TableCell align="right" colSpan={3}>
                         Total Amount

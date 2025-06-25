@@ -14,6 +14,7 @@ const usePayment = () => {
   const [deletedPayments, setDeletedPayments] = useState([]);
   const [pendingPayments, setPendingPayments] = useState([]);
   const [woPayments, setWoPayments] = useState([]);
+  const [grnPayments, setGrnPayments] = useState([]);
   const [accSummary, setAccSummary] = useState([]);
   const [finSummary, setFinSummary] = useState({ incomeData: [], expenseData: [] });
   const [expSummary, setExpSummary] = useState({
@@ -37,6 +38,8 @@ const usePayment = () => {
   const [isLoadingCreateExp, setIsLoadingCreateExp] = useState(false);
   const [isLoadingCreateInc, setIsLoadingCreateInc] = useState(false);
   const [isLoadingRefund, setIsLoadingRefund] = useState(false);
+  const [isLoadingAddGrnPayment, setIsLoadingAddGrnPayment] = useState(false);
+  const [isLoadingGrnPayments, setIsLoadingGrnPayments] = useState(false);
   const [isLoadingPaymentComplete, setIsLoadingPaymentComplete] = useState(false);
   const [isLoadingWoPayments, setIsLoadingWoPayments] = useState(false);
   const [isLoadingAccSummary, setIsLoadingAccSummary] = useState(true);
@@ -299,6 +302,36 @@ const usePayment = () => {
     return isSuccess;
   };
 
+  // Create GRN payment record
+  const createGrnPaymentRecord = async (data) => {
+    let isSuccess = false;
+    setIsLoadingAddGrnPayment(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_CREATE_GRN,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseData, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingAddGrnPayment(false);
+      })
+      .finally(() => {
+        setIsLoadingAddGrnPayment(false);
+      });
+
+    return isSuccess;
+  };
+
   // Process payment record - Cheques
   const processPaymentRecord = async (id) => {
     let isSuccess = false;
@@ -352,6 +385,29 @@ const usePayment = () => {
       })
       .finally(() => {
         setIsLoadingWoPayments(false);
+      });
+  };
+
+  // Fetch GRN payment records
+  const fetchGrnPaymentRecords = async (id) => {
+    setIsLoadingGrnPayments(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_GRN,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setGrnPayments(res.data.responseData);
+        }
+      })
+      .catch(() => {
+        setIsLoadingGrnPayments(false);
+      })
+      .finally(() => {
+        setIsLoadingGrnPayments(false);
       });
   };
 
@@ -457,6 +513,7 @@ const usePayment = () => {
     deletedPaymentsCount,
     pendingPayments,
     woPayments,
+    grnPayments,
     accSummary,
     finSummary,
     expSummary,
@@ -469,8 +526,10 @@ const usePayment = () => {
     isLoadingCreateExp,
     isLoadingCreateInc,
     isLoadingRefund,
+    isLoadingAddGrnPayment,
     isLoadingPaymentComplete,
     isLoadingWoPayments,
+    isLoadingGrnPayments,
     isLoadingAccSummary,
     isLoadingFinSummary,
     isLoadingFinSummary,
@@ -485,8 +544,10 @@ const usePayment = () => {
     createExpensesPayment,
     createIncomePayment,
     createRefoundRecord,
+    createGrnPaymentRecord,
     processPaymentRecord,
     fetchWorkorderPayments,
+    fetchGrnPaymentRecords,
     fetchAccountsSummary,
     fetchFinancialSummary,
     fetchExpenseSummary,

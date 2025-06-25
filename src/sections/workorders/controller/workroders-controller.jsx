@@ -59,6 +59,7 @@ const WorkordersController = () => {
       workOrderType: WO_TYPE_SERVICE,
       workOrderServiceItems: [],
       workOrderCustomItems: [],
+      workOrderCustomChargers: [],
       workOrderServiceCharge: 0,
       workOrderOtherChargers: 0,
       workOrderNotes: '',
@@ -81,6 +82,7 @@ const WorkordersController = () => {
           inventoryItem: data._id,
           inventoryItemName: data.itemName,
           quantity: 1,
+          exQuantity: 0,
           unitPrice: data.itemSellingPrice,
           totalPrice: 0,
         },
@@ -148,6 +150,7 @@ const WorkordersController = () => {
           workOrderType: selectedJob.workOrderType,
           workOrderServiceItems: selectedJob.workOrderServiceItems,
           workOrderCustomItems: selectedJob.workOrderCustomItems,
+          workOrderCustomChargers: selectedJob.workOrderCustomChargers || [],
           workOrderServiceCharge: selectedJob.workOrderServiceCharge,
           workOrderOtherChargers: selectedJob.workOrderOtherChargers,
           workOrderNotes: selectedJob.workOrderNotes,
@@ -214,14 +217,13 @@ const WorkordersController = () => {
   };
 
   const handelUpdateWorkorderAssignees = async (values) => {
-    const isSuccess = await updateWorkorderAssignees(selectedId, values)
+    const isSuccess = await updateWorkorderAssignees(selectedId, values);
 
     if (isSuccess) {
       await fetchActiveWorkOrders();
       setSelectedJob(null);
       setSelectedId(null);
     }
-
   };
 
   const handleUpdateWorkOrder = async () => {
