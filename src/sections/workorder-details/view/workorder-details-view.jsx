@@ -220,6 +220,16 @@ export const WorkorderView = ({
                       <TableCell colSpan={3}>Notes</TableCell>
                       <TableCell align="right">{job.workOrderNotes}</TableCell>
                     </TableRow>
+                    {(job.workOrderCustomChargers || []).map((customCharge, index) => (
+                      <TableRow key={index}>
+                        <TableCell align="right" colSpan={3}>
+                          {customCharge.chargeName}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customCharge.chargeAmount)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                     {job.workOrderServiceCharge > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={3}>

@@ -7,6 +7,7 @@ import {
   FormControl,
   FormHelperText,
   IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -82,6 +83,10 @@ export const WokrOrderUpdateForm = ({
               touched.workOrderServiceItems?.[index]?.quantity &&
               errors.workOrderServiceItems?.[index]?.quantity;
 
+            const exQuantityError =
+              touched.workOrderServiceItems?.[index]?.exQuantity &&
+              errors.workOrderServiceItems?.[index]?.exQuantity;
+
             const unitPriceError =
               touched.workOrderServiceItems?.[index]?.unitPrice &&
               errors.workOrderServiceItems?.[index]?.unitPrice;
@@ -140,6 +145,27 @@ export const WokrOrderUpdateForm = ({
                     }
                   />
                 </Grid>
+                {/* <Grid size={{ xs: 12, md: 2 }}>
+                  <TextField
+                    label="Ex Qty"
+                    name={`workOrderServiceItems.${index}.exQuantity`}
+                    type="number"
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps(`workOrderServiceItems.${index}.exQuantity`)}
+                    error={exQuantityError}
+                    helperText={
+                      (touched.workOrderServiceItems &&
+                        touched.workOrderServiceItems[index] &&
+                        touched.workOrderServiceItems[index].exQuantity &&
+                        errors.workOrderServiceItems &&
+                        errors.workOrderServiceItems[index] &&
+                        errors.workOrderServiceItems[index].exQuantity) ||
+                      ''
+                    }
+                  />
+                </Grid> */}
                 <Grid size={{ xs: 12, md: 3 }}>
                   <TextField
                     label="Unit Price"
@@ -321,6 +347,94 @@ export const WokrOrderUpdateForm = ({
         <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
           <Divider sx={{ fontWeight: 'bold' }}>Chargers</Divider>
         </Grid>
+        <Grid size={12}>
+          <FieldArray name="workOrderCustomChargers">
+            {({ push, remove }) => (
+              <>
+                {values.workOrderCustomChargers.map((item, index) => {
+                  // Calculate error states once to avoid repetition
+                  const chargeNameError =
+                    touched.workOrderCustomChargers?.[index]?.chargeName &&
+                    errors.workOrderCustomChargers?.[index]?.chargeName;
+
+                  const chargePriceError =
+                    touched.workOrderCustomChargers?.[index]?.chargeAmount &&
+                    errors.workOrderCustomChargers?.[index]?.chargeAmount;
+
+                  return (
+                    <Grid
+                      key={index}
+                      container
+                      spacing={1}
+                      sx={{ marginBottom: '1rem' }}
+                      justifyContent="flex-start"
+                      alignItems="center"
+                    >
+                      <Grid size={{ xs: 12, md: 8 }}>
+                        <TextField
+                          label="Charge Name"
+                          name={`workOrderCustomChargers.${index}.chargeName`}
+                          required
+                          fullWidth
+                          autoComplete="off"
+                          variant="outlined"
+                          {...getFieldProps(`workOrderCustomChargers.${index}.chargeName`)}
+                          error={chargeNameError}
+                          helperText={
+                            (touched.workOrderCustomChargers &&
+                              touched.workOrderCustomChargers[index] &&
+                              touched.workOrderCustomChargers[index].chargeName &&
+                              errors.workOrderCustomChargers &&
+                              errors.workOrderCustomChargers[index] &&
+                              errors.workOrderCustomChargers[index].chargeName) ||
+                            ''
+                          }
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 3 }}>
+                        <TextField
+                          label="Amount"
+                          name={`workOrderCustomChargers.${index}.chargeAmount`}
+                          fullWidth
+                          required
+                          autoComplete="off"
+                          variant="outlined"
+                          {...getFieldProps(`workOrderCustomChargers.${index}.chargeAmount`)}
+                          error={chargePriceError}
+                          helperText={
+                            (touched.workOrderCustomChargers &&
+                              touched.workOrderCustomChargers[index] &&
+                              touched.workOrderCustomChargers[index].chargeAmount &&
+                              errors.workOrderCustomChargers &&
+                              errors.workOrderCustomChargers[index] &&
+                              errors.workOrderCustomChargers[index].chargeAmount) ||
+                            ''
+                          }
+                          slotProps={{ input: { inputComponent: CurrencyInput } }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
+                        <IconButton onClick={() => remove(index)}>
+                          <RemoveCircleIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+                <Button
+                  onClick={() =>
+                    push({
+                      chargeName: '',
+                      chargeAmount: 0,
+                    })
+                  }
+                >
+                  Add Custom Charge
+                </Button>
+              </>
+            )}
+          </FieldArray>
+        </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TextField
             label="Service Charge"
@@ -377,11 +491,16 @@ export const WokrOrderUpdateForm = ({
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TextField
-            label="Cash Discount"
+            label="Discount"
             name="workOrderDiscountPercentage"
             type="number"
             fullWidth
             required
+            slotProps={{
+              input: {
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              },
+            }}
             autoComplete="off"
             variant="outlined"
             {...getFieldProps('workOrderDiscountPercentage')}
