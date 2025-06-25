@@ -58,7 +58,7 @@ const SupplierDetailsController = () => {
   };
   const [grmInitialValues, setGrmInitialValues] = useState(initValues);
 
-  const [filters, setFilters] = useState({ name: '' });
+  const [filters, setFilters] = useState({ name: '', code: '' });
 
   const [isOpenUpdateSupplier, setIsOpenUpdateSupplier] = useState(false);
   const [isOpenAddBulk, setIsOpenAddBulk] = useState(false);
@@ -185,7 +185,7 @@ const SupplierDetailsController = () => {
 
   // Trigger fetch when input changes
   useEffect(() => {
-    if (filters.name) {
+    if (filters.name || filters.code) {
       debouncedFetch(paramsItemOptions);
     }
     return () => debouncedFetch.cancel();

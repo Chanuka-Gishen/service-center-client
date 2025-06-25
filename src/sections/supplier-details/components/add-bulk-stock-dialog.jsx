@@ -165,6 +165,16 @@ export const AddBulkStockDialog = ({
                         />
                       </Grid>
                       <Grid size={12}>
+                        <TextField
+                          label="Item Code"
+                          name="code"
+                          value={filters.code}
+                          onChange={handleChangeSearch}
+                          autoComplete="off"
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid size={12}>
                         <Card>
                           <Paper elevation={0}>
                             <CustomTable
