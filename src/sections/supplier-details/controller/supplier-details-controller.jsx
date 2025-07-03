@@ -19,6 +19,16 @@ const stockMvColumns = [
   'Payment Status',
   'Created At',
 ];
+const returnColumns = [
+  'GRN Code',
+  'Item Code',
+  'Item Name',
+  'Qty',
+  'Reason',
+  'Total Value',
+  'Type',
+  'Status',
+];
 const paymentColumns = ['Method', 'Amount', 'Date'];
 
 const SupplierDetailsController = () => {
@@ -32,17 +42,25 @@ const SupplierDetailsController = () => {
     supplierGrnCount,
     supplierPayments,
     supplierPaymentsCount,
+    supplierReturns,
+    supplierReturnsCount,
     supplierItems,
     isLoadingSupplier,
     isLoadingSupUpdate,
     isLoadingSupplierGrnRecords,
     isLoadingSupplierPayments,
     isLoadingAddStockBulk,
+    isLoadingSupReturns,
+    isLoadingProcessReturns,
+    isLoadingCancelReturns,
     fetchSupplierInfo,
     fetchSupplierGrnRecords,
     fetchSupplierRecentPayments,
+    fetchSupplierReturnItems,
     updateSupplier,
     addStockBulks,
+    processItemReturnRecord,
+    cancelItemReturnRecord,
   } = useSupplier();
 
   const { selectItems, isLoadingSelect, fetchItemsForInvoiceSelection } = useInventory();
@@ -57,11 +75,20 @@ const SupplierDetailsController = () => {
     grnItems: [],
   };
   const [grmInitialValues, setGrmInitialValues] = useState(initValues);
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedReturnRow, setSelectedReturnRow] = useState(null);
 
   const [filters, setFilters] = useState({ name: '', code: '' });
+  const [returnFilters, setReturnFilters] = useState({ typeFilter: '', statusFilter: '' });
 
   const [isOpenUpdateSupplier, setIsOpenUpdateSupplier] = useState(false);
   const [isOpenAddBulk, setIsOpenAddBulk] = useState(false);
+  const [isOpenProcessReturn, setIsOpenProcessReturn] = useState(false);
+  const [isOpenCancelReturn, setIsOpenCancelReturn] = useState(false);
+
+  const returnPagination = usePagination();
+
+  //-----------------------------------------------------------------
 
   const paramsMv = {
     id,
@@ -79,10 +106,33 @@ const SupplierDetailsController = () => {
     ...filters,
   };
 
+  const returnQuery = {
+    page: returnPagination.page,
+    limit: returnPagination.limit,
+    id,
+    ...returnFilters,
+  };
+
+  //-----------------------------------------------------------------
+
   const handleChangeSearch = (e) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleChangeSearchReturns = (e) => {
+    setReturnFilters((prevFilters) => ({
+      ...prevFilters,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleDeleteSearchParamReturns = (filterName) => {
+    setReturnFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: '',
     }));
   };
 
@@ -106,6 +156,10 @@ const SupplierDetailsController = () => {
     }
   };
 
+  const handleSelectReturnRow = (row = null) => {
+    setSelectedReturnRow(row);
+  };
+
   const handleRemoveItem = (_idToRemove) => {
     setGrmInitialValues((prev) => ({
       ...prev,
@@ -117,6 +171,10 @@ const SupplierDetailsController = () => {
     if (rowId && id) {
       router.push(`${NAVIGATION_ROUTES.suppliers.details.id}${id}/${rowId}`);
     }
+  };
+
+  const handleSelectTab = (event, newValue) => {
+    setSelectedTab(newValue);
   };
 
   const handleToggleUpdateSupplier = () => {
@@ -143,6 +201,14 @@ const SupplierDetailsController = () => {
     setIsOpenAddBulk(!isOpenAddBulk);
   };
 
+  const handleToggleProcessReturn = () => {
+    setIsOpenProcessReturn(!isOpenProcessReturn);
+  };
+
+  const handleToggleCancelReturn = () => {
+    setIsOpenCancelReturn(!isOpenCancelReturn);
+  };
+
   const handleUpdateSupplierInfo = async (values) => {
     const isSuccess = await updateSupplier(supplier._id, values);
 
@@ -164,6 +230,40 @@ const SupplierDetailsController = () => {
     }
   };
 
+  const handleProcessReturnItem = async (values) => {
+    if (!selectedReturnRow) return;
+
+    const data = {
+      _id: selectedReturnRow._id,
+      ...values,
+    };
+
+    const isSuccess = await processItemReturnRecord(data);
+
+    if (isSuccess) {
+      handleToggleProcessReturn();
+      setSelectedReturnRow(null);
+      fetchSupplierReturnItems(returnQuery);
+      fetchSupplierRecentPayments(paramsPay);
+    }
+  };
+
+  const handleCancelReturnItem = async () => {
+    if (!selectedReturnRow) return;
+
+    const params = {
+      id: selectedReturnRow._id,
+    };
+    const isSuccess = await cancelItemReturnRecord(params);
+
+    if (isSuccess) {
+      handleToggleCancelReturn();
+      setSelectedReturnRow(null);
+      fetchSupplierReturnItems(returnQuery);
+      fetchSupplierRecentPayments(paramsPay);
+    }
+  };
+
   // Debounced API call
   const debouncedFetch = useMemo(() => debounce(fetchItemsForInvoiceSelection, 500), []);
 
@@ -176,12 +276,20 @@ const SupplierDetailsController = () => {
   }, []);
 
   useEffect(() => {
-    if (id) {
+    if (id && selectedTab === 0) {
       fetchSupplierGrnRecords(paramsMv);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movementPagination.limit, movementPagination.page]);
+  }, [movementPagination.limit, movementPagination.page, selectedTab]);
+
+  useEffect(() => {
+    if (id && selectedTab === 1) {
+      fetchSupplierReturnItems(returnQuery);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [returnPagination.limit, returnPagination.page, selectedTab, returnFilters]);
 
   // Trigger fetch when input changes
   useEffect(() => {
@@ -201,36 +309,56 @@ const SupplierDetailsController = () => {
 
   return (
     <SupplierDetailsView
+      selectedTab={selectedTab}
       stockMvColumns={stockMvColumns}
+      returnColumns={returnColumns}
       paymentColumns={paymentColumns}
       initialValues={initialValues}
       grmInitialValues={grmInitialValues}
       filters={filters}
+      returnFilters={returnFilters}
       selectItems={selectItems}
+      selectedReturnRow={selectedReturnRow}
       supplier={supplier}
       supplierItems={supplierItems}
       supplierGrnRecords={supplierGrnRecords}
       supplierPayments={supplierPayments}
       supplierGrnCount={supplierGrnCount}
       supplierPaymentsCount={supplierPaymentsCount}
+      supplierReturns={supplierReturns}
+      supplierReturnsCount={supplierReturnsCount}
       isOpenUpdateSupplier={isOpenUpdateSupplier}
       isOpenAddBulk={isOpenAddBulk}
+      isOpenProcessReturn={isOpenProcessReturn}
+      isOpenCancelReturn={isOpenCancelReturn}
       isLoadingSupplier={isLoadingSupplier}
       isLoadingSelect={isLoadingSelect}
       isLoadingSupplierGrnRecords={isLoadingSupplierGrnRecords}
       isLoadingSupplierPayments={isLoadingSupplierPayments}
+      isLoadingSupReturns={isLoadingSupReturns}
       isLoadingSupUpdate={isLoadingSupUpdate}
       isLoadingAddStockBulk={isLoadingAddStockBulk}
+      isLoadingProcessReturns={isLoadingProcessReturns}
+      isLoadingCancelReturns={isLoadingCancelReturns}
       movementPagination={movementPagination}
       paymentsPagination={paymentsPagination}
+      returnPagination={returnPagination}
+      handleSelectTab={handleSelectTab}
       handleChangeSearch={handleChangeSearch}
+      handleChangeSearchReturns={handleChangeSearchReturns}
+      handleDeleteSearchParamReturns={handleDeleteSearchParamReturns}
+      handleSelectReturnRow={handleSelectReturnRow}
       handleSelectItem={handleSelectItem}
       handleRowClick={handleRowClick}
       handleToggleUpdateSupplier={handleToggleUpdateSupplier}
       handleToggleAddBulk={handleToggleAddBulk}
+      handleToggleProcessReturn={handleToggleProcessReturn}
+      handleToggleCancelReturn={handleToggleCancelReturn}
       handleRemoveItem={handleRemoveItem}
       handleUpdateSupplierInfo={handleUpdateSupplierInfo}
       handleAddBulkStock={handleAddBulkStock}
+      handleProcessReturnItem={handleProcessReturnItem}
+      handleCancelReturnItem={handleCancelReturnItem}
     />
   );
 };

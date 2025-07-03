@@ -1,11 +1,8 @@
 import {
-  Box,
   Breadcrumbs,
   Button,
   Card,
-  CardContent,
   Container,
-  Divider,
   Link,
   Paper,
   Stack,
@@ -26,40 +23,8 @@ import { formatCurrency } from 'src/utils/format-number';
 import { GrnAddPaymentDialog } from '../components/grn-add-payment-dialog';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { PaymentHistoryRow } from '../components/payment-history-row';
-
-const GRNItemCard = ({ item }) => {
-  return (
-    <Card sx={{ minWidth: 275, mb: 2, boxShadow: 3 }}>
-      <CardContent>
-        <Typography variant="h6" component="div" gutterBottom>
-          {item.itemName}
-        </Typography>
-        <Divider sx={{ my: 1 }} />
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2" color="text.secondary">
-            Quantity:
-          </Typography>
-          <Typography variant="body2">{item.stockQuantity}</Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2" color="text.secondary">
-            Unit Price:
-          </Typography>
-          <Typography variant="body2">{formatCurrency(item.stockUnitPrice)}</Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-          <Typography variant="subtitle2">Total Price:</Typography>
-          <Typography variant="subtitle2" fontWeight="bold">
-            {formatCurrency(item.stockTotalPrice)}
-          </Typography>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-};
+import { CreateReturnDialog } from '../components/create-return-dialog';
+import { GrnItemCard } from '../components/grn-item-card';
 
 export const GrnInfoView = ({
   paymentColumns,
@@ -67,11 +32,15 @@ export const GrnInfoView = ({
   grnInfo,
   grnPayments,
   isOpenAddPayment,
+  isOpenCreateReturn,
   isLoadingGrnInfo,
   isLoadingGrnPayments,
   isLoadingAddGrnPayment,
+  isLoadingCreateReturns,
   handelToggleAddPayment,
+  handleToggleCreateReturn,
   handleAddPayment,
+  handleCreateReturnRecord,
 }) => {
   return (
     <Container>
@@ -174,8 +143,11 @@ export const GrnInfoView = ({
         {!isLoadingGrnInfo && grnInfo && (
           <>
             {grnInfo.grnItems.map((item, index) => (
-              <Grid key={index} size={{ xs: 12, sm: 4, md: 3 }}>
-                <GRNItemCard item={item} />
+              <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+                <GrnItemCard
+                  item={item}
+                  handleToggleCreateReturn={handleToggleCreateReturn}
+                />
               </Grid>
             ))}
           </>
@@ -188,6 +160,14 @@ export const GrnInfoView = ({
           handleClose={handelToggleAddPayment}
           isLoading={isLoadingAddGrnPayment}
           handleConfirm={handleAddPayment}
+        />
+      )}
+      {isOpenCreateReturn && (
+        <CreateReturnDialog
+          open={isOpenCreateReturn}
+          handleClose={handleToggleCreateReturn}
+          handleConfirm={handleCreateReturnRecord}
+          isLoading={isLoadingCreateReturns}
         />
       )}
     </Container>

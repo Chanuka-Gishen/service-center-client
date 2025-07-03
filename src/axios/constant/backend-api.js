@@ -85,4 +85,8 @@ export const BACKEND_API = {
   SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
   SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment',
   SUPPLIER_ITEMS_INFO: IP_URL + '/supplier/auth/supplier-items',
+  SUPPLIER_RETURNED_ITEMS: IP_URL + '/supplier/auth/return-records',
+  SUPPLIER_RETURN_ITEM: IP_URL + '/supplier/auth/return-item',
+  SUPPLIER_RETURN_PROCESS: IP_URL + '/supplier/auth/process-return',
+  SUPPLIER_RETURN_CANCEL: IP_URL + '/supplier/auth/cancel-return',
 };

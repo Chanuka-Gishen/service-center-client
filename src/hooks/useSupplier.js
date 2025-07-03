@@ -11,16 +11,16 @@ const useSupplier = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
   const [grnInfo, setGrnInfo] = useState(null);
-  const [grnPayments, setGrnPayments] = useState([]);
   const [suppliersOptions, setSuppliersOptions] = useState([]);
   const [supplierGrnRecords, setSupplierGrnRecords] = useState([]);
   const [supplierPayments, setSupplierPayments] = useState([]);
   const [supplierItems, setSupplierItems] = useState([]);
+  const [supplierReturns, setSupplierReturns] = useState([]);
 
   const [suppliersCount, setSuppliersCount] = useState(0);
   const [supplierGrnCount, setSupplierGrnCount] = useState(0);
-  const [grnPaymentsCount, setGrnPaymentsCount] = useState(0);
   const [supplierPaymentsCount, setSupplierPaymentsCount] = useState(0);
+  const [supplierReturnsCount, setSupplierReturnsCount] = useState(0);
 
   const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(true);
   const [isLoadingSupplier, setIsLoadingSupplier] = useState(true);
@@ -30,10 +30,13 @@ const useSupplier = () => {
   const [isLoadingSuppliersOptions, setIsLoadingSuppliersOptions] = useState(false);
   const [isLoadingSupplierGrnRecords, setIsLoadingSupplierGrnRecords] = useState(false);
   const [isLoadingGrnInfo, setIsLoadingGrnInfo] = useState(true);
-  const [isLoadingGrnPayments, setIsLoadingGrnPayments] = useState(false);
   const [isLoadingSupplierPayments, setIsLoadingSupplierPayments] = useState(false);
   const [isLoadingSupplierItems, setIsLoadingSupplierItems] = useState(false);
   const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
+  const [isLoadingSupReturns, setIsLoadingSupReturns] = useState(false);
+  const [isLoadingCreateReturns, setIsLoadingCreateReturns] = useState(false);
+  const [isLoadingProcessReturns, setIsLaodingProcessReturns] = useState(false);
+  const [isLoadingCancelReturns, setIsLoadingCancelReturns] = useState(false);
 
   // Get all suppliers with filterss
   const getAllSuppliers = async (params) => {
@@ -326,6 +329,123 @@ const useSupplier = () => {
     return isSuccess;
   };
 
+  // Fetch supplier return items
+  const fetchSupplierReturnItems = async (params) => {
+    setIsLoadingSupReturns(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_RETURNED_ITEMS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setSupplierReturns(res.data.responseData.data);
+          setSupplierReturnsCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingSupReturns(false);
+      })
+      .finally(() => {
+        setIsLoadingSupReturns(false);
+      });
+  };
+
+  // Create item return record
+  const createItemReturnRecord = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingCreateReturns(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_RETURN_ITEM,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingCreateReturns(false);
+      })
+      .finally(() => {
+        setIsLoadingCreateReturns(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Process item return record
+  const processItemReturnRecord = async (data) => {
+    let isSuccess = false;
+
+    setIsLaodingProcessReturns(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_RETURN_PROCESS,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLaodingProcessReturns(false);
+      })
+      .finally(() => {
+        setIsLaodingProcessReturns(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Cancel item return record
+  const cancelItemReturnRecord = async (params) => {
+    let isSuccess = false;
+
+    setIsLoadingCancelReturns(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_RETURN_CANCEL,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingCancelReturns(false);
+      })
+      .finally(() => {
+        setIsLoadingCancelReturns(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     suppliers,
     supplier,
@@ -337,6 +457,8 @@ const useSupplier = () => {
     supplierPaymentsCount,
     suppliersOptions,
     supplierItems,
+    supplierReturns,
+    supplierReturnsCount,
     isLoadingSuppliers,
     isLoadingSupplier,
     isLoadingSupRegister,
@@ -348,6 +470,10 @@ const useSupplier = () => {
     isLoadingSupplierPayments,
     isLoadingSupplierItems,
     isLoadingAddStockBulk,
+    isLoadingSupReturns,
+    isLoadingCreateReturns,
+    isLoadingProcessReturns,
+    isLoadingCancelReturns,
     getAllSuppliers,
     fetchSupplierInfo,
     registerSupplier,
@@ -359,6 +485,10 @@ const useSupplier = () => {
     fetchGrnInfo,
     fetchSupplierRecentPayments,
     fetchSupplierItemsInfo,
+    fetchSupplierReturnItems,
+    createItemReturnRecord,
+    processItemReturnRecord,
+    cancelItemReturnRecord,
   };
 };
 
