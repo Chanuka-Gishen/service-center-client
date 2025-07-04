@@ -61,6 +61,7 @@ export const SupplierDetailsView = ({
   paymentColumns,
   initialValues,
   grmInitialValues,
+  returnInitialValues,
   filters,
   returnFilters,
   selectItems,
@@ -76,6 +77,7 @@ export const SupplierDetailsView = ({
   isOpenAddBulk,
   isOpenProcessReturn,
   isOpenCancelReturn,
+  isOpenUpdateReturn,
   isLoadingSupplier,
   isLoadingSupplierGrnRecords,
   isLoadingSupplierPayments,
@@ -85,6 +87,7 @@ export const SupplierDetailsView = ({
   isLoadingSelect,
   isLoadingProcessReturns,
   isLoadingCancelReturns,
+  isLoadingUpdateReturns,
   movementPagination,
   paymentsPagination,
   returnPagination,
@@ -99,11 +102,13 @@ export const SupplierDetailsView = ({
   handleToggleAddBulk,
   handleToggleProcessReturn,
   handleToggleCancelReturn,
+  handleToggleUpdateReturn,
   handleRemoveItem,
   handleUpdateSupplierInfo,
   handleAddBulkStock,
   handleProcessReturnItem,
   handleCancelReturnItem,
+  handleUpdateReturnItem,
 }) => {
   const { auth } = useAuthStore();
 
@@ -229,22 +234,27 @@ export const SupplierDetailsView = ({
               <GrnReturnTab
                 returnColumns={returnColumns}
                 returnFilters={returnFilters}
+                returnInitialValues={returnInitialValues}
                 selectedReturnRow={selectedReturnRow}
                 supplierReturns={supplierReturns}
                 supplierReturnsCount={supplierReturnsCount}
                 returnPagination={returnPagination}
                 isOpenProcessReturn={isOpenProcessReturn}
                 isOpenCancelReturn={isOpenCancelReturn}
+                isOpenUpdateReturn={isOpenUpdateReturn}
                 isLoadingSupReturns={isLoadingSupReturns}
                 isLoadingProcessReturns={isLoadingProcessReturns}
                 isLoadingCancelReturns={isLoadingCancelReturns}
+                isLoadingUpdateReturns={isLoadingUpdateReturns}
                 handleToggleProcessReturn={handleToggleProcessReturn}
                 handleToggleCancelReturn={handleToggleCancelReturn}
+                handleToggleUpdateReturn={handleToggleUpdateReturn}
                 handleChangeSearchReturns={handleChangeSearchReturns}
                 handleDeleteSearchParam={handleDeleteSearchParamReturns}
                 handleSelectReturnRow={handleSelectReturnRow}
                 handleProcessReturnItem={handleProcessReturnItem}
                 handleCancelReturnItem={handleCancelReturnItem}
+                handleUpdateReturnItem={handleUpdateReturnItem}
               />
             </CustomTabPanel>
           </Box>

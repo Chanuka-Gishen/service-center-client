@@ -22,26 +22,32 @@ import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
 import { ReturnProcessDialog } from './return-process-dialog';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
+import { ReturnUpdateDialog } from './return-update-dialog';
 
 export const GrnReturnTab = ({
   returnColumns,
   returnFilters,
+  returnInitialValues,
   selectedReturnRow,
   supplierReturns,
   supplierReturnsCount,
   isOpenProcessReturn,
   isOpenCancelReturn,
+  isOpenUpdateReturn,
   isLoadingSupReturns,
   isLoadingProcessReturns,
   isLoadingCancelReturns,
+  isLoadingUpdateReturns,
   returnPagination,
   handleToggleProcessReturn,
   handleToggleCancelReturn,
+  handleToggleUpdateReturn,
   handleChangeSearchReturns,
   handleDeleteSearchParam,
   handleSelectReturnRow,
   handleProcessReturnItem,
   handleCancelReturnItem,
+  handleUpdateReturnItem,
 }) => {
   const { auth } = useAuthStore();
 
@@ -127,6 +133,11 @@ export const GrnReturnTab = ({
                 </Stack>
 
                 <Stack direction="row" spacing={1}>
+                  {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+                    <Button variant="contained" onClick={handleToggleUpdateReturn}>
+                      Update Record
+                    </Button>
+                  )}
                   <Button variant="contained" onClick={handleToggleProcessReturn}>
                     Process Return
                   </Button>
@@ -187,6 +198,15 @@ export const GrnReturnTab = ({
           handleClose={handleToggleCancelReturn}
           handleSubmit={handleCancelReturnItem}
           isLoading={isLoadingCancelReturns}
+        />
+      )}
+      {isOpenUpdateReturn && (
+        <ReturnUpdateDialog
+          open={isOpenUpdateReturn}
+          initialValues={returnInitialValues}
+          handleClose={handleToggleUpdateReturn}
+          handleConfirm={handleUpdateReturnItem}
+          isLoading={isLoadingUpdateReturns}
         />
       )}
     </Box>

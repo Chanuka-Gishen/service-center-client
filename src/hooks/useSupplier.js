@@ -35,6 +35,7 @@ const useSupplier = () => {
   const [isLoadingAddStockBulk, setIsLoadingAddStockBulk] = useState(false);
   const [isLoadingSupReturns, setIsLoadingSupReturns] = useState(false);
   const [isLoadingCreateReturns, setIsLoadingCreateReturns] = useState(false);
+  const [isLoadingUpdateReturns, setIsLoadingUpdateReturns] = useState(false);
   const [isLoadingProcessReturns, setIsLaodingProcessReturns] = useState(false);
   const [isLoadingCancelReturns, setIsLoadingCancelReturns] = useState(false);
 
@@ -384,6 +385,37 @@ const useSupplier = () => {
     return isSuccess;
   };
 
+  // Update item return record
+  const updateItemReturnRecord = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingUpdateReturns(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SUPPLIER_RETURN_UPDATE,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingUpdateReturns(false);
+      })
+      .finally(() => {
+        setIsLoadingUpdateReturns(false);
+      });
+
+    return isSuccess;
+  };
+
   // Process item return record
   const processItemReturnRecord = async (data) => {
     let isSuccess = false;
@@ -472,6 +504,7 @@ const useSupplier = () => {
     isLoadingAddStockBulk,
     isLoadingSupReturns,
     isLoadingCreateReturns,
+    isLoadingUpdateReturns,
     isLoadingProcessReturns,
     isLoadingCancelReturns,
     getAllSuppliers,
@@ -487,6 +520,7 @@ const useSupplier = () => {
     fetchSupplierItemsInfo,
     fetchSupplierReturnItems,
     createItemReturnRecord,
+    updateItemReturnRecord,
     processItemReturnRecord,
     cancelItemReturnRecord,
   };

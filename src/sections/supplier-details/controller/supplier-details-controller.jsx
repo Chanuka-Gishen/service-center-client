@@ -53,6 +53,7 @@ const SupplierDetailsController = () => {
     isLoadingSupReturns,
     isLoadingProcessReturns,
     isLoadingCancelReturns,
+    isLoadingUpdateReturns,
     fetchSupplierInfo,
     fetchSupplierGrnRecords,
     fetchSupplierRecentPayments,
@@ -61,6 +62,7 @@ const SupplierDetailsController = () => {
     addStockBulks,
     processItemReturnRecord,
     cancelItemReturnRecord,
+    updateItemReturnRecord,
   } = useSupplier();
 
   const { selectItems, isLoadingSelect, fetchItemsForInvoiceSelection } = useInventory();
@@ -69,6 +71,7 @@ const SupplierDetailsController = () => {
   const paymentsPagination = usePagination(5);
 
   const [initialValues, setInitialValues] = useState({});
+  const [returnInitialValues, setReturnInitialValues] = useState({});
   const initValues = {
     grnReceivedDate: new Date(),
     grnDiscountAmount: 0,
@@ -85,6 +88,7 @@ const SupplierDetailsController = () => {
   const [isOpenAddBulk, setIsOpenAddBulk] = useState(false);
   const [isOpenProcessReturn, setIsOpenProcessReturn] = useState(false);
   const [isOpenCancelReturn, setIsOpenCancelReturn] = useState(false);
+  const [isOpenUpdateReturn, setIsOpenUpdateReturn] = useState(false);
 
   const returnPagination = usePagination();
 
@@ -209,6 +213,22 @@ const SupplierDetailsController = () => {
     setIsOpenCancelReturn(!isOpenCancelReturn);
   };
 
+  const handleToggleUpdateReturn = () => {
+    if (!selectedReturnRow) return;
+
+    if (isOpenUpdateReturn) {
+      setReturnInitialValues({});
+    } else {
+      setReturnInitialValues({
+        returnQty: selectedReturnRow.returnQty,
+        returnReason: selectedReturnRow.returnReason,
+        returnNote: selectedReturnRow.returnNote,
+      });
+    }
+
+    setIsOpenUpdateReturn(!isOpenUpdateReturn);
+  };
+
   const handleUpdateSupplierInfo = async (values) => {
     const isSuccess = await updateSupplier(supplier._id, values);
 
@@ -264,6 +284,23 @@ const SupplierDetailsController = () => {
     }
   };
 
+  const handleUpdateReturnItem = async (values) => {
+    if (!selectedReturnRow) return;
+
+    const data = {
+      id: selectedReturnRow._id,
+      ...values,
+    };
+
+    const isSuccess = await updateItemReturnRecord(data);
+
+    if (isSuccess) {
+      setSelectedReturnRow(null)
+      handleToggleUpdateReturn();
+      await fetchSupplierReturnItems(returnQuery);
+    }
+  };
+
   // Debounced API call
   const debouncedFetch = useMemo(() => debounce(fetchItemsForInvoiceSelection, 500), []);
 
@@ -315,6 +352,7 @@ const SupplierDetailsController = () => {
       paymentColumns={paymentColumns}
       initialValues={initialValues}
       grmInitialValues={grmInitialValues}
+      returnInitialValues={returnInitialValues}
       filters={filters}
       returnFilters={returnFilters}
       selectItems={selectItems}
@@ -329,6 +367,7 @@ const SupplierDetailsController = () => {
       supplierReturnsCount={supplierReturnsCount}
       isOpenUpdateSupplier={isOpenUpdateSupplier}
       isOpenAddBulk={isOpenAddBulk}
+      isOpenUpdateReturn={isOpenUpdateReturn}
       isOpenProcessReturn={isOpenProcessReturn}
       isOpenCancelReturn={isOpenCancelReturn}
       isLoadingSupplier={isLoadingSupplier}
@@ -340,6 +379,7 @@ const SupplierDetailsController = () => {
       isLoadingAddStockBulk={isLoadingAddStockBulk}
       isLoadingProcessReturns={isLoadingProcessReturns}
       isLoadingCancelReturns={isLoadingCancelReturns}
+      isLoadingUpdateReturns={isLoadingUpdateReturns}
       movementPagination={movementPagination}
       paymentsPagination={paymentsPagination}
       returnPagination={returnPagination}
@@ -354,11 +394,13 @@ const SupplierDetailsController = () => {
       handleToggleAddBulk={handleToggleAddBulk}
       handleToggleProcessReturn={handleToggleProcessReturn}
       handleToggleCancelReturn={handleToggleCancelReturn}
+      handleToggleUpdateReturn={handleToggleUpdateReturn}
       handleRemoveItem={handleRemoveItem}
       handleUpdateSupplierInfo={handleUpdateSupplierInfo}
       handleAddBulkStock={handleAddBulkStock}
       handleProcessReturnItem={handleProcessReturnItem}
       handleCancelReturnItem={handleCancelReturnItem}
+      handleUpdateReturnItem={handleUpdateReturnItem}
     />
   );
 };
