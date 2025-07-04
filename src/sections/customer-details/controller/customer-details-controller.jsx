@@ -95,6 +95,7 @@ const CustomerDetailsController = () => {
         customerName: customer.customerName,
         customerType: customer.customerType ?? CUS_TYPE_INDIVIDUAL,
         customerMobile: customer.customerMobile,
+        customerSecondaryMobile: customer.customerSecondaryMobile,
         customerEmail: customer.customerEmail,
       });
     } else {

@@ -5,7 +5,13 @@ import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { useNavigate } from 'react-router-dom';
 
 const CustomersController = () => {
-  const tableKeys = ['Customer Name', 'Customer Mobile', 'Customer Vehicles', 'Registered Date'];
+  const tableKeys = [
+    'Customer Name',
+    'Customer Mobile',
+    'Secondary Mobile',
+    'Customer Vehicles',
+    'Registered Date',
+  ];
 
   const navigate = useNavigate();
 
@@ -15,6 +21,7 @@ const CustomersController = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     name: '',
     mobile: '',
+    secMobile: '',
     vehicleNumber: '',
   });
 

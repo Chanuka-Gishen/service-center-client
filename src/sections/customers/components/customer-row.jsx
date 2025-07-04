@@ -18,6 +18,7 @@ export const CustomerRow = ({ data, onClickRow = null }) => {
               : item.customerName}
           </TableCell>
           <TableCell>{item.customerMobile}</TableCell>
+          <TableCell>{item.customerSecondaryMobile}</TableCell>
           <TableCell align='left'>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {Array.isArray(item.customerVehicles) && item.customerVehicles.length > 0

@@ -44,6 +44,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
           customerName: '',
           customerType: CUS_TYPE_INDIVIDUAL,
           customerMobile: '',
+          customerSecondaryMobile: '',
           customerEmail: '',
           vehicleNumber: '',
           vehicleManufacturer: '',
@@ -134,7 +135,7 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
                     helperText={touched.customerName && errors.customerName}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <TextField
                     label="Customer Mobile"
                     name="customerMobile"
@@ -147,7 +148,21 @@ export const RegisterCustomerDialog = ({ open, isLoading, handleOpenClose, handl
                     helperText={touched.customerMobile && errors.customerMobile}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    label="Customer Secondary Mobile"
+                    name="customerSecondaryMobile"
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('customerSecondaryMobile')}
+                    error={
+                      touched.customerSecondaryMobile && Boolean(errors.customerSecondaryMobile)
+                    }
+                    helperText={touched.customerSecondaryMobile && errors.customerSecondaryMobile}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <TextField
                     label="Customer Email"
                     name="customerEmail"
