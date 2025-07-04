@@ -8,6 +8,7 @@ import responseUtil from 'src/utils/responseUtil';
 import useAuthStore from 'src/store/auth-store';
 import useSnackbarStore from 'src/store/notification-store';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
+import { UAParser } from 'ua-parser-js';
 
 export const backendAuthApi = axios.create({
   // one minute timeout
@@ -15,11 +16,19 @@ export const backendAuthApi = axios.create({
 });
 
 backendAuthApi.interceptors.request.use((request) => {
+  const parser = new UAParser();
+  const result = parser.getResult();
+
   const { auth } = useAuthStore.getState();
   const bearerToken = auth ? auth.user.token : null;
   if (bearerToken) {
     request.headers.Authorization = `Bearer ${bearerToken}`;
   }
+  request.headers['X-Device-Info'] = JSON.stringify({
+    type: result.device.type || 'desktop',
+    model: result.device.model || 'unknown',
+    browser: result.browser.name || 'unknown',
+  });
   return request;
 });
 
@@ -51,7 +60,10 @@ backendAuthApi.interceptors.response.use(
 
         if (errorResponse.responseCode === 'AUTH-004') {
           logoutUser();
-          window.location.href = NAVIGATION_ROUTES.login;
+
+          if (!window.location.pathname.includes(NAVIGATION_ROUTES.login)) {
+            window.location.href = NAVIGATION_ROUTES.login;
+          }
         }
       }
 

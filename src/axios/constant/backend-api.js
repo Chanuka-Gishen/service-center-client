@@ -1,5 +1,3 @@
-import { WO_TYPES } from 'src/constants/workorder-types';
-
 // SERVER URL
 const IP_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -11,6 +9,8 @@ export const BACKEND_API = {
 
   USER_REGISTER: IP_URL + '/user/supAuth/create',
   USERS: IP_URL + '/user/auth/all',
+  USER_UPDATE: IP_URL + '/user/supAuth/update',
+  USER_ACTIVITIES: IP_URL + '/user/supAuth/get-activities',
 
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',
