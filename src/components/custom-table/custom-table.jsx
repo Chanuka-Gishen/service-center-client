@@ -21,7 +21,7 @@ export const CustomTable = ({
   enableAction = false,
   enablePagination = true,
   documentCount = 0,
-  rowerPerPage = [10, 20, 30],
+  rowerPerPage = [5, 10, 20, 30],
   page = 0,
   limit = 10,
   handleChangePage,

@@ -34,8 +34,6 @@ export const SummaryCard = ({ selectedItems }) => {
       return sum + value;
     }, 0);
 
-  console.log(totalValue);
-
   return (
     <StyledCard elevation={3}>
       <CardContent>

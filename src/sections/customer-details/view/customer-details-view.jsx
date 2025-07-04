@@ -126,7 +126,7 @@ export const CustomerDetailsView = ({
 }) => {
   const { auth } = useAuthStore.getState();
   return (
-    <Container maxWidth="lg" >
+    <Container maxWidth="lg">
       <Grid container rowSpacing={4} columnSpacing={2}>
         <Grid size={{ xs: 12, sm: 6, md: 8, lg: 8 }}>
           <Breadcrumbs aria-label="breadcrumb">
@@ -190,6 +190,10 @@ export const CustomerDetailsView = ({
                       <TableRow>
                         <TableCell variant="head">Customer Mobile</TableCell>
                         <TableCell>{data.customerMobile}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell variant="head">Customer Secondary Mobile</TableCell>
+                        <TableCell>{data.customerSecondaryMobile}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell variant="head">Customer Email</TableCell>

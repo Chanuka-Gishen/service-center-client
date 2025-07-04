@@ -72,6 +72,16 @@ export const CustomersView = ({
         </Grid>
         <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3 }}>
           <TextField
+            label="Customer Secondary Mobile"
+            value={selectedFilters.secMobile}
+            name="secMobile"
+            onChange={handleChangeSearch}
+            autoComplete="off"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3 }}>
+          <TextField
             label="Vehicle Number"
             value={selectedFilters.vehicleNumber}
             name="vehicleNumber"

@@ -4,13 +4,20 @@ import { useParams } from 'react-router-dom';
 import { GrnInfoView } from '../view/grn-info-view';
 import useSupplier from 'src/hooks/useSupplier';
 import usePayment from 'src/hooks/usePayment';
+import usePagination from 'src/hooks/usePagination';
 
 const paymentColumns = ['Method', 'Amount', 'Date'];
 
 const GrnInfoController = () => {
   const { supId, id } = useParams();
 
-  const { grnInfo, isLoadingGrnInfo, fetchGrnInfo } = useSupplier();
+  const {
+    grnInfo,
+    isLoadingGrnInfo,
+    isLoadingCreateReturns,
+    fetchGrnInfo,
+    createItemReturnRecord,
+  } = useSupplier();
   const {
     grnPayments,
     isLoadingGrnPayments,
@@ -19,10 +26,18 @@ const GrnInfoController = () => {
     createGrnPaymentRecord,
   } = usePayment();
 
+  const [selectedStock, setSelectedStock] = useState(null);
+
   const [isOpenAddPayment, setIsOpenAddPayment] = useState(false);
+  const [isOpenCreateReturn, setIsOpenCreateReturn] = useState(false);
 
   const handelToggleAddPayment = () => {
     setIsOpenAddPayment(!isOpenAddPayment);
+  };
+
+  const handleToggleCreateReturn = (item = null) => {
+    setSelectedStock(item);
+    setIsOpenCreateReturn(!isOpenCreateReturn);
   };
 
   const handleAddPayment = async (values) => {
@@ -37,6 +52,20 @@ const GrnInfoController = () => {
       handelToggleAddPayment();
       await handleFetchGrnInfo();
       await fetchGrnPaymentRecords(id);
+    }
+  };
+
+  const handleCreateReturnRecord = async (values) => {
+    const data = {
+      grnId: grnInfo._id,
+      grnItemId: selectedStock._id,
+      ...values,
+    };
+
+    const isSuccess = await createItemReturnRecord(data);
+
+    if (isSuccess) {
+      handleToggleCreateReturn();
     }
   };
 
@@ -58,11 +87,15 @@ const GrnInfoController = () => {
       grnInfo={grnInfo}
       grnPayments={grnPayments}
       isOpenAddPayment={isOpenAddPayment}
+      isOpenCreateReturn={isOpenCreateReturn}
       isLoadingGrnInfo={isLoadingGrnInfo}
       isLoadingGrnPayments={isLoadingGrnPayments}
       isLoadingAddGrnPayment={isLoadingAddGrnPayment}
+      isLoadingCreateReturns={isLoadingCreateReturns}
       handelToggleAddPayment={handelToggleAddPayment}
+      handleToggleCreateReturn={handleToggleCreateReturn}
       handleAddPayment={handleAddPayment}
+      handleCreateReturnRecord={handleCreateReturnRecord}
     />
   );
 };

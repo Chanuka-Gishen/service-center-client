@@ -1,5 +1,3 @@
-import { WO_TYPES } from 'src/constants/workorder-types';
-
 // SERVER URL
 const IP_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -11,6 +9,8 @@ export const BACKEND_API = {
 
   USER_REGISTER: IP_URL + '/user/supAuth/create',
   USERS: IP_URL + '/user/auth/all',
+  USER_UPDATE: IP_URL + '/user/supAuth/update',
+  USER_ACTIVITIES: IP_URL + '/user/supAuth/get-activities',
 
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',
@@ -85,4 +85,9 @@ export const BACKEND_API = {
   SUPPLIER_PAYMENTS: IP_URL + '/supplier/auth/supplier-payments',
   SUPPLIER_ADD_PAYMENTS: IP_URL + '/supplier/auth/add-payment',
   SUPPLIER_ITEMS_INFO: IP_URL + '/supplier/auth/supplier-items',
+  SUPPLIER_RETURNED_ITEMS: IP_URL + '/supplier/auth/return-records',
+  SUPPLIER_RETURN_ITEM: IP_URL + '/supplier/auth/return-item',
+  SUPPLIER_RETURN_UPDATE: IP_URL + '/supplier/supAuth/return-update',
+  SUPPLIER_RETURN_PROCESS: IP_URL + '/supplier/auth/process-return',
+  SUPPLIER_RETURN_CANCEL: IP_URL + '/supplier/auth/cancel-return',
 };

@@ -142,6 +142,20 @@ export const UpdateCustomerDialog = ({
                     helperText={touched.customerMobile && errors.customerMobile}
                   />
                 </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    label="Customer Secondary Mobile"
+                    name="customerSecondaryMobile"
+                    fullWidth
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('customerSecondaryMobile')}
+                    error={
+                      touched.customerSecondaryMobile && Boolean(errors.customerSecondaryMobile)
+                    }
+                    helperText={touched.customerSecondaryMobile && errors.customerSecondaryMobile}
+                  />
+                </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
                   <TextField
                     label="Customer Email"

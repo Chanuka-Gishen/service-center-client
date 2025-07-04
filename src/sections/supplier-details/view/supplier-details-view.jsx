@@ -9,11 +9,13 @@ import {
   Link,
   Paper,
   Stack,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  Tabs,
   Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -26,37 +28,87 @@ import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
 import { UpdateSupplierDialog } from '../components/update-supplier-dialog';
 import { AddBulkStockDialog } from '../components/add-bulk-stock-dialog';
+import { GrnTab } from '../components/grn-tab';
+import { GrnReturnTab } from '../components/grn-return-tab';
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box>{children}</Box>}
+    </Box>
+  );
+}
+
+const a11yProps = (index) => {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+};
 
 export const SupplierDetailsView = ({
+  selectedTab,
   stockMvColumns,
+  returnColumns,
   paymentColumns,
   initialValues,
   grmInitialValues,
+  returnInitialValues,
   filters,
+  returnFilters,
   selectItems,
+  selectedReturnRow,
   supplier,
   supplierGrnRecords,
   supplierPayments,
   supplierGrnCount,
   supplierPaymentsCount,
+  supplierReturns,
+  supplierReturnsCount,
   isOpenUpdateSupplier,
   isOpenAddBulk,
+  isOpenProcessReturn,
+  isOpenCancelReturn,
+  isOpenUpdateReturn,
   isLoadingSupplier,
   isLoadingSupplierGrnRecords,
   isLoadingSupplierPayments,
+  isLoadingSupReturns,
   isLoadingSupUpdate,
   isLoadingAddStockBulk,
   isLoadingSelect,
+  isLoadingProcessReturns,
+  isLoadingCancelReturns,
+  isLoadingUpdateReturns,
   movementPagination,
   paymentsPagination,
+  returnPagination,
+  handleSelectTab,
   handleChangeSearch,
+  handleChangeSearchReturns,
+  handleDeleteSearchParamReturns,
+  handleSelectReturnRow,
   handleSelectItem,
   handleRowClick,
   handleToggleUpdateSupplier,
   handleToggleAddBulk,
+  handleToggleProcessReturn,
+  handleToggleCancelReturn,
+  handleToggleUpdateReturn,
   handleRemoveItem,
   handleUpdateSupplierInfo,
   handleAddBulkStock,
+  handleProcessReturnItem,
+  handleCancelReturnItem,
+  handleUpdateReturnItem,
 }) => {
   const { auth } = useAuthStore();
 
@@ -145,31 +197,67 @@ export const SupplierDetailsView = ({
           </Stack>
         </Grid>
         <Grid size={12}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h5">Good Received Notes (GRN)</Typography>
-            {auth.user.userRole === USER_ROLE.SUPER_ADMIN ? (
-              <Button variant="contained" onClick={handleToggleAddBulk}>
-                Add Stocks
-              </Button>
-            ) : null}
-          </Stack>
-        </Grid>
-        <Grid size={12}>
-          <Card>
-            <Paper elevation={0}>
-              <CustomTable
-                keys={stockMvColumns}
-                isLoading={isLoadingSupplierGrnRecords}
-                dataLength={supplierGrnRecords.length}
-                documentCount={supplierGrnCount}
-                limit={movementPagination.limit}
-                page={movementPagination.page}
-                handleChangePage={movementPagination.handleChangePage}
-                handleChangeRowsPerPage={movementPagination.handleChangeRowsPerPage}
-                tableBody={<SupplierGrnRow data={supplierGrnRecords} onClickRow={handleRowClick} />}
+          <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={selectedTab}
+                onChange={handleSelectTab}
+                aria-label="supplier info tab"
+                variant="fullWidth"
+              >
+                <Tab label="Good Received Notes (GRN)" {...a11yProps(0)} />
+                <Tab label="Returned Items" {...a11yProps(1)} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={selectedTab} index={0}>
+              <GrnTab
+                stockMvColumns={stockMvColumns}
+                grmInitialValues={grmInitialValues}
+                filters={filters}
+                selectItems={selectItems}
+                supplierGrnRecords={supplierGrnRecords}
+                supplierGrnCount={supplierGrnCount}
+                isOpenAddBulk={isOpenAddBulk}
+                isLoadingSupplierGrnRecords={isLoadingSupplierGrnRecords}
+                isLoadingAddStockBulk={isLoadingAddStockBulk}
+                isLoadingSelect={isLoadingSelect}
+                movementPagination={movementPagination}
+                handleChangeSearch={handleChangeSearch}
+                handleSelectItem={handleSelectItem}
+                handleRowClick={handleRowClick}
+                handleToggleAddBulk={handleToggleAddBulk}
+                handleRemoveItem={handleRemoveItem}
+                handleAddBulkStock={handleAddBulkStock}
               />
-            </Paper>
-          </Card>
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={1}>
+              <GrnReturnTab
+                returnColumns={returnColumns}
+                returnFilters={returnFilters}
+                returnInitialValues={returnInitialValues}
+                selectedReturnRow={selectedReturnRow}
+                supplierReturns={supplierReturns}
+                supplierReturnsCount={supplierReturnsCount}
+                returnPagination={returnPagination}
+                isOpenProcessReturn={isOpenProcessReturn}
+                isOpenCancelReturn={isOpenCancelReturn}
+                isOpenUpdateReturn={isOpenUpdateReturn}
+                isLoadingSupReturns={isLoadingSupReturns}
+                isLoadingProcessReturns={isLoadingProcessReturns}
+                isLoadingCancelReturns={isLoadingCancelReturns}
+                isLoadingUpdateReturns={isLoadingUpdateReturns}
+                handleToggleProcessReturn={handleToggleProcessReturn}
+                handleToggleCancelReturn={handleToggleCancelReturn}
+                handleToggleUpdateReturn={handleToggleUpdateReturn}
+                handleChangeSearchReturns={handleChangeSearchReturns}
+                handleDeleteSearchParam={handleDeleteSearchParamReturns}
+                handleSelectReturnRow={handleSelectReturnRow}
+                handleProcessReturnItem={handleProcessReturnItem}
+                handleCancelReturnItem={handleCancelReturnItem}
+                handleUpdateReturnItem={handleUpdateReturnItem}
+              />
+            </CustomTabPanel>
+          </Box>
         </Grid>
       </Grid>
       {isOpenUpdateSupplier && (
