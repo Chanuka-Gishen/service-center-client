@@ -74,6 +74,15 @@ const WorkordersController = () => {
   });
 
   const handleAddNewInventoryRow = (data) => {
+    const itemExists = formik.values.workOrderServiceItems.find(
+      (item) => item.inventoryItem === data._id
+    );
+
+    if (itemExists) {
+      enqueueSnackbar(`Item already added to the invoice - ${itemExists.inventoryItemName}`, {variant: SNACKBAR_VARIANT.INFO});
+      return;
+    }
+
     formik.setValues({
       ...formik.values,
       workOrderServiceItems: [

@@ -29,6 +29,7 @@ const useEmployee = () => {
   const [isLoadingEmpSelect, setIsLoadingEmpSelect] = useState(false);
   const [isLoadingAttendences, setIsLoadingAttendences] = useState(false);
   const [isLoadingAddAttendences, setIsLoadingAddAttendences] = useState(false);
+  const [isLoadingAddDailyAtt, setIsLoadingAddDailyAtt] = useState(false);
   const [isLoadingEmpAtt, setIsLoadingEmpAtt] = useState(true);
 
   // Register employee data
@@ -145,7 +146,7 @@ const useEmployee = () => {
   };
 
   // Fetch employees for select options
-  const fetchEmployeeForSelect = async () => {
+  const fetchEmployeeForSelect = async (params = null) => {
     if (isLoadingEmpSelect) return;
 
     setIsLoadingEmpSelect(true);
@@ -154,6 +155,7 @@ const useEmployee = () => {
       url: BACKEND_API.EMP_SELECT,
       method: 'GET',
       cancelToken: sourceToken.token,
+      params,
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
@@ -204,7 +206,7 @@ const useEmployee = () => {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      url: BACKEND_API.EMP_ATT_ADD,
+      url: BACKEND_API.EMP_ATT_BATCH_ADD,
       method: 'POST',
       cancelToken: sourceToken.token,
       data,
@@ -219,6 +221,37 @@ const useEmployee = () => {
       })
       .finally(() => {
         setIsLoadingAddAttendences(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Add attendence seperatly
+  const addAttendenceRecordsDaily = async (data) => {
+    setIsLoadingAddDailyAtt(true);
+
+    let isSuccess = false;
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_ATT_ADD,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingAddDailyAtt(false);
+      })
+      .finally(() => {
+        setIsLoadingAddDailyAtt(false);
       });
 
     return isSuccess;
@@ -279,6 +312,7 @@ const useEmployee = () => {
     isLoadingEmpSelect,
     isLoadingAttendences,
     isLoadingAddAttendences,
+    isLoadingAddDailyAtt,
     isLoadingEmpAtt,
     employee,
     employees,
@@ -299,6 +333,7 @@ const useEmployee = () => {
     fetchEmpJobs,
     fetchEmpAttendence,
     addAttendenceRecords,
+    addAttendenceRecordsDaily,
   };
 };
 

@@ -1,28 +1,81 @@
 import {
+  alpha,
   Button,
   Card,
   Chip,
   Container,
   FormControl,
+  Menu,
+  MenuItem,
   Paper,
   Stack,
+  styled,
   TextField,
   Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { DatePicker } from '@mui/x-date-pickers';
+
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { EmpAttendenceRow } from '../components/emp-attendence-row';
 import { EmpAttendenceDialog } from '../components/emp-attendence-dialog';
-import { DatePicker } from '@mui/x-date-pickers';
+
 import { fDate } from 'src/utils/format-time';
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color: 'rgb(55, 65, 81)',
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+      },
+    },
+    ...theme.applyStyles('dark', {
+      color: theme.palette.grey[300],
+    }),
+  },
+}));
 
 export const EmpAttendenceView = ({
   tableHeaders,
   pagination,
   searchParams,
+  anchorEl,
   attendences,
+  openOptions,
   attendenceCount,
   isOpenUploadDlg,
+  isOpenAddDlg,
   selectedFile,
   isLoadingAttendences,
   isLoadingAddAttendences,
@@ -30,7 +83,10 @@ export const EmpAttendenceView = ({
   handleChangeSearchParam,
   handleChangeSearchParamDate,
   handleDeleteSearchParam,
+  handleClickOptions,
+  handleCloseOptions,
   handleToggleUploadDialog,
+  handleToggleAddDialog,
   handleSelectFile,
   handleAddAttendenceRecords,
 }) => {
@@ -40,9 +96,41 @@ export const EmpAttendenceView = ({
         <Grid size={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h4">Manage Attendence</Typography>
-            <Button variant="contained" onClick={handleToggleUploadDialog}>
+            {/* <Button variant="contained" onClick={handleToggleUploadDialog}>
               Add Records
+            </Button> */}
+            <Button
+              id="demo-customized-button"
+              aria-controls={openOptions ? 'demo-customized-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openOptions ? 'true' : undefined}
+              variant="contained"
+              disableElevation
+              onClick={handleClickOptions}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Options
             </Button>
+            <StyledMenu
+              id="demo-customized-menu"
+              slotProps={{
+                list: {
+                  'aria-labelledby': 'demo-customized-button',
+                },
+              }}
+              anchorEl={anchorEl}
+              open={openOptions}
+              onClose={handleCloseOptions}
+            >
+              <MenuItem onClick={handleToggleAddDialog} disableRipple>
+                <AddCircleIcon />
+                Add Attendence
+              </MenuItem>
+              <MenuItem onClick={handleToggleUploadDialog} disableRipple>
+                <UploadFileIcon />
+                Upload Records
+              </MenuItem>
+            </StyledMenu>
           </Stack>
         </Grid>
         <Grid size={{ sm: 12, md: 3 }}>
