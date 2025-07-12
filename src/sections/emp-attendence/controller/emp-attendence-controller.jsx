@@ -18,17 +18,26 @@ const EmpAttendenceController = () => {
   const pagination = usePagination();
 
   const {
+    empSelectables,
     attendences,
     attendenceCount,
     isLoadingAttendences,
+    isLoadingEmpSelect,
     isLoadingAddAttendences,
+    isLoadingAddDailyAtt,
     fetchEmpAttendences,
+    fetchEmployeeForSelect,
     addAttendenceRecords,
+    addAttendenceRecordsDaily,
   } = useEmployee();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openOptions = Boolean(anchorEl);
 
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [isOpenUploadDlg, setIsOpenUploadDialog] = useState(false);
+  const [isOpenAddDlg, setIsOpenAddDlg] = useState(false);
 
   const [searchParams, setSearchParams] = useState({
     empId: '',
@@ -59,10 +68,32 @@ const EmpAttendenceController = () => {
     }));
   };
 
+  const handleClickOptions = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseOptions = () => {
+    setAnchorEl(null);
+  };
+
   const handleToggleUploadDialog = () => {
-    if (isOpenUploadDlg) setSelectedFile(null);
+    if (isOpenUploadDlg) {
+      setSelectedFile(null);
+    } else {
+      handleCloseOptions();
+    }
 
     setIsOpenUploadDialog(!isOpenUploadDlg);
+  };
+
+  const handleToggleAddDialog = async () => {
+    if (!isOpenAddDlg) {
+      handleCloseOptions();
+      const params = { isIdRequired: true };
+      await fetchEmployeeForSelect(params);
+    }
+
+    setIsOpenAddDlg(!isOpenAddDlg);
   };
 
   const handleSelectFile = (e) => {
@@ -93,10 +124,13 @@ const EmpAttendenceController = () => {
     <EmpAttendenceView
       tableHeaders={tableHeaders}
       pagination={pagination}
+      anchorEl={anchorEl}
       searchParams={searchParams}
+      openOptions={openOptions}
       attendences={attendences}
       attendenceCount={attendenceCount}
       isOpenUploadDlg={isOpenUploadDlg}
+      isOpenAddDlg={isOpenAddDlg}
       selectedFile={selectedFile}
       isLoadingAttendences={isLoadingAttendences}
       isLoadingAddAttendences={isLoadingAddAttendences}
@@ -104,7 +138,10 @@ const EmpAttendenceController = () => {
       handleChangeSearchParam={handleChangeSearchParam}
       handleChangeSearchParamDate={handleChangeSearchParamDate}
       handleDeleteSearchParam={handleDeleteSearchParam}
+      handleClickOptions={handleClickOptions}
+      handleCloseOptions={handleCloseOptions}
       handleToggleUploadDialog={handleToggleUploadDialog}
+      handleToggleAddDialog={handleToggleAddDialog}
       handleSelectFile={handleSelectFile}
       handleAddAttendenceRecords={handleAddAttendenceRecords}
     />
