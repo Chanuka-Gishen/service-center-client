@@ -74,6 +74,9 @@ export const BACKEND_API = {
   EMP_ATT_BATCH_ADD: IP_URL + '/employee/auth/add-emp-attendence-batch',
   EMP_ATT_ADD: IP_URL + '/employee/auth/add-emp-attendence',
   EMP_WORKORDERS: IP_URL + '/workorder/auth/emp-jobs',
+  EMP_LEAVE_RQSTS: IP_URL + '/employee/auth/leave-requests',
+  EMP_LEAVE_RQSTS_ADD: IP_URL + '/employee/auth/leave-request',
+  EMP_LEAVE_RQSTS_PROCESS: IP_URL + '/employee/supAuth/process-leave-request',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',

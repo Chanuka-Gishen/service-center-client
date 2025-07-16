@@ -15,11 +15,13 @@ const useEmployee = () => {
   const [attendences, setAttendences] = useState([]);
   const [empAttendences, setEmpAttendences] = useState([]);
   const [empSelectables, setEmpSelectables] = useState([]);
+  const [leaveRequests, setLeaveRequests] = useState([]);
 
   const [employeesCount, setEmployeesCount] = useState(0);
   const [empJobsCount, setEmpJobsCount] = useState(0);
   const [attendenceCount, setAttendenceCount] = useState(0);
   const [empAttCount, setEmpAttCount] = useState(0);
+  const [leaveRqstCount, setLeaveRqstCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
@@ -31,6 +33,9 @@ const useEmployee = () => {
   const [isLoadingAddAttendences, setIsLoadingAddAttendences] = useState(false);
   const [isLoadingAddDailyAtt, setIsLoadingAddDailyAtt] = useState(false);
   const [isLoadingEmpAtt, setIsLoadingEmpAtt] = useState(true);
+  const [isLoadingLeaveRqsts, setIsLoadingLeaveRqsts] = useState(true);
+  const [isLoadingCreateLeaveRqst, setIsLoadingCreateLeaveRqst] = useState(false);
+  const [isLoadingProcessLeaveRqst, setIsLoadingProcessLeaveRqst] = useState(false);
 
   // Register employee data
   const registerEmployee = async (data) => {
@@ -148,6 +153,8 @@ const useEmployee = () => {
   // Fetch employees for select options
   const fetchEmployeeForSelect = async (params = null) => {
     if (isLoadingEmpSelect) return;
+
+    setEmpSelectables([]);
 
     setIsLoadingEmpSelect(true);
 
@@ -303,6 +310,92 @@ const useEmployee = () => {
       });
   };
 
+  // Fetch leave requsts
+  const fetchLeaveRequests = async (params) => {
+    setLeaveRequests([]);
+    setLeaveRqstCount(0);
+    setIsLoadingLeaveRqsts(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_LEAVE_RQSTS,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          setLeaveRequests(res.data.responseData.data);
+          setLeaveRqstCount(res.data.responseData.count);
+        }
+      })
+      .catch(() => {
+        setIsLoadingLeaveRqsts(false);
+      })
+      .finally(() => {
+        setIsLoadingLeaveRqsts(false);
+      });
+  };
+
+  // Create leave requests
+  const createLeaveRequests = async (data) => {
+    let isSuccess = false;
+    setIsLoadingCreateLeaveRqst(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_LEAVE_RQSTS_ADD,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingCreateLeaveRqst(false);
+      })
+      .finally(() => {
+        setIsLoadingCreateLeaveRqst(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Process leave requests
+  const processLeaveRequest = async (data) => {
+    let isSuccess = false;
+    setIsLoadingProcessLeaveRqst(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.EMP_LEAVE_RQSTS_PROCESS,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingProcessLeaveRqst(false);
+      })
+      .finally(() => {
+        setIsLoadingProcessLeaveRqst(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     isLoading,
     isLoadingEmp,
@@ -314,6 +407,9 @@ const useEmployee = () => {
     isLoadingAddAttendences,
     isLoadingAddDailyAtt,
     isLoadingEmpAtt,
+    isLoadingLeaveRqsts,
+    isLoadingCreateLeaveRqst,
+    isLoadingProcessLeaveRqst,
     employee,
     employees,
     empJobs,
@@ -324,6 +420,9 @@ const useEmployee = () => {
     empJobsCount,
     attendences,
     attendenceCount,
+    leaveRequests,
+    setLeaveRequests,
+    leaveRqstCount,
     registerEmployee,
     updateEmployee,
     fetchAllEmployees,
@@ -332,8 +431,11 @@ const useEmployee = () => {
     fetchEmpAttendences,
     fetchEmpJobs,
     fetchEmpAttendence,
+    fetchLeaveRequests,
     addAttendenceRecords,
     addAttendenceRecordsDaily,
+    createLeaveRequests,
+    processLeaveRequest,
   };
 };
 
