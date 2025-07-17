@@ -195,6 +195,7 @@ export const WorkorderView = ({
                         <TableCell>Item</TableCell>
                         <TableCell>Quantity</TableCell>
                         <TableCell align="right">Unit Price</TableCell>
+                        <TableCell align="right">Discount</TableCell>
                         <TableCell align="right">Total Price</TableCell>
                       </TableRow>
                     </TableHead>
@@ -205,6 +206,9 @@ export const WorkorderView = ({
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
@@ -213,16 +217,19 @@ export const WorkorderView = ({
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow>
-                      <TableCell colSpan={3}>Notes</TableCell>
+                      <TableCell colSpan={4}>Notes</TableCell>
                       <TableCell align="right">{job.workOrderNotes}</TableCell>
                     </TableRow>
                     {(job.workOrderCustomChargers || []).map((customCharge, index) => (
                       <TableRow key={index}>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           {customCharge.chargeName}
                         </TableCell>
                         <TableCell align="right">
@@ -232,7 +239,7 @@ export const WorkorderView = ({
                     ))}
                     {job.workOrderServiceCharge > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Service Charge
                         </TableCell>
                         <TableCell align="right">
@@ -242,7 +249,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderOtherChargers > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Other Charges
                         </TableCell>
                         <TableCell align="right">
@@ -252,7 +259,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderDiscountPercentage > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Discount Percentage
                         </TableCell>
                         <TableCell align="right">{`${job.workOrderDiscountPercentage} %`}</TableCell>
@@ -260,7 +267,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderDiscountCash > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Cash Discount
                         </TableCell>
                         <TableCell align="right">
@@ -269,7 +276,7 @@ export const WorkorderView = ({
                       </TableRow>
                     )}
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Total Amount
                       </TableCell>
                       <TableCell align="right">
@@ -277,7 +284,7 @@ export const WorkorderView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Paid Amount
                       </TableCell>
                       <TableCell align="right">
@@ -285,7 +292,7 @@ export const WorkorderView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
