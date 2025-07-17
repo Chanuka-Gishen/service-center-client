@@ -41,6 +41,7 @@ export const BACKEND_API = {
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
   WO_CUSTOMER: IP_URL + '/workorder/auth/customer-jobs',
   WO_CUSTOMER_PAYMENT_STATUS: IP_URL + '/workorder/auth/customer-payment-stats',
+  WO_SEND_INVOICE_EMAIL: IP_URL + '/workorder/auth/invoice-email',
   WO_CHART_REVENUE: IP_URL + '/workorder/auth/stat-revenue-chart',
   WO_CHART_TOTAL_JOBS: IP_URL + '/workorder/auth/stat-total-jobs-chart',
   WO_TODAY_REVENUE: IP_URL + '/workorder/auth/today-revenue',

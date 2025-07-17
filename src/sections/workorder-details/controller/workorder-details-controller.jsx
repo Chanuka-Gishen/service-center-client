@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { WorkorderView } from '../view/workorder-details-view';
 import { useLocation } from 'react-router-dom';
+
+import { WorkorderView } from '../view/workorder-details-view';
 import useWorkOrder from 'src/hooks/useWorkorder';
 import usePayment from 'src/hooks/usePayment';
 
@@ -14,8 +15,10 @@ const WorkorderController = () => {
     isLoadingJob,
     isLoadingUpdateAssignee,
     isDownloading,
+    isLoadingMailInvoice,
     updateWorkorderAssignees,
     downloadInvoice,
+    sendInvoiceEmail,
   } = useWorkOrder();
   const {
     woPayments,
@@ -38,6 +41,8 @@ const WorkorderController = () => {
   const [isOpenProceedPayDlg, setIsOpenproceedPayDlg] = useState(false);
   const [isOpenRefundDlg, setIsOpenRefundDlg] = useState(false);
   const [isOpenDeletePayment, setIsOpenDeletePayment] = useState(false);
+  const [isOpenEmailConfirmation, setIsOpenEmailConfirmation] = useState(false);
+  const [isOpenEmailResendConfirmation, setIsOpenEmailResendConfirmation] = useState(false);
 
   const handleTogglePaymentDlg = () => {
     setIsOpenPaymentDlg(!isOpenPaymentDlg);
@@ -55,6 +60,14 @@ const WorkorderController = () => {
   const handleToggleDeletePaymentDlg = (id = null) => {
     setSelectedPayment(id);
     setIsOpenDeletePayment(!isOpenDeletePayment);
+  };
+
+  const handleToggleEmailConfirmation = () => {
+    setIsOpenEmailConfirmation(!isOpenEmailConfirmation);
+  };
+
+  const handleToggleEmailResendConfirmation = () => {
+    setIsOpenEmailResendConfirmation(!isOpenEmailResendConfirmation);
   };
 
   const handleAddPaymentRecord = async (values) => {
@@ -106,6 +119,27 @@ const WorkorderController = () => {
     }
   };
 
+  const handleSendEmailInvoice = async () => {
+    if (!job?._id) return;
+
+    const { isSuccess, resend } = await sendInvoiceEmail(job._id);
+
+    if (isSuccess) handleToggleEmailConfirmation();
+
+    if (resend) {
+      handleToggleEmailConfirmation();
+      handleToggleEmailResendConfirmation();
+    }
+  };
+
+  const handleResendEmailInvoice = async () => {
+    if (!job?._id) return;
+
+    const { isSuccess } = await sendInvoiceEmail(job._id, true);
+
+    if (isSuccess) handleToggleEmailResendConfirmation();
+  };
+
   const handelUpdateWorkorderAssignees = async (values) => {
     const isSuccess = await updateWorkorderAssignees(job._id, values);
 
@@ -143,20 +177,27 @@ const WorkorderController = () => {
       isLoadingUpdateAssignee={isLoadingUpdateAssignee}
       isLoadingPaymentComplete={isLoadingPaymentComplete}
       isLoadingRefund={isLoadingRefund}
+      isLoadingMailInvoice={isLoadingMailInvoice}
       isOpenPaymentDlg={isOpenPaymentDlg}
       isOpenProceedPayDlg={isOpenProceedPayDlg}
       isOpenRefundDlg={isOpenRefundDlg}
       isOpenDeletePayment={isOpenDeletePayment}
+      isOpenEmailConfirmation={isOpenEmailConfirmation}
+      isOpenEmailResendConfirmation={isOpenEmailResendConfirmation}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleTogglePaymentProceedDlg={handleTogglePaymentProceedDlg}
       handleToggleRefundDialog={handleToggleRefundDialog}
       handleToggleDeletePaymentDlg={handleToggleDeletePaymentDlg}
+      handleToggleEmailConfirmation={handleToggleEmailConfirmation}
+      handleToggleEmailResendConfirmation={handleToggleEmailResendConfirmation}
       handleAddPaymentRecord={handleAddPaymentRecord}
       handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       handleCompletePayment={handleCompletePayment}
       handleIssueRefund={handleIssueRefund}
       handleDeletePaymentRecord={handleDeletePaymentRecord}
       downloadInvoice={downloadInvoice}
+      handleSendEmailInvoice={handleSendEmailInvoice}
+      handleResendEmailInvoice={handleResendEmailInvoice}
     />
   );
 };

@@ -26,7 +26,7 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
-import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
+import { WO_STATUS_CLOSED, WO_STATUS_OPEN } from 'src/constants/workorderStatus';
 import { fDate, fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
@@ -56,20 +56,27 @@ export const WorkorderView = ({
   isLoadingUpdateAssignee,
   isLoadingPaymentComplete,
   isLoadingRefund,
+  isLoadingMailInvoice,
   isOpenPaymentDlg,
   isOpenProceedPayDlg,
   isOpenRefundDlg,
   isOpenDeletePayment,
+  isOpenEmailConfirmation,
+  isOpenEmailResendConfirmation,
   handleTogglePaymentDlg,
   handleTogglePaymentProceedDlg,
   handleToggleRefundDialog,
   handleToggleDeletePaymentDlg,
+  handleToggleEmailConfirmation,
+  handleToggleEmailResendConfirmation,
   handleAddPaymentRecord,
   handelUpdateWorkorderAssignees,
   handleCompletePayment,
   handleIssueRefund,
   handleDeletePaymentRecord,
   downloadInvoice,
+  handleSendEmailInvoice,
+  handleResendEmailInvoice,
 }) => {
   const { auth } = useAuthStore.getState();
   return (
@@ -92,7 +99,7 @@ export const WorkorderView = ({
         )}
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} direction={{ xs: 'column', md: 'row' }}>
               {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
                 job.workOrderPaymentStatus != PAY_STATUS_REFUNDED && (
                   <Button
@@ -130,6 +137,16 @@ export const WorkorderView = ({
                   onClick={() => downloadInvoice(job)}
                 >
                   Download Invoice
+                </Button>
+              )}
+              {job.workOrderStatus === WO_STATUS_CLOSED && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  disabled={isLoadingMailInvoice}
+                  onClick={handleToggleEmailConfirmation}
+                >
+                  Send Invoice Email
                 </Button>
               )}
             </Stack>
@@ -452,6 +469,28 @@ export const WorkorderView = ({
           }
           handleSubmit={handleDeletePaymentRecord}
           isLoading={isLoadingDeleteWoPay}
+        />
+      )}
+      {isOpenEmailConfirmation && (
+        <ConfirmationDialog
+          open={isOpenEmailConfirmation}
+          handleClose={handleToggleEmailConfirmation}
+          contentText={
+            'Are you sure that you want to send this customer workorder invoice via email? The email will be sent only if customer email is provided in the system'
+          }
+          handleSubmit={handleSendEmailInvoice}
+          isLoading={isLoadingMailInvoice}
+        />
+      )}
+      {isOpenEmailResendConfirmation && (
+        <ConfirmationDialog
+          open={isOpenEmailResendConfirmation}
+          handleClose={handleToggleEmailResendConfirmation}
+          contentText={
+            'The customer has already received the invoice through email. Are you sure that you want to resend invoice to the customer?'
+          }
+          handleSubmit={handleResendEmailInvoice}
+          isLoading={isLoadingMailInvoice}
         />
       )}
     </Container>
