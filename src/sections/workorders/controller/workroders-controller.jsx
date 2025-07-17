@@ -1,19 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useFormik } from 'formik';
 
 import { WorkordersView } from '../view/workorders-view';
 import useWorkOrder from 'src/hooks/useWorkorder';
 import useInventory from 'src/hooks/useInventory';
-import { WorkOrderUpdateSchema } from 'src/schema/update-workorder-schema';
-
-import commonUtil from 'src/utils/common-util';
-import { useSnackbar } from 'notistack';
-import { SNACKBAR_MESSAGE, SNACKBAR_VARIANT } from 'src/constants/snackbar-constants';
 import usePayment from 'src/hooks/usePayment';
-import { WO_TYPE_SERVICE } from 'src/constants/workorder-types';
 
 const WorkordersController = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const {
     workOrders,
     isLoading,
@@ -38,6 +30,7 @@ const WorkordersController = () => {
   const [selectedJob, setSelectedJob] = useState(null);
 
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+  const [isOpenSelectItemDlg, setIsOpenSelectItemDlg] = useState(false);
   const [isOpenCompleteDlg, setIsOpenCompleteDlg] = useState(false);
   const [isOpenClosedDlg, setIsOpenClosedDlg] = useState(false);
   const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
@@ -52,93 +45,7 @@ const WorkordersController = () => {
   //------------------
   const queryParams = { ...selectedFilters };
   //------------------
-
-  const formik = useFormik({
-    initialValues: {
-      workOrderMileage: 0,
-      workOrderType: WO_TYPE_SERVICE,
-      workOrderServiceItems: [],
-      workOrderCustomItems: [],
-      workOrderCustomChargers: [],
-      workOrderServiceCharge: 0,
-      workOrderOtherChargers: 0,
-      workOrderNotes: '',
-      workOrderDiscountPercentage: 0,
-      workOrderDiscountCash: 0,
-    },
-    validationSchema: WorkOrderUpdateSchema,
-    onSubmit: () => {
-      null;
-    },
-    enableReinitialize: true,
-  });
-
-  const handleAddNewInventoryRow = (data) => {
-    const itemExists = formik.values.workOrderServiceItems.find(
-      (item) => item.inventoryItem === data._id
-    );
-
-    if (itemExists) {
-      enqueueSnackbar(`Item already added to the invoice - ${itemExists.inventoryItemName}`, {variant: SNACKBAR_VARIANT.INFO});
-      return;
-    }
-
-    formik.setValues({
-      ...formik.values,
-      workOrderServiceItems: [
-        ...formik.values.workOrderServiceItems,
-        {
-          inventoryItem: data._id,
-          inventoryItemName: data.itemName,
-          quantity: 1,
-          exQuantity: 0,
-          unitPrice: data.itemSellingPrice,
-          totalPrice: 0,
-        },
-      ],
-    });
-  };
-
-  const handleDeleteInventoryItem = (index) => {
-    // Create copies of the current items array
-    const updatedChargers = [...formik.values.workOrderServiceItems];
-    const updatedErrors = formik.errors.workOrderServiceItems
-      ? [...formik.errors.workOrderServiceItems]
-      : [];
-    const updatedTouched = formik.touched.workOrderServiceItems
-      ? [...formik.touched.workOrderServiceItems]
-      : [];
-
-    // Remove the entry at the specified index from each array
-    updatedChargers.splice(index, 1);
-    if (updatedErrors.length > index) {
-      updatedErrors.splice(index, 1);
-    }
-    if (updatedTouched.length > index) {
-      updatedTouched.splice(index, 1);
-    }
-
-    // Update the form values with the modified arrays
-    formik.setValues({
-      ...formik.values,
-      workOrderServiceItems: updatedChargers,
-    });
-
-    // Update the errors and touched states
-    if (formik.errors.workOrderServiceItems) {
-      formik.setErrors({
-        ...formik.errors,
-        workOrderServiceItems: updatedErrors,
-      });
-    }
-
-    if (formik.touched.workOrderServiceItems) {
-      formik.setTouched({
-        ...formik.touched,
-        workOrderServiceItems: updatedTouched,
-      });
-    }
-  };
+  const [initialValues, setInitialValues] = useState({});
 
   const handleChangeSearch = (e) => {
     setSelectedFilters((prevFilters) => ({
@@ -150,10 +57,10 @@ const WorkordersController = () => {
   const handleToggleUpdateDialog = () => {
     if (selectedJob) {
       if (isOpenUpdate) {
-        formik.resetForm();
+        setInitialValues({});
       } else {
         fetchItemsForInvoiceSelection();
-        formik.setValues({
+        setInitialValues({
           _id: selectedJob._id,
           workOrderMileage: selectedJob.workOrderMileage,
           workOrderType: selectedJob.workOrderType,
@@ -169,6 +76,10 @@ const WorkordersController = () => {
       }
       setIsOpenUpdate(!isOpenUpdate);
     }
+  };
+
+  const handleToggleSelectItemDialog = () => {
+    setIsOpenSelectItemDlg(!isOpenSelectItemDlg);
   };
 
   const handleToggleCompleteDlg = () => {
@@ -235,20 +146,12 @@ const WorkordersController = () => {
     }
   };
 
-  const handleUpdateWorkOrder = async () => {
-    commonUtil.validateFormik(formik);
+  const handleUpdateWorkOrder = async (values) => {
+    const isSucess = await updateWorkOrder(values);
 
-    if (formik.isValid && formik.dirty) {
-      const isSucess = await updateWorkOrder(formik.values);
-
-      if (isSucess) {
-        handleToggleUpdateDialog();
-        await fetchActiveWorkOrders();
-        setSelectedJob(null);
-        setSelectedId(null);
-      }
-    } else {
-      enqueueSnackbar(SNACKBAR_MESSAGE.FILL_REQUIRED_FIELDS, { variant: SNACKBAR_VARIANT.ERROR });
+    if (isSucess) {
+      handleToggleUpdateDialog();
+      await handleFetchWorkOrder();
     }
   };
 
@@ -275,11 +178,10 @@ const WorkordersController = () => {
       selectItems={selectItems}
       selectedId={selectedId}
       selectedJob={selectedJob}
-      formik={formik}
-      handleAddNewInventoryRow={handleAddNewInventoryRow}
-      handleDeleteInventoryItem={handleDeleteInventoryItem}
+      initialValues={initialValues}
       selectedFilters={selectedFilters}
       isOpenUpdate={isOpenUpdate}
+      isOpenSelectItemDlg={isOpenSelectItemDlg}
       isOpenCompleteDlg={isOpenCompleteDlg}
       isOpenClosedDlg={isOpenClosedDlg}
       isOpenPaymentDlg={isOpenPaymentDlg}
@@ -295,14 +197,15 @@ const WorkordersController = () => {
       handleSelectJob={handleSelectJob}
       handleChangeSearch={handleChangeSearch}
       handleToggleUpdateDialog={handleToggleUpdateDialog}
+      handleToggleSelectItemDialog={handleToggleSelectItemDialog}
       handleToggleCompleteDlg={handleToggleCompleteDlg}
       handleToggleClosedDlg={handleToggleClosedDlg}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
       handleUdpateWorkOrderStatusComplete={handleUdpateWorkOrderStatusComplete}
       handleUpdateWorkOrderStatusClosed={handleUpdateWorkOrderStatusClosed}
       handleAddPaymentRecord={handleAddPaymentRecord}
-      handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       handleUpdateWorkOrder={handleUpdateWorkOrder}
+      handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       downloadInvoice={downloadInvoice}
     />
   );

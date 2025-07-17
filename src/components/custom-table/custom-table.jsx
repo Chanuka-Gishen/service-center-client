@@ -43,7 +43,9 @@ export const CustomTable = ({
           </TableHead>
           <TableBody>
             {isLoading && <TableLoadingRow colSpan={keys.length} />}
-            {!isLoading && dataLength === 0 && <TableEmptyRow colSpan={keys.length} />}
+            {!isLoading && dataLength === 0 && (
+              <TableEmptyRow colSpan={enableAction ? keys.length + 1 : keys.length} />
+            )}
             {!isLoading && dataLength > 0 && <>{tableBody}</>}
           </TableBody>
         </Table>
