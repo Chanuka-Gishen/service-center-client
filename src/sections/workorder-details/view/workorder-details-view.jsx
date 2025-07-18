@@ -139,7 +139,7 @@ export const WorkorderView = ({
                   Download Invoice
                 </Button>
               )}
-              {job.workOrderStatus === WO_STATUS_CLOSED && (
+              {/* {job.workOrderStatus === WO_STATUS_CLOSED && (
                 <Button
                   variant="contained"
                   size="large"
@@ -148,7 +148,7 @@ export const WorkorderView = ({
                 >
                   Send Invoice Email
                 </Button>
-              )}
+              )} */}
             </Stack>
           </Grid>
         )}
