@@ -26,7 +26,7 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
-import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
+import { WO_STATUS_CLOSED, WO_STATUS_OPEN } from 'src/constants/workorderStatus';
 import { fDate, fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { AddPaymentDialog } from 'src/sections/workorders/components/add-payment-dialog';
@@ -56,20 +56,27 @@ export const WorkorderView = ({
   isLoadingUpdateAssignee,
   isLoadingPaymentComplete,
   isLoadingRefund,
+  isLoadingMailInvoice,
   isOpenPaymentDlg,
   isOpenProceedPayDlg,
   isOpenRefundDlg,
   isOpenDeletePayment,
+  isOpenEmailConfirmation,
+  isOpenEmailResendConfirmation,
   handleTogglePaymentDlg,
   handleTogglePaymentProceedDlg,
   handleToggleRefundDialog,
   handleToggleDeletePaymentDlg,
+  handleToggleEmailConfirmation,
+  handleToggleEmailResendConfirmation,
   handleAddPaymentRecord,
   handelUpdateWorkorderAssignees,
   handleCompletePayment,
   handleIssueRefund,
   handleDeletePaymentRecord,
   downloadInvoice,
+  handleSendEmailInvoice,
+  handleResendEmailInvoice,
 }) => {
   const { auth } = useAuthStore.getState();
   return (
@@ -92,7 +99,7 @@ export const WorkorderView = ({
         )}
         {!isLoading && job && (
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} direction={{ xs: 'column', md: 'row' }}>
               {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
                 job.workOrderPaymentStatus != PAY_STATUS_REFUNDED && (
                   <Button
@@ -132,6 +139,16 @@ export const WorkorderView = ({
                   Download Invoice
                 </Button>
               )}
+              {/* {job.workOrderStatus === WO_STATUS_CLOSED && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  disabled={isLoadingMailInvoice}
+                  onClick={handleToggleEmailConfirmation}
+                >
+                  Send Invoice Email
+                </Button>
+              )} */}
             </Stack>
           </Grid>
         )}
@@ -195,6 +212,7 @@ export const WorkorderView = ({
                         <TableCell>Item</TableCell>
                         <TableCell>Quantity</TableCell>
                         <TableCell align="right">Unit Price</TableCell>
+                        <TableCell align="right">Discount</TableCell>
                         <TableCell align="right">Total Price</TableCell>
                       </TableRow>
                     </TableHead>
@@ -205,6 +223,9 @@ export const WorkorderView = ({
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
@@ -213,16 +234,19 @@ export const WorkorderView = ({
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow>
-                      <TableCell colSpan={3}>Notes</TableCell>
+                      <TableCell colSpan={4}>Notes</TableCell>
                       <TableCell align="right">{job.workOrderNotes}</TableCell>
                     </TableRow>
                     {(job.workOrderCustomChargers || []).map((customCharge, index) => (
                       <TableRow key={index}>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           {customCharge.chargeName}
                         </TableCell>
                         <TableCell align="right">
@@ -232,7 +256,7 @@ export const WorkorderView = ({
                     ))}
                     {job.workOrderServiceCharge > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Service Charge
                         </TableCell>
                         <TableCell align="right">
@@ -242,7 +266,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderOtherChargers > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Other Charges
                         </TableCell>
                         <TableCell align="right">
@@ -252,7 +276,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderDiscountPercentage > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Discount Percentage
                         </TableCell>
                         <TableCell align="right">{`${job.workOrderDiscountPercentage} %`}</TableCell>
@@ -260,7 +284,7 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderDiscountCash > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Cash Discount
                         </TableCell>
                         <TableCell align="right">
@@ -269,7 +293,7 @@ export const WorkorderView = ({
                       </TableRow>
                     )}
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Total Amount
                       </TableCell>
                       <TableCell align="right">
@@ -277,7 +301,7 @@ export const WorkorderView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Paid Amount
                       </TableCell>
                       <TableCell align="right">
@@ -285,7 +309,7 @@ export const WorkorderView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
@@ -445,6 +469,28 @@ export const WorkorderView = ({
           }
           handleSubmit={handleDeletePaymentRecord}
           isLoading={isLoadingDeleteWoPay}
+        />
+      )}
+      {isOpenEmailConfirmation && (
+        <ConfirmationDialog
+          open={isOpenEmailConfirmation}
+          handleClose={handleToggleEmailConfirmation}
+          contentText={
+            'Are you sure that you want to send this customer workorder invoice via email? The email will be sent only if customer email is provided in the system'
+          }
+          handleSubmit={handleSendEmailInvoice}
+          isLoading={isLoadingMailInvoice}
+        />
+      )}
+      {isOpenEmailResendConfirmation && (
+        <ConfirmationDialog
+          open={isOpenEmailResendConfirmation}
+          handleClose={handleToggleEmailResendConfirmation}
+          contentText={
+            'The customer has already received the invoice through email. Are you sure that you want to resend invoice to the customer?'
+          }
+          handleSubmit={handleResendEmailInvoice}
+          isLoading={isLoadingMailInvoice}
         />
       )}
     </Container>

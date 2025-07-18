@@ -16,6 +16,10 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
         unitPrice: Yup.number()
           .min(0, 'Unit price cannot be negative')
           .required('Unit price is required'),
+        cashDiscount: Yup.number()
+          .min(0, 'Cash discount cannot be negative')
+          .required('Cash discount is required')
+          .default(0),
         totalPrice: Yup.number()
           .min(0, 'Total price cannot be negative')
           .required('Total price is required'),
@@ -33,6 +37,10 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
         unitPrice: Yup.number()
           .min(0, 'Unit price cannot be negative')
           .required('Unit price is required'),
+        cashDiscount: Yup.number()
+          .min(0, 'Cash discount cannot be negative')
+          .required('Cash discount is required')
+          .default(0),
         totalPrice: Yup.number()
           .min(0, 'Total price cannot be negative')
           .required('Total price is required'),
@@ -45,7 +53,7 @@ export const WorkOrderUpdateSchema = Yup.object().shape({
       Yup.object().shape({
         chargeName: Yup.string().required('Custom charge name is required'),
         chargeAmount: Yup.number()
-          .min(0, 'Charge amount cannot be negative')
+          .min(0.1, 'Charge amount should be above 0')
           .required('Charge amount is required'),
       })
     )

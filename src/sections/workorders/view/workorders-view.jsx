@@ -67,11 +67,10 @@ export const WorkordersView = ({
   selectItems,
   selectedId,
   selectedJob,
-  formik,
-  handleAddNewInventoryRow,
-  handleDeleteInventoryItem,
+  initialValues,
   selectedFilters,
   isOpenUpdate,
+  isOpenSelectItemDlg,
   isOpenCompleteDlg,
   isOpenClosedDlg,
   isOpenPaymentDlg,
@@ -86,13 +85,14 @@ export const WorkordersView = ({
   isDownloading,
   handleSelectJob,
   handleToggleUpdateDialog,
+  handleToggleSelectItemDialog,
   handleToggleCompleteDlg,
   handleToggleClosedDlg,
   handleTogglePaymentDlg,
-  handleUpdateWorkOrder,
   downloadInvoice,
   handleUdpateWorkOrderStatusComplete,
   handleUpdateWorkOrderStatusClosed,
+  handleUpdateWorkOrder,
   handelUpdateWorkorderAssignees,
   handleAddPaymentRecord,
   handleChangeSearch,
@@ -196,6 +196,7 @@ export const WorkordersView = ({
                         <TableCell>Item</TableCell>
                         <TableCell>Quantity</TableCell>
                         <TableCell align="right">Unit Price</TableCell>
+                        <TableCell align="right">Discount</TableCell>
                         <TableCell align="right">Total Price</TableCell>
                       </TableRow>
                     </TableHead>
@@ -204,8 +205,11 @@ export const WorkordersView = ({
                     {selectedJob.workOrderServiceItems.map((customItem, index) => (
                       <TableRow key={index}>
                         <TableCell>{customItem.inventoryItemName}</TableCell>
-                        <TableCell>{customItem.quantity}</TableCell>
+                        <TableCell>{customItem.quantity + customItem.exQuantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
@@ -214,6 +218,9 @@ export const WorkordersView = ({
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
+                        <TableCell align="right">
+                          {formatCurrency(customItem.cashDiscount)}
+                        </TableCell>
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
@@ -223,7 +230,7 @@ export const WorkordersView = ({
                     </TableRow>
                     {(selectedJob.workOrderCustomChargers || []).map((customCharge, index) => (
                       <TableRow key={index}>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           {customCharge.chargeName}
                         </TableCell>
                         <TableCell align="right">
@@ -233,7 +240,7 @@ export const WorkordersView = ({
                     ))}
                     {selectedJob.workOrderServiceCharge > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Service Charge
                         </TableCell>
                         <TableCell align="right">
@@ -243,7 +250,7 @@ export const WorkordersView = ({
                     )}
                     {selectedJob.workOrderOtherChargers > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Other Charges
                         </TableCell>
                         <TableCell align="right">
@@ -253,7 +260,7 @@ export const WorkordersView = ({
                     )}
                     {selectedJob.workOrderDiscountPercentage > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Discount Percentage
                         </TableCell>
                         <TableCell align="right">{`${selectedJob.workOrderDiscountPercentage} %`}</TableCell>
@@ -261,7 +268,7 @@ export const WorkordersView = ({
                     )}
                     {selectedJob.workOrderDiscountCash > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Cash Discount
                         </TableCell>
                         <TableCell align="right">
@@ -271,7 +278,7 @@ export const WorkordersView = ({
                     )}
 
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Total Amount
                       </TableCell>
                       <TableCell align="right">
@@ -279,7 +286,7 @@ export const WorkordersView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Paid Amount
                       </TableCell>
                       <TableCell align="right">
@@ -287,7 +294,7 @@ export const WorkordersView = ({
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell align="right" colSpan={3}>
+                      <TableCell align="right" colSpan={4}>
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
@@ -370,14 +377,14 @@ export const WorkordersView = ({
           open={isOpenUpdate}
           inventoryItems={selectItems}
           filterValues={selectedFilters}
-          formik={formik}
-          handleAddNewInventoryRow={handleAddNewInventoryRow}
-          handleDeleteInventoryItem={handleDeleteInventoryItem}
+          initialValues={initialValues}
+          isOpenSelectItemDlg={isOpenSelectItemDlg}
           isLoading={isLoadingUpdate}
           isLoadingItems={isLoadingSelect}
           handleOpenClose={handleToggleUpdateDialog}
+          handleToggleSelectItemDialog={handleToggleSelectItemDialog}
           handleChangeSearch={handleChangeSearch}
-          handleConfirm={handleUpdateWorkOrder}
+          handleUpdateWorkOrder={handleUpdateWorkOrder}
         />
       )}
       {isOpenPaymentDlg && (

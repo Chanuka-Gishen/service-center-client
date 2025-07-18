@@ -33,6 +33,7 @@ const useWorkOrder = () => {
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isLoadingMailInvoice, setIsLoadingMailInvoice] = useState(false);
   const [isLoadingChartRevenueData, setIsLoadingChartRevenueData] = useState(false);
   const [isLoadingChartTotalJobs, setIsLoadingChartTotalJobs] = useState(false);
   const [isLoadingActiveJobsCount, setIsLoadingActiveJobsCount] = useState(false);
@@ -476,6 +477,49 @@ const useWorkOrder = () => {
       });
   };
 
+  // Send email invoice
+  const sendInvoiceEmail = async (id, isResend = false) => {
+    if (!id) return;
+
+    if (isLoadingMailInvoice) return;
+
+    let isSuccess = false;
+    let resend = false;
+
+    setIsLoadingMailInvoice(!isLoadingMailInvoice);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_SEND_INVOICE_EMAIL,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: {
+        id,
+        isResend,
+      },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch((error) => {
+        if (error.response.data.responseCode === 'RQST-003') {
+          resend = true;
+        }
+
+        setIsLoadingMailInvoice(false);
+      })
+      .finally(() => {
+        setIsLoadingMailInvoice(false);
+      });
+
+    return { isSuccess, resend };
+  };
+
   return {
     workOrders,
     jobs,
@@ -497,6 +541,7 @@ const useWorkOrder = () => {
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
+    isLoadingMailInvoice,
     isLoadingCustomerJobs,
     isLoadingCustomerPayStats,
     isLoadingChartRevenueData,
@@ -520,6 +565,7 @@ const useWorkOrder = () => {
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
     downloadInvoice,
+    sendInvoiceEmail,
   };
 };
 

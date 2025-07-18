@@ -41,6 +41,7 @@ export const BACKEND_API = {
   WO_UPDATE_CLOSED: IP_URL + '/workorder/auth/update-closed',
   WO_CUSTOMER: IP_URL + '/workorder/auth/customer-jobs',
   WO_CUSTOMER_PAYMENT_STATUS: IP_URL + '/workorder/auth/customer-payment-stats',
+  WO_SEND_INVOICE_EMAIL: IP_URL + '/workorder/auth/invoice-email',
   WO_CHART_REVENUE: IP_URL + '/workorder/auth/stat-revenue-chart',
   WO_CHART_TOTAL_JOBS: IP_URL + '/workorder/auth/stat-total-jobs-chart',
   WO_TODAY_REVENUE: IP_URL + '/workorder/auth/today-revenue',
@@ -74,6 +75,9 @@ export const BACKEND_API = {
   EMP_ATT_BATCH_ADD: IP_URL + '/employee/auth/add-emp-attendence-batch',
   EMP_ATT_ADD: IP_URL + '/employee/auth/add-emp-attendence',
   EMP_WORKORDERS: IP_URL + '/workorder/auth/emp-jobs',
+  EMP_LEAVE_RQSTS: IP_URL + '/employee/auth/leave-requests',
+  EMP_LEAVE_RQSTS_ADD: IP_URL + '/employee/auth/leave-request',
+  EMP_LEAVE_RQSTS_PROCESS: IP_URL + '/employee/supAuth/process-leave-request',
 
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',
