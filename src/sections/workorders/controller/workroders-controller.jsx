@@ -29,6 +29,8 @@ const WorkordersController = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  const [showExQuantity, setShowExQuantity] = useState(false);
+
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [isOpenSelectItemDlg, setIsOpenSelectItemDlg] = useState(false);
   const [isOpenCompleteDlg, setIsOpenCompleteDlg] = useState(false);
@@ -52,6 +54,10 @@ const WorkordersController = () => {
       ...prevFilters,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleToggleShowExQuantity = () => {
+    setShowExQuantity(!showExQuantity);
   };
 
   const handleToggleUpdateDialog = () => {
@@ -180,6 +186,7 @@ const WorkordersController = () => {
       selectedJob={selectedJob}
       initialValues={initialValues}
       selectedFilters={selectedFilters}
+      showExQuantity={showExQuantity}
       isOpenUpdate={isOpenUpdate}
       isOpenSelectItemDlg={isOpenSelectItemDlg}
       isOpenCompleteDlg={isOpenCompleteDlg}
@@ -196,6 +203,7 @@ const WorkordersController = () => {
       isDownloading={isDownloading}
       handleSelectJob={handleSelectJob}
       handleChangeSearch={handleChangeSearch}
+      handleToggleShowExQuantity={handleToggleShowExQuantity}
       handleToggleUpdateDialog={handleToggleUpdateDialog}
       handleToggleSelectItemDialog={handleToggleSelectItemDialog}
       handleToggleCompleteDlg={handleToggleCompleteDlg}
