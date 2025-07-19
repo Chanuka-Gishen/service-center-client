@@ -23,6 +23,8 @@ import Grid from '@mui/material/Grid2';
 import Slide from '@mui/material/Slide';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { ItemsSelectDialog } from './items-select-dialog';
 import { WO_TYPES } from 'src/constants/workorder-types';
@@ -42,9 +44,11 @@ export const WokrOrderUpdateDialog = ({
   inventoryItems,
   filterValues,
   initialValues,
+  showExQuantity,
   isLoading,
   isLoadingItems,
   handleOpenClose,
+  handleToggleShowExQuantity,
   handleToggleSelectItemDialog,
   handleChangeSearch,
   handleUpdateWorkOrder,
@@ -220,7 +224,7 @@ export const WokrOrderUpdateDialog = ({
                                 justifyContent="flex-start"
                                 alignItems="center"
                               >
-                                <Grid size={{ xs: 12, md: 3 }}>
+                                <Grid size={{ xs: 12, md: showExQuantity ? 3 : 4 }}>
                                   <Typography variant="subtitle1">
                                     {values.workOrderServiceItems[index].inventoryItemName}
                                   </Typography>
@@ -248,28 +252,32 @@ export const WokrOrderUpdateDialog = ({
                                     }
                                   />
                                 </Grid>
-                                <Grid size={{ xs: 12, md: 1 }}>
-                                  <TextField
-                                    label="Ex Qty"
-                                    name={'exQuantity'}
-                                    type="number"
-                                    fullWidth
-                                    autoComplete="off"
-                                    variant="outlined"
-                                    size="small"
-                                    {...getFieldProps(`workOrderServiceItems.${index}.exQuantity`)}
-                                    error={exQuantityError}
-                                    helperText={
-                                      (touched.workOrderServiceItems &&
-                                        touched.workOrderServiceItems[index] &&
-                                        touched.workOrderServiceItems[index].exQuantity &&
-                                        errors.workOrderServiceItems &&
-                                        errors.workOrderServiceItems[index] &&
-                                        errors.workOrderServiceItems[index].exQuantity) ||
-                                      ''
-                                    }
-                                  />
-                                </Grid>
+                                {showExQuantity && (
+                                  <Grid size={{ xs: 12, md: 1 }}>
+                                    <TextField
+                                      label="Ex Qty"
+                                      name={'exQuantity'}
+                                      type="number"
+                                      fullWidth
+                                      autoComplete="off"
+                                      variant="outlined"
+                                      size="small"
+                                      {...getFieldProps(
+                                        `workOrderServiceItems.${index}.exQuantity`
+                                      )}
+                                      error={exQuantityError}
+                                      helperText={
+                                        (touched.workOrderServiceItems &&
+                                          touched.workOrderServiceItems[index] &&
+                                          touched.workOrderServiceItems[index].exQuantity &&
+                                          errors.workOrderServiceItems &&
+                                          errors.workOrderServiceItems[index] &&
+                                          errors.workOrderServiceItems[index].exQuantity) ||
+                                        ''
+                                      }
+                                    />
+                                  </Grid>
+                                )}
                                 <Grid size={{ xs: 12, md: 2 }}>
                                   <TextField
                                     label="Item Unit Price"
@@ -301,6 +309,7 @@ export const WokrOrderUpdateDialog = ({
                                     required
                                     autoComplete="off"
                                     variant="outlined"
+                                    size="small"
                                     {...getFieldProps(
                                       `workOrderServiceItems.${index}.cashDiscount`
                                     )}
@@ -332,9 +341,14 @@ export const WokrOrderUpdateDialog = ({
                                   />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 12, lg: 1 }}>
-                                  <IconButton onClick={() => remove(index)}>
-                                    <RemoveCircleIcon />
-                                  </IconButton>
+                                  <Stack direction="row" alignItems="center" spacing={2}>
+                                    <IconButton onClick={() => remove(index)}>
+                                      <RemoveCircleIcon />
+                                    </IconButton>
+                                    <IconButton onClick={handleToggleShowExQuantity}>
+                                      {!showExQuantity ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                    </IconButton>
+                                  </Stack>
                                 </Grid>
                               </Grid>
                             );
@@ -472,6 +486,7 @@ export const WokrOrderUpdateDialog = ({
                                   required
                                   autoComplete="off"
                                   variant="outlined"
+                                  size="small"
                                   {...getFieldProps(`workOrderCustomItems.${index}.cashDiscount`)}
                                   error={cashDiscountError}
                                   helperText={

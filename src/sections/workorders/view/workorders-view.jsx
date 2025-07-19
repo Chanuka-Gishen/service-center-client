@@ -69,6 +69,7 @@ export const WorkordersView = ({
   selectedJob,
   initialValues,
   selectedFilters,
+  showExQuantity,
   isOpenUpdate,
   isOpenSelectItemDlg,
   isOpenCompleteDlg,
@@ -84,6 +85,7 @@ export const WorkordersView = ({
   isLoadingCreate,
   isDownloading,
   handleSelectJob,
+  handleToggleShowExQuantity,
   handleToggleUpdateDialog,
   handleToggleSelectItemDialog,
   handleToggleCompleteDlg,
@@ -378,9 +380,11 @@ export const WorkordersView = ({
           inventoryItems={selectItems}
           filterValues={selectedFilters}
           initialValues={initialValues}
+          showExQuantity={showExQuantity}
           isOpenSelectItemDlg={isOpenSelectItemDlg}
           isLoading={isLoadingUpdate}
           isLoadingItems={isLoadingSelect}
+          handleToggleShowExQuantity={handleToggleShowExQuantity}
           handleOpenClose={handleToggleUpdateDialog}
           handleToggleSelectItemDialog={handleToggleSelectItemDialog}
           handleChangeSearch={handleChangeSearch}
