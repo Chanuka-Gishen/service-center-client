@@ -4,6 +4,8 @@ import useUser from 'src/hooks/useUser';
 import usePagination from 'src/hooks/usePagination';
 import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
+import { useRouter } from 'src/routes/hooks';
+import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 
 const tableHeaders = ['User Fullname', 'User Role', 'Email', 'Status'];
 const actTableHeaders = [
@@ -16,7 +18,8 @@ const actTableHeaders = [
 ];
 
 const usersController = () => {
-  const { auth } = useAuthStore();
+  const router = useRouter();
+  const { auth, logoutUser } = useAuthStore.getState();
 
   const {
     users,
@@ -27,10 +30,12 @@ const usersController = () => {
     isLoadingAdd,
     isLoadingUpdate,
     isLoadingActivities,
+    isLoadingPwdChange,
     fetchUsers,
     registerUser,
     updateUser,
     fetchAdminActivities,
+    changePasswordController,
   } = useUser();
 
   const pagination = usePagination();
@@ -39,6 +44,7 @@ const usersController = () => {
   const [initialValues, setInitialValues] = useState({});
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isSelectedCurrentUser, setIsSelectedCurrentUser] = useState(false);
 
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -68,11 +74,17 @@ const usersController = () => {
       setInitialValues({});
       setSelectedUser(null);
     } else {
+      if (auth.user.id === values._id) {
+        setIsSelectedCurrentUser(true);
+      } else {
+        setIsSelectedCurrentUser(false);
+      }
       setInitialValues({
         userFirstName: values.userFirstName,
         userLastName: values.userLastName,
         userEmail: values.userEmail,
         userIsActive: values.userIsActive,
+        isUserFirstLogin: values.isUserFirstLogin,
       });
       setSelectedUser(values);
     }
@@ -109,6 +121,15 @@ const usersController = () => {
     await fetchAdminActivities(actQuery);
   };
 
+  const handlePasswordChange = async (values) => {
+    const isSuccess = await changePasswordController(values);
+
+    if (isSuccess) {
+      logoutUser();
+      router.push(NAVIGATION_ROUTES.login);
+    }
+  };
+
   useEffect(() => {
     const params = {
       page: pagination.page,
@@ -139,17 +160,20 @@ const usersController = () => {
       actPagination={actPagination}
       initialValues={initialValues}
       selectedRow={selectedRow}
+      isSelectedCurrentUser={isSelectedCurrentUser}
       isLoading={isLoading}
       isOpenAdd={isOpenAdd}
       isOpenUpdate={isOpenUpdate}
       isLoadingAdd={isLoadingAdd}
       isLoadingUpdate={isLoadingUpdate}
       isLoadingActivities={isLoadingActivities}
+      isLoadingPwdChange={isLoadingPwdChange}
       handleSelectUser={handleSelectUser}
       handleToggleAddDialog={handleToggleAddDialog}
       handleToggleUpdateDialog={handleToggleUpdateDialog}
       handleRegisterUser={handleRegisterUser}
       handleUpdateUser={handleUpdateUser}
+      handlePasswordChange={handlePasswordChange}
     />
   );
 };

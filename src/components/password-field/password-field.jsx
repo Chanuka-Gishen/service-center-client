@@ -17,14 +17,16 @@ export const PasswordField = ({ label, error, helperText, ...props }) => {
     <TextField
       label={label}
       type={showPassword ? 'text' : 'password'}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton onClick={handleShowPassword} edge="end">
-              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon/>}
-            </IconButton>
-          </InputAdornment>
-        ),
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleShowPassword} edge="end">
+                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        },
       }}
       {...props}
       error={error}
@@ -36,5 +38,5 @@ export const PasswordField = ({ label, error, helperText, ...props }) => {
 PasswordField.propTypes = {
   label: PropTypes.string.isRequired,
   error: PropTypes.bool,
-  helperText: PropTypes.any.isRequired,
+  helperText: PropTypes.any,
 };

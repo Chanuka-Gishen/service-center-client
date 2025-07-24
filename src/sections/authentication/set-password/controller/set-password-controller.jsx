@@ -1,79 +1,43 @@
-import React, { useState } from 'react';
-import { useFormik } from 'formik';
+import React, { useEffect } from 'react';
 
-import * as Yup from 'yup';
 import { SetPasswordView } from '../view/set-password-view';
-import axios from 'axios';
 import { useRouter } from 'src/routes/hooks';
-import { useSnackbar } from 'notistack';
-import { SNACKBAR_MESSAGE, SNACKBAR_VARIANT } from 'src/constants/snackbar-constants';
-import { backendAuthApi } from 'src/axios/instance/backend-axios-instance';
-import { BACKEND_API } from 'src/axios/constant/backend-api';
-import responseUtil from 'src/utils/responseUtil';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
+import useAuthStore from 'src/store/auth-store';
+import useAuth from 'src/hooks/use-auth';
 
 //-------------------------------------------------------
 
-const validationSchema = Yup.object().shape({
-  userPassword: Yup.string().required('Password is required'),
-  userConfirmPassword: Yup.string()
-    .oneOf([Yup.ref('userPassword'), null], 'Passwords must match')
-    .required('Confirm Password is required'),
-});
-
 const SetPasswordController = () => {
   const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
 
-  const canceltToken = axios.CancelToken.source();
+  const { isLoadingPwdReset, resetPasswordController } = useAuth();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { auth, loginUser } = useAuthStore.getState();
 
-  const formik = useFormik({
-    initialValues: {
-      userPassword: '',
-      userConfirmPassword: '',
-    },
-    validationSchema,
-    onSubmit: () => {
-      null;
-    },
-  });
+  const handleConfirm = async (values) => {
+    const data = {
+      id: auth.user.id,
+      ...values,
+    };
+    const user = await resetPasswordController(data);
 
-  const handleSubmit = async () => {
-    if (formik.dirty && formik.isValid) {
-      setIsLoading(true);
-
-      await backendAuthApi({
-        url: BACKEND_API.SET_PASSWORD,
-        method: 'PUT',
-        cancelToken: canceltToken.token,
-        data: formik.values,
-      })
-        .then((res) => {
-          const data = res.data;
-
-          if (responseUtil.isResponseSuccess(data.responseCode)) {
-            // Update login status - TODO
-            router.push(NAVIGATION_ROUTES.dashboard.base);
-          } else {
-            enqueueSnackbar(data.responseMessage, {
-              variant: responseUtil.findResponseType(data.responseCode),
-            });
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      enqueueSnackbar(SNACKBAR_MESSAGE.FILL_REQUIRED_FIELDS, { variant: SNACKBAR_VARIANT.WARNING });
+    if (user) {
+      loginUser(user);
+      router.push(NAVIGATION_ROUTES.dashboard.base);
     }
   };
 
-  return <SetPasswordView formik={formik} isLoading={isLoading} handleSubmit={handleSubmit} />;
+  useEffect(() => {
+    if (!router) return;
+    if (!auth.user.id && !auth.user.isUserFirstLogin) {
+      router.replace(NAVIGATION_ROUTES.login);
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth.user?.id, auth.user?.isUserFirstLogin, router]);
+
+  return <SetPasswordView isLoading={isLoadingPwdReset} handleConfirm={handleConfirm} />;
 };
 
 export default SetPasswordController;

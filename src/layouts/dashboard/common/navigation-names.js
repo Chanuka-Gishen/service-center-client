@@ -9,5 +9,5 @@ export const NAVBAR_ITEMS = {
   ACCOUNTS_REPORTS: 'reports',
   EMPLOYEES: 'employees',
   EMP_ATTENDENCE: 'emp-attendence',
-  USERS: 'users'
+  USERS: 'administration'
 };

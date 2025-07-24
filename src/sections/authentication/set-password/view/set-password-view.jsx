@@ -5,7 +5,7 @@ import { Box, Card, Stack, Typography, alpha, useTheme } from '@mui/material';
 import { bgGradient } from 'src/theme/css';
 import { SetPasswordForm } from '../component/set-password-form';
 
-export const SetPasswordView = ({ formik, isLoading, handleSubmit }) => {
+export const SetPasswordView = ({ isLoading, handleConfirm }) => {
   const theme = useTheme();
   return (
     <Box
@@ -37,7 +37,7 @@ export const SetPasswordView = ({ formik, isLoading, handleSubmit }) => {
             Change your password to continue
           </Typography>
 
-          <SetPasswordForm formik={formik} isLoading={isLoading} handleSubmit={handleSubmit} />
+          <SetPasswordForm isLoading={isLoading} handleConfirm={handleConfirm} />
         </Card>
       </Stack>
     </Box>
@@ -45,7 +45,6 @@ export const SetPasswordView = ({ formik, isLoading, handleSubmit }) => {
 };
 
 SetPasswordForm.propTypes = {
-  formik: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  handleConfirm: PropTypes.func.isRequired,
 };

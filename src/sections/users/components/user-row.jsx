@@ -1,8 +1,10 @@
 import { Chip, IconButton, TableCell, TableRow } from '@mui/material';
 
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import useAuthStore from 'src/store/auth-store';
 
 export const UserRow = ({ data, onClick, onEdit }) => {
+  const { auth } = useAuthStore();
   return (
     <>
       {data.map((item, index) => (

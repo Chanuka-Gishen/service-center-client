@@ -11,4 +11,5 @@ export const updateUserSchema = Yup.object().shape({
     .trim(),
   userEmail: Yup.string().email('Invalid email format').required('User email is required'),
   userIsActive: Yup.boolean().default(true).typeError('Active status must be true or false'),
+  isUserFirstLogin: Yup.boolean().typeError('Reset password approval must be true or false'),
 });
