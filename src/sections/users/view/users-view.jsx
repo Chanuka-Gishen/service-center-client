@@ -42,7 +42,7 @@ export const UsersView = ({
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 9 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography variant="h5">Manage Admins</Typography>
@@ -82,8 +82,19 @@ export const UsersView = ({
             </Card>
           </Box>
         </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Stack spacing={3}>
+            <Typography variant="h5">Change Password</Typography>
+            <Card sx={{ p: '10px' }}>
+              <ChangePasswordForm
+                isLoading={isLoadingPwdChange}
+                handleConfirm={handlePasswordChange}
+              />
+            </Card>
+          </Stack>
+        </Grid>
         {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={12}>
             <Stack spacing={2}>
               <Typography variant="h5" textAlign="center">
                 Admin Login Activity
@@ -115,17 +126,6 @@ export const UsersView = ({
             </Stack>
           </Grid>
         )}
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Stack spacing={2}>
-            <Typography variant="h5">Change Password</Typography>
-            <Card sx={{ p: '10px' }}>
-              <ChangePasswordForm
-                isLoading={isLoadingPwdChange}
-                handleConfirm={handlePasswordChange}
-              />
-            </Card>
-          </Stack>
-        </Grid>
       </Grid>
       {isOpenAdd && (
         <RegisterUserDialog
