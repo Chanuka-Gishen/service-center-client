@@ -1,22 +1,16 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
-import { Formik } from 'formik';
 import { Button, Stack } from '@mui/material';
-
+import { Formik } from 'formik';
 import { PasswordField } from 'src/components/password-field/password-field';
 import resetPasswordSchema from 'src/schema/reset-password-schema';
 
-export const SetPasswordForm = ({ isLoading, handleConfirm }) => {
+export const ChangePasswordForm = ({ isLoading, handleConfirm }) => {
   return (
     <Formik
-      initialValues={{
-        password: '',
-        confirmPassword: '',
-      }}
+      initialValues={{ password: '', confirmPassword: '' }}
       validationSchema={resetPasswordSchema}
-      onSubmit={(values) => {
-        handleConfirm(values);
+      onSubmit={async (values, { resetForm }) => {
+        await handleConfirm(values);
+        resetForm();
       }}
     >
       {({ errors, touched, handleSubmit, getFieldProps }) => (
@@ -46,17 +40,10 @@ export const SetPasswordForm = ({ isLoading, handleConfirm }) => {
             loading={isLoading}
             disabled={isLoading}
           >
-            Login
+            Submit
           </Button>
         </form>
       )}
     </Formik>
   );
 };
-
-SetPasswordForm.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  handleConfirm: PropTypes.func.isRequired,
-};
-
-export default SetPasswordForm;

@@ -6,10 +6,12 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   InputLabel,
   MenuItem,
   Select,
+  Switch,
   TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -26,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export const UpdateUserDialog = ({
   open,
   initialValues,
+  isSelectedCurrentUser,
   isLoading,
   handleOpenClose,
   handleConfirm,
@@ -58,10 +61,11 @@ export const UpdateUserDialog = ({
           handleBlur,
           handleSubmit,
           getFieldProps,
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent>
-              <Grid container spacing={2} sx={{ mt: 2 }}>
+              <Grid container spacing={2} sx={{ mt: 2 }} alignItems="center">
                 <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
                   <TextField
                     label="First Name"
@@ -101,31 +105,65 @@ export const UpdateUserDialog = ({
                     helperText={touched.userEmail && errors.userEmail}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <FormControl
-                    fullWidth
-                    required
-                    error={Boolean(touched.userIsActive && errors.userIsActive)}
-                  >
-                    <InputLabel id="select-label">Active Status</InputLabel>
-                    <Select
-                      labelId="select-label"
-                      id="simple-select"
-                      label="Active Status"
-                      name="userIsActive"
-                      required
-                      value={values.userIsActive}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      <MenuItem value={true}>Active</MenuItem>
-                      <MenuItem value={false}>Disabled</MenuItem>
-                    </Select>
-                    <FormHelperText error={Boolean(touched.userIsActive && errors.userIsActive)}>
-                      {touched.userIsActive && errors.userIsActive}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
+
+                {!isSelectedCurrentUser && (
+                  <>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <FormControl
+                        fullWidth
+                        required
+                        error={Boolean(touched.userIsActive && errors.userIsActive)}
+                      >
+                        <InputLabel id="select-label">Active Status</InputLabel>
+                        <Select
+                          labelId="select-label"
+                          id="simple-select"
+                          label="Active Status"
+                          name="userIsActive"
+                          required
+                          value={values.userIsActive}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        >
+                          <MenuItem value={true}>Active</MenuItem>
+                          <MenuItem value={false}>Disabled</MenuItem>
+                        </Select>
+                        <FormHelperText
+                          error={Boolean(touched.userIsActive && errors.userIsActive)}
+                        >
+                          {touched.userIsActive && errors.userIsActive}
+                        </FormHelperText>
+                      </FormControl>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <FormControl
+                        fullWidth
+                        required
+                        component="fieldset"
+                        variant="standard"
+                        error={Boolean(touched.isUserFirstLogin && errors.isUserFirstLogin)}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={values.isUserFirstLogin}
+                              onChange={(e) => {
+                                setFieldValue('isUserFirstLogin', e.target.checked);
+                              }}
+                            />
+                          }
+                          label="Approve Reset Password"
+                        />
+
+                        <FormHelperText
+                          error={Boolean(touched.isUserFirstLogin && errors.isUserFirstLogin)}
+                        >
+                          {touched.isUserFirstLogin && errors.isUserFirstLogin}
+                        </FormHelperText>
+                      </FormControl>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </DialogContent>
             <DialogActions>

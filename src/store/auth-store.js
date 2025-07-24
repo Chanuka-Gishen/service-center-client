@@ -31,6 +31,20 @@ const useAuthStore = create(
             },
           },
         })),
+      saveUserData: (payload) =>
+        set((state) => ({
+          auth: {
+            isLoggedIn: false,
+            user: {
+              id: payload._id,
+              token: null,
+              name: '',
+              userEmail: '',
+              userRole: '',
+              isUserFirstLogin: true,
+            },
+          },
+        })),
       logoutUser: () =>
         set(() => ({
           auth: {

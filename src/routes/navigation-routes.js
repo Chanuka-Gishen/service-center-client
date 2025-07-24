@@ -1,9 +1,7 @@
-import { Details } from '@mui/icons-material';
-
 export const NAVIGATION_ROUTES = {
   // authentication routes
-  login: 'login',
-  set_password: 'setPassword',
+  login: '/login',
+  set_password: '/setPassword',
   register: 'register',
 
   // not found

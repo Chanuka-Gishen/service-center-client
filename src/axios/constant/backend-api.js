@@ -11,6 +11,9 @@ export const BACKEND_API = {
   USERS: IP_URL + '/user/auth/all',
   USER_UPDATE: IP_URL + '/user/supAuth/update',
   USER_ACTIVITIES: IP_URL + '/user/supAuth/get-activities',
+  USER_EMAIL_VALIDATE: IP_URL + '/user/noAuth/verify-email',
+  USER_RESET_PWD: IP_URL + '/user/noAuth/reset-pwd',
+  USER_CHANGE_PWD: IP_URL + '/user/auth/change-pwd',
 
   CUSTOMERS: IP_URL + '/customer/auth/customers',
   CUSTOMER: IP_URL + '/customer/auth/customer',

@@ -88,7 +88,7 @@ const navConfig = [
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
   },
   {
-    title: 'Users',
+    title: 'Administration',
     name: NAVBAR_ITEMS.USERS,
     path: 'users',
     icon: <AdminPanelSettingsIcon />,

@@ -10,6 +10,7 @@ import { UpdateUserDialog } from '../components/update-user-dialog';
 import { ActivitiesRow } from '../components/activities-row';
 import useAuthStore from 'src/store/auth-store';
 import { USER_ROLE } from 'src/constants/user-role';
+import { ChangePasswordForm } from '../components/change-password-form';
 
 export const UsersView = ({
   tableKeys,
@@ -22,10 +23,12 @@ export const UsersView = ({
   actPagination,
   initialValues,
   selectedRow,
+  isSelectedCurrentUser,
   isLoading,
   isLoadingAdd,
   isLoadingUpdate,
   isLoadingActivities,
+  isLoadingPwdChange,
   isOpenAdd,
   isOpenUpdate,
   handleSelectUser,
@@ -33,6 +36,7 @@ export const UsersView = ({
   handleToggleUpdateDialog,
   handleRegisterUser,
   handleUpdateUser,
+  handlePasswordChange,
 }) => {
   const { auth } = useAuthStore();
   return (
@@ -111,6 +115,17 @@ export const UsersView = ({
             </Stack>
           </Grid>
         )}
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Stack spacing={2}>
+            <Typography variant="h5">Change Password</Typography>
+            <Card sx={{ p: '10px' }}>
+              <ChangePasswordForm
+                isLoading={isLoadingPwdChange}
+                handleConfirm={handlePasswordChange}
+              />
+            </Card>
+          </Stack>
+        </Grid>
       </Grid>
       {isOpenAdd && (
         <RegisterUserDialog
@@ -124,6 +139,7 @@ export const UsersView = ({
         <UpdateUserDialog
           open={isOpenUpdate}
           initialValues={initialValues}
+          isSelectedCurrentUser={isSelectedCurrentUser}
           handleOpenClose={handleToggleUpdateDialog}
           isLoading={isLoadingUpdate}
           handleConfirm={handleUpdateUser}

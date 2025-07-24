@@ -18,6 +18,7 @@ const useUser = () => {
   const [isLoadingAdd, setIsLoadingAdd] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isLoadingActivities, setIsLoadingActivities] = useState(false);
+  const [isLoadingPwdChange, setIsLoadingPasswordChange] = useState(false);
 
   // Fetch all users
   const fetchUsers = async (params) => {
@@ -108,6 +109,36 @@ const useUser = () => {
     return isSuccess;
   };
 
+  // Change current admin password
+  const changePasswordController = async (data) => {
+    let isSuccess = false;
+    setIsLoadingPasswordChange(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.USER_CHANGE_PWD,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+
+        enqueueSnackbar(res.data.responseMessage, {
+          variant: responseUtil.findResponseType(res.data.responseCode),
+        });
+      })
+      .catch(() => {
+        setIsLoadingPasswordChange(false);
+      })
+      .finally(() => {
+        setIsLoadingPasswordChange(false);
+      });
+
+    return isSuccess;
+  };
+
   // Admin activities - Login
   const fetchAdminActivities = async (params) => {
     setIsLoadingActivities(true);
@@ -141,10 +172,12 @@ const useUser = () => {
     isLoadingAdd,
     isLoadingUpdate,
     isLoadingActivities,
+    isLoadingPwdChange,
     fetchUsers,
     registerUser,
     updateUser,
     fetchAdminActivities,
+    changePasswordController,
   };
 };
 
