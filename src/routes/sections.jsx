@@ -28,6 +28,7 @@ export const EmployeePage = lazy(() => import('src/pages/employee'));
 export const EmpAttendencePage = lazy(() => import('src/pages/emp-attendence'));
 export const UsersPage = lazy(() => import('src/pages/users'));
 export const GrnInfoPage = lazy(() => import('src/pages/grn-info'));
+export const NotificationsPage = lazy(() => import('src/pages/notifications'));
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +77,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.suppliers.base, element: <SuppliersPage /> },
         { path: NAVIGATION_ROUTES.suppliers.details.base, element: <SupplierInfoPage /> },
         { path: NAVIGATION_ROUTES.suppliers.details.info.base, element: <GrnInfoPage /> },
+        { path: NAVIGATION_ROUTES.notifications.base, element: <NotificationsPage /> },
         { path: NAVIGATION_ROUTES.accounts.base, element: <AccountsPage /> },
         { path: NAVIGATION_ROUTES.accounts_reports.base, element: <AccountsReportsPage /> },
         { path: NAVIGATION_ROUTES.employees.base, element: <EmployeesPage /> },

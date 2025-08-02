@@ -46,6 +46,8 @@ import { VehicleFormDialog } from '../components/vehicle-form-dialog';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { CustomerJobRow } from '../components/customer-job-row';
 import StatCard from 'src/components/stat-card';
+import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
+import { NotificationsRow } from '../components/notifications-row';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -89,19 +91,23 @@ const StyledMenu = styled((props) => (
 
 export const CustomerDetailsView = ({
   tableColumns,
+  notificationTableColumns,
   data,
   customerJobs,
   customerJobsCount,
+  customerSmsLogs,
+  customerSmsLogsCount,
   customerPaymentStats,
   selectedVehicle,
   customerInitialValues,
   vehicleInitialValues,
-  limit,
-  page,
+  workorderPagination,
+  notificationsPagination,
   isOpenCreate,
   isOpenUpdateCustomer,
   isOpenAddVehicle,
   isOpenUpdateVehicle,
+  isOpenSendRemainder,
   isLoading,
   isLoadingCustomerJobs,
   isLoadingCustomerPayStats,
@@ -109,26 +115,28 @@ export const CustomerDetailsView = ({
   isLoadingUpdate,
   isLoadingUpdateVehicle,
   isLoadingAddVehicle,
+  isLoadingSendPaymentRemainder,
+  isLoadingCustomerSmsLogs,
   handleToggleWorkOrderCreateDialog,
   handleToggleUpdateCustomerDialog,
   handleToggleAddVehicleDialog,
   handleToggleUpdateVehicleDialog,
+  handleToggleSendRemainderDialog,
   handleCreateWorkOrder,
   handleUpdateCustomer,
   handleAddVehicle,
   handleUpdateVehicle,
+  handleSendInvoiceRemainder,
   optionsAnchorEl,
   isOpenOptions,
   handleClickOptions,
   handleCloseOptions,
-  handleChangePage,
-  handleChangeRowsPerPage,
 }) => {
   const { auth } = useAuthStore.getState();
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <Grid container rowSpacing={4} columnSpacing={2}>
-        <Grid size={{ xs: 12, sm: 6, md: 8, lg: 8 }}>
+        <Grid size={{ xs: 12, sm: 4, md: 6 }}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href={NAVIGATION_ROUTES.customers.base}>
               Customers
@@ -146,6 +154,14 @@ export const CustomerDetailsView = ({
           </Grid>
         )}
 
+        {auth.user.userRole === USER_ROLE.SUPER_ADMIN && (
+          <Grid size={{ xs: 6, sm: 3, md: 2, lg: 2 }}>
+            <Button fullWidth variant="contained" onClick={handleToggleSendRemainderDialog}>
+              Invoice Remainder
+            </Button>
+          </Grid>
+        )}
+
         <Grid size={{ xs: 6, sm: 3, md: 2, lg: 2 }}>
           <Button fullWidth variant="contained" onClick={handleToggleAddVehicleDialog}>
             Add Vehicle
@@ -153,7 +169,7 @@ export const CustomerDetailsView = ({
         </Grid>
         <Grid size={12}>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, xl: 3 }}>
               <StatCard
                 title="Revenue Generated"
                 isLoading={isLoadingCustomerPayStats}
@@ -161,7 +177,7 @@ export const CustomerDetailsView = ({
                 icon={<AttachMoneyIcon color="success" fontSize="large" />}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, xl: 3 }}>
               <StatCard
                 title="Receivables"
                 isLoading={isLoadingCustomerPayStats}
@@ -173,7 +189,7 @@ export const CustomerDetailsView = ({
         </Grid>
         {data != null && (
           <>
-            <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+            <Grid size={{ xs: 12, sm: 12, md: 6, lg: 5 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
                 <Typography variant="h5">Customer Details</Typography>
                 <TableContainer>
@@ -208,7 +224,7 @@ export const CustomerDetailsView = ({
                 </TableContainer>
               </Box>
             </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+            <Grid size={{ xs: 12, sm: 12, md: 6, lg: 3 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
                 <Typography variant="h5">Customer Vehicles</Typography>
 
@@ -271,6 +287,27 @@ export const CustomerDetailsView = ({
             </Grid>
           </>
         )}
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
+            <Typography variant="h5">Notifications/Remainders</Typography>
+            <Card>
+              <Paper elevation={0}>
+                <CustomTable
+                  keys={notificationTableColumns}
+                  dataLength={customerSmsLogs.length}
+                  isLoading={isLoadingCustomerSmsLogs}
+                  documentCount={customerSmsLogsCount}
+                  page={notificationsPagination.page}
+                  limit={notificationsPagination.limit}
+                  handleChangePage={notificationsPagination.handleChangePage}
+                  handleChangeRowsPerPage={notificationsPagination.handleChangeRowsPerPage}
+                  tableBody={<NotificationsRow data={customerSmsLogs} />}
+                  enableAction={true}
+                />
+              </Paper>
+            </Card>
+          </Box>
+        </Grid>
         <Grid size={12}>
           <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
             <Typography variant="h5">Customer Workorder history</Typography>
@@ -281,10 +318,10 @@ export const CustomerDetailsView = ({
                   dataLength={customerJobs.length}
                   isLoading={isLoadingCustomerJobs}
                   documentCount={customerJobsCount}
-                  page={page}
-                  limit={limit}
-                  handleChangePage={handleChangePage}
-                  handleChangeRowsPerPage={handleChangeRowsPerPage}
+                  page={workorderPagination.page}
+                  limit={workorderPagination.limit}
+                  handleChangePage={workorderPagination.handleChangePage}
+                  handleChangeRowsPerPage={workorderPagination.handleChangeRowsPerPage}
                   tableBody={<CustomerJobRow data={customerJobs} />}
                 />
               </Paper>
@@ -328,6 +365,17 @@ export const CustomerDetailsView = ({
           handleOpenClose={handleToggleUpdateVehicleDialog}
           isLoading={isLoadingUpdateVehicle}
           handleConfirm={handleUpdateVehicle}
+        />
+      )}
+      {isOpenSendRemainder && (
+        <ConfirmationDialog
+          open={isOpenSendRemainder}
+          contentText={
+            'Are you sure that you want to send payment balance remainder to this customer? The message will be sent only if there is a balance amount to be paid'
+          }
+          handleClose={handleToggleSendRemainderDialog}
+          isLoading={isLoadingSendPaymentRemainder}
+          handleSubmit={handleSendInvoiceRemainder}
         />
       )}
     </Container>

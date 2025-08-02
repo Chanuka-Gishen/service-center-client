@@ -114,7 +114,7 @@ const useWorkOrder = () => {
   };
 
   // Fetch customer workorders
-  const fetchCustomerWorkorders = async (id) => {
+  const fetchCustomerWorkorders = async (params) => {
     if (isLoadingCustomerJobs) return;
 
     setIsLoadingCustomerJobs(true);
@@ -123,7 +123,7 @@ const useWorkOrder = () => {
       url: BACKEND_API.WO_CUSTOMER,
       method: 'GET',
       cancelToken: sourceToken.token,
-      params: { id },
+      params,
     })
       .then((res) => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
