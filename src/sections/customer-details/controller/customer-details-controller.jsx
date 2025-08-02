@@ -7,6 +7,7 @@ import useWorkOrder from 'src/hooks/useWorkorder';
 import { VEHICLE_TYPE_PETROL } from 'src/constants/vehicle-type';
 import { CUS_TYPE_INDIVIDUAL } from 'src/constants/customer-type';
 import useVehicle from 'src/hooks/useVehicle';
+import usePagination from 'src/hooks/usePagination';
 
 const tableColumns = [
   'Vehicle Number',
@@ -18,15 +19,14 @@ const tableColumns = [
   'Created At',
 ];
 
+const notificationTableColumns = ['Type', 'Title', 'Send At']
+
 const CustomerDetailsController = () => {
   const location = useLocation();
   const { id } = location.state || {};
 
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   const isOpenOptions = Boolean(optionsAnchorEl);
-
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
 
   const [selectedVehicle, setSelectedVehicle] = useState(null);
 
@@ -37,9 +37,24 @@ const CustomerDetailsController = () => {
   const [isOpenUpdateCustomer, setIsOpenUpdateCustomer] = useState(false);
   const [isOpenAddVehicle, setIsOpenAddVehicle] = useState(false);
   const [isOpenUpdateVehicle, setIsOpenUpdateVehicle] = useState(false);
+  const [isOpenSendRemainder, setIsOpenSendRemainder] = useState(false);
 
-  const { isLoadingCustomer, isLoadingUpdate, customer, fetchCustomer, updateCustomer } =
-    useCustomer();
+  const workorderPagination = usePagination();
+  const notificationsPagination = usePagination();
+
+  const {
+    customerSmsLogs,
+    customerSmsLogsCount,
+    isLoadingCustomer,
+    isLoadingUpdate,
+    isLoadingSendPaymentRemainder,
+    isLoadingCustomerSmsLogs,
+    customer,
+    fetchCustomer,
+    fetchCustomerSmsLogs,
+    updateCustomer,
+    sendCustomerPaymentRemainder,
+  } = useCustomer();
 
   const {
     customerJobs,
@@ -60,18 +75,21 @@ const CustomerDetailsController = () => {
     updateVehicleController,
   } = useVehicle();
 
+  const workorderQuery = {
+    id,
+    page: workorderPagination.page,
+    limit: workorderPagination.limit,
+  };
+
+  const notificationsQuery = {
+    id,
+    page: notificationsPagination.page,
+    limit: notificationsPagination.limit,
+  };
+
   const handleClickOptions = (event, vehicle) => {
     setOptionsAnchorEl(event.currentTarget);
     setSelectedVehicle(vehicle);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setPage(0);
-    setLimit(parseInt(event.target.value, 10));
   };
 
   const handleCloseOptions = () => {
@@ -138,6 +156,10 @@ const CustomerDetailsController = () => {
     setIsOpenUpdateVehicle(!isOpenUpdateVehicle);
   };
 
+  const handleToggleSendRemainderDialog = () => {
+    setIsOpenSendRemainder(!isOpenSendRemainder);
+  };
+
   const handleUpdateCustomer = async (values) => {
     const isSuccess = await updateCustomer(customer._id, values);
 
@@ -145,6 +167,13 @@ const CustomerDetailsController = () => {
       handleToggleUpdateCustomerDialog();
       fetchCustomer(customer._id);
     }
+  };
+
+  const handleSendInvoiceRemainder = async () => {
+    if (customer?._id) {
+      await sendCustomerPaymentRemainder(customer._id);
+    }
+    handleToggleSendRemainderDialog();
   };
 
   const handleAddVehicle = async (values) => {
@@ -184,8 +213,9 @@ const CustomerDetailsController = () => {
   useEffect(() => {
     if (id) {
       fetchCustomer(id);
-      fetchCustomerWorkorders(id);
+      fetchCustomerWorkorders(workorderQuery);
       fetchCustomerPaymentStatus(id);
+      fetchCustomerSmsLogs(notificationsQuery);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,19 +223,23 @@ const CustomerDetailsController = () => {
   return (
     <CustomerDetailsView
       tableColumns={tableColumns}
+      notificationTableColumns={notificationTableColumns}
       data={customer}
       customerJobs={customerJobs}
       customerJobsCount={customerJobsCount}
+      customerSmsLogs={customerSmsLogs}
+      customerSmsLogsCount={customerSmsLogsCount}
       customerPaymentStats={customerPaymentStats}
       selectedVehicle={selectedVehicle}
       customerInitialValues={customerInitialValues}
       vehicleInitialValues={vehicleInitialValues}
-      limit={limit}
-      page={page}
+      workorderPagination={workorderPagination}
+      notificationsPagination={notificationsPagination}
       isOpenCreate={isOpenCreate}
       isOpenUpdateCustomer={isOpenUpdateCustomer}
       isOpenAddVehicle={isOpenAddVehicle}
       isOpenUpdateVehicle={isOpenUpdateVehicle}
+      isOpenSendRemainder={isOpenSendRemainder}
       isLoading={isLoadingCustomer}
       isLoadingCustomerJobs={isLoadingCustomerJobs}
       isLoadingCustomerPayStats={isLoadingCustomerPayStats}
@@ -213,20 +247,22 @@ const CustomerDetailsController = () => {
       isLoadingUpdate={isLoadingUpdate}
       isLoadingUpdateVehicle={isLoadingUpdateVehicle}
       isLoadingAddVehicle={isLoadingAddVehicle}
+      isLoadingSendPaymentRemainder={isLoadingSendPaymentRemainder}
+      isLoadingCustomerSmsLogs={isLoadingCustomerSmsLogs}
       handleToggleWorkOrderCreateDialog={handleToggleWorkOrderCreateDialog}
       handleToggleUpdateCustomerDialog={handleToggleUpdateCustomerDialog}
       handleToggleAddVehicleDialog={handleToggleAddVehicleDialog}
       handleToggleUpdateVehicleDialog={handleToggleUpdateVehicleDialog}
+      handleToggleSendRemainderDialog={handleToggleSendRemainderDialog}
       handleCreateWorkOrder={handleCreateWorkOrder}
       handleUpdateCustomer={handleUpdateCustomer}
       handleAddVehicle={handleAddVehicle}
       handleUpdateVehicle={handleUpdateVehicle}
+      handleSendInvoiceRemainder={handleSendInvoiceRemainder}
       optionsAnchorEl={optionsAnchorEl}
       isOpenOptions={isOpenOptions}
       handleClickOptions={handleClickOptions}
       handleCloseOptions={handleCloseOptions}
-      handleChangePage={handleChangePage}
-      handleChangeRowsPerPage={handleChangeRowsPerPage}
     />
   );
 };

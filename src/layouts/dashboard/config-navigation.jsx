@@ -11,6 +11,7 @@ import HailIcon from '@mui/icons-material/Hail';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import CampaignIcon from '@mui/icons-material/Campaign';
 
 import { USER_ROLE } from 'src/constants/user-role';
 
@@ -52,6 +53,13 @@ const navConfig = [
     icon: <GroupIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
+  // {
+  //   title: 'Promotions',
+  //   name: NAVBAR_ITEMS.NOTIFICATIONS,
+  //   path: 'notifications',
+  //   icon: <CampaignIcon />,
+  //   permissions: [USER_ROLE.SUPER_ADMIN],
+  // },
   {
     title: 'Suppliers',
     name: NAVBAR_ITEMS.SUPPLIERS,

@@ -40,7 +40,7 @@ export const UsersView = ({
 }) => {
   const { auth } = useAuthStore();
   return (
-    <Container maxWidth="xl">
+    <Container>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, sm: 12, md: 9 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

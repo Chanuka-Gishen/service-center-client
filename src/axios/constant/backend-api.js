@@ -19,6 +19,13 @@ export const BACKEND_API = {
   CUSTOMER: IP_URL + '/customer/auth/customer',
   CUSTOMER_REGISTER: IP_URL + '/customer/auth/register',
   CUSTOMER_EDIT: IP_URL + '/customer/supAuth/update',
+  CUSTOMERS_NOTIFICATIONS: IP_URL + '/customer/auth/notification-logs',
+  CUSTOMER_NOTIFICATIONS: IP_URL + '/customer/auth/customer-notification-logs',
+  CUSTOMER_BULK_SMS: IP_URL + '/customer/supAuth/send-sms-bulk',
+  CUSTOMER_PAY_REMAINDER: IP_URL + '/customer/supAuth/send-pay-remainder',
+  CUSTOMER_STAT_CUSTOMERS_COUNT: IP_URL + '/customer/auth/stat-unique-customers',
+  CUSTOMER_STAT_REPEATING_CUSTOMERS: IP_URL + '/customer/auth/stat-repeating-customers',
+  CUSTOMER_STAT_NEW_CUSTOMRES: IP_URL + '/customer/auth/stat-new-customers',
 
   VEHICLE_REGISTER: IP_URL + '/vehicle/auth/register',
   VEHICLE_EDIT: IP_URL + '/vehicle/supAuth/update',

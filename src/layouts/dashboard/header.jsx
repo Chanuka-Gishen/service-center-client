@@ -13,7 +13,9 @@ import { bgBlur } from 'src/theme/css';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 import { ColorSwitch } from 'src/components/color-switch';
-import { Stack } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
+import { fDateTime } from 'src/utils/format-time';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,20 @@ export default function Header({ onOpenNav }) {
   const theme = useTheme();
 
   const lgUp = false;
+
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  useEffect(() => {
+    // Update time immediately and every second
+    const updateTime = () => {
+      setCurrentDateTime(new Date());
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const renderContent = (
     <>
@@ -31,7 +47,18 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Box sx={{ flexGrow: 1 }} />
-      <Stack direction="row" spacing={2} justifyContent='center' alignItems='center'>
+      <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+        {/* <Typography sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
+          {fDateTime(currentDateTime)}
+        </Typography> */}
+        <Chip
+          label={fDateTime(currentDateTime)}
+          sx={{
+            fontSize: '1rem',
+            padding: 2,
+            bgcolor: 'background.paper',
+          }}
+        />
         <ColorSwitch />
         <AccountPopover />
       </Stack>

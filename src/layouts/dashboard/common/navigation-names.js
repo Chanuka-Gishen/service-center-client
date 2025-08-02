@@ -1,6 +1,7 @@
 export const NAVBAR_ITEMS = {
   DASHBOARD: 'dashboard',
   CUSTOMERS: 'customers',
+  NOTIFICATIONS: 'notifications',
   INVENTORY: 'inventory',
   WORKORDERS: 'workorders',
   JOBS: 'jobs',
@@ -9,5 +10,5 @@ export const NAVBAR_ITEMS = {
   ACCOUNTS_REPORTS: 'reports',
   EMPLOYEES: 'employees',
   EMP_ATTENDENCE: 'emp-attendence',
-  USERS: 'administration'
+  USERS: 'administration',
 };

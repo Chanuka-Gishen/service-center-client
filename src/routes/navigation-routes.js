@@ -64,4 +64,7 @@ export const NAVIGATION_ROUTES = {
   accounts_reports: {
     base: '/reports',
   },
+  notifications: {
+    base: '/notifications',
+  },
 };
