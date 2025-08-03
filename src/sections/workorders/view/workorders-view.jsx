@@ -36,6 +36,7 @@ import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-
 import { PAY_STATUS_PAID } from 'src/constants/payment-status';
 import { AddPaymentDialog } from '../components/add-payment-dialog';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
+import commonUtil from 'src/utils/common-util';
 
 const LoadingStack = () => {
   return (
@@ -227,14 +228,13 @@ export const WorkordersView = ({
                       </TableRow>
                     ))}
                     <TableRow>
-                      <TableCell colSpan={3}>Notes</TableCell>
-                      <TableCell align="right">{selectedJob.workOrderNotes}</TableCell>
+                      <TableCell colSpan={5}>
+                        <Divider> Charges </Divider>
+                      </TableCell>
                     </TableRow>
                     {(selectedJob.workOrderCustomChargers || []).map((customCharge, index) => (
                       <TableRow key={index}>
-                        <TableCell align="right" colSpan={4}>
-                          {customCharge.chargeName}
-                        </TableCell>
+                        <TableCell colSpan={4}>{customCharge.chargeName}</TableCell>
                         <TableCell align="right">
                           {formatCurrency(customCharge.chargeAmount)}
                         </TableCell>
@@ -242,9 +242,7 @@ export const WorkordersView = ({
                     ))}
                     {selectedJob.workOrderServiceCharge > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
-                          Service Charge
-                        </TableCell>
+                        <TableCell colSpan={4}>Service Charge</TableCell>
                         <TableCell align="right">
                           {formatCurrency(selectedJob.workOrderServiceCharge)}
                         </TableCell>
@@ -252,14 +250,25 @@ export const WorkordersView = ({
                     )}
                     {selectedJob.workOrderOtherChargers > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
-                          Other Charges
-                        </TableCell>
+                        <TableCell colSpan={4}>Other Charges</TableCell>
                         <TableCell align="right">
                           {formatCurrency(selectedJob.workOrderOtherChargers)}
                         </TableCell>
                       </TableRow>
                     )}
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        <Divider> Summary </Divider>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="right" colSpan={4}>
+                        Gross Total Amount
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatCurrency(selectedJob.workOrderGrossAmount)}
+                      </TableCell>
+                    </TableRow>
                     {selectedJob.workOrderDiscountPercentage > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
@@ -278,12 +287,11 @@ export const WorkordersView = ({
                         </TableCell>
                       </TableRow>
                     )}
-
                     <TableRow>
-                      <TableCell align="right" colSpan={4}>
-                        Total Amount
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Net Subtotal Amount
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell variant="head" align="right">
                         {formatCurrency(selectedJob.workOrderTotalAmount)}
                       </TableCell>
                     </TableRow>
@@ -303,6 +311,12 @@ export const WorkordersView = ({
                         {formatCurrency(selectedJob.workOrderBalanceAmount)}
                       </TableCell>
                     </TableRow>
+                    {!commonUtil.stringIsEmptyOrSpaces(selectedJob.workOrderNotes) && (
+                      <TableRow>
+                        <TableCell colSpan={3}>Notes</TableCell>
+                        <TableCell align="right">{selectedJob.workOrderNotes}</TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

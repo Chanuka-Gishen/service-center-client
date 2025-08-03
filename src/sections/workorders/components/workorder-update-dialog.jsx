@@ -677,7 +677,7 @@ export const WokrOrderUpdateDialog = ({
                     slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
+                {/* <Grid size={{ xs: 12, md: 6 }}>
                   <TextField
                     label="Discount"
                     name="workOrderDiscountPercentage"
@@ -700,7 +700,7 @@ export const WokrOrderUpdateDialog = ({
                       touched.workOrderDiscountPercentage && errors.workOrderDiscountPercentage
                     }
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </DialogContent>
           </form>

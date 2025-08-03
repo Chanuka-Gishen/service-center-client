@@ -241,14 +241,13 @@ export const WorkorderView = ({
                       </TableRow>
                     ))}
                     <TableRow>
-                      <TableCell colSpan={4}>Notes</TableCell>
-                      <TableCell align="right">{job.workOrderNotes}</TableCell>
+                      <TableCell colSpan={5}>
+                        <Divider> Charges </Divider>
+                      </TableCell>
                     </TableRow>
                     {(job.workOrderCustomChargers || []).map((customCharge, index) => (
                       <TableRow key={index}>
-                        <TableCell align="right" colSpan={4}>
-                          {customCharge.chargeName}
-                        </TableCell>
+                        <TableCell colSpan={4}>{customCharge.chargeName}</TableCell>
                         <TableCell align="right">
                           {formatCurrency(customCharge.chargeAmount)}
                         </TableCell>
@@ -256,9 +255,7 @@ export const WorkorderView = ({
                     ))}
                     {job.workOrderServiceCharge > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
-                          Service Charge
-                        </TableCell>
+                        <TableCell colSpan={4}>Service Charge</TableCell>
                         <TableCell align="right">
                           {formatCurrency(job.workOrderServiceCharge)}
                         </TableCell>
@@ -266,14 +263,25 @@ export const WorkorderView = ({
                     )}
                     {job.workOrderOtherChargers > 0 && (
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
-                          Other Charges
-                        </TableCell>
+                        <TableCell colSpan={4}>Other Charges</TableCell>
                         <TableCell align="right">
                           {formatCurrency(job.workOrderOtherChargers)}
                         </TableCell>
                       </TableRow>
                     )}
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        <Divider> Summary </Divider>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="right" colSpan={4}>
+                        Gross Total Amount
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatCurrency(job.workOrderGrossAmount)}
+                      </TableCell>
+                    </TableRow>
                     {job.workOrderDiscountPercentage > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
@@ -293,10 +301,10 @@ export const WorkorderView = ({
                       </TableRow>
                     )}
                     <TableRow>
-                      <TableCell align="right" colSpan={4}>
-                        Total Amount
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Net Subtotal Amount
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell variant="head" align="right">
                         {formatCurrency(job.workOrderTotalAmount)}
                       </TableCell>
                     </TableRow>
@@ -304,18 +312,22 @@ export const WorkorderView = ({
                       <TableCell align="right" colSpan={4}>
                         Paid Amount
                       </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(job.workOrderPaidAmount ?? 0)}
-                      </TableCell>
+                      <TableCell align="right">{formatCurrency(job.workOrderPaidAmount)}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell align="right" colSpan={4}>
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
-                        {formatCurrency(job.workOrderBalanceAmount ?? 0)}
+                        {formatCurrency(job.workOrderBalanceAmount)}
                       </TableCell>
                     </TableRow>
+                    {!commonUtil.stringIsEmptyOrSpaces(job.workOrderNotes) && (
+                      <TableRow>
+                        <TableCell colSpan={3}>Notes</TableCell>
+                        <TableCell align="right">{job.workOrderNotes}</TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
