@@ -78,6 +78,7 @@ const EmployeeController = () => {
 
   return (
     <EmployeeView
+      empId={id}
       jobHeaders={jobHeaders}
       attHeaders={attHeaders}
       employee={employee}

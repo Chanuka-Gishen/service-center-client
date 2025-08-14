@@ -132,12 +132,6 @@ export const EmployeeUpdateValidationSchema = Yup.object().shape({
 
   empIsActive: Yup.boolean().default(true),
 
-  empSalary: Yup.number().required('Salary is required').min(0, 'Salary cannot be negative'),
-
-  empPayFrequency: Yup.string()
-    .required('Pay frequency is required')
-    .oneOf(['Monthly', 'Weekly', 'Hourly'], 'Invalid pay frequency'),
-
   empBankDetails: Yup.object()
     .shape({
       accountNumber: Yup.string().nullable().default('').notRequired(),

@@ -27,8 +27,6 @@ import { GENDERS } from 'src/constants/gender';
 import { MARTIAL_STATUS } from 'src/constants/martial-status';
 import { EMP_RELATIONSHIPS } from 'src/constants/relationship-constants';
 import { EMPLOYMENT_TYPES } from 'src/constants/employment-types';
-import { CurrencyInput } from 'src/components/currency-input/currency-input';
-import { SALLARY_FREQUENCY } from 'src/constants/sallary-frequency';
 import { EMP_ROLES } from 'src/constants/emp-role';
 import { EmployeeUpdateValidationSchema } from 'src/schema/emp-update-schema';
 
@@ -37,7 +35,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export const EmpUpdateDialog = ({ open, data, isLoading, handleOpenClose, handleConfirm }) => {
-  const { createdAt, updatedAt, __v, id, ...cleanedData } = data;
+  const { createdAt, updatedAt, empSalary, empPayFrequency, __v, id, ...cleanedData } = data;
 
   const initialValues = {
     ...cleanedData,
@@ -430,45 +428,6 @@ export const EmpUpdateDialog = ({ open, data, isLoading, handleOpenClose, handle
                       value={values.empHireDate}
                       onChange={(date) => setFieldValue('empHireDate', date, true)}
                     />
-                  </FormControl>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
-                  <TextField
-                    label="Basic Sallary"
-                    name="empSalary"
-                    fullWidth
-                    required
-                    autoComplete="off"
-                    variant="outlined"
-                    {...getFieldProps('empSalary')}
-                    error={touched.empSalary && Boolean(errors.empSalary)}
-                    helperText={touched.empSalary && errors.empSalary}
-                    slotProps={{ input: { inputComponent: CurrencyInput } }}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
-                  <FormControl fullWidth required>
-                    <InputLabel id="select-label">Sallary Frequency</InputLabel>
-                    <Select
-                      labelId="select-label"
-                      id="simple-select"
-                      label="Sallary Frequency"
-                      name="empPayFrequency"
-                      required
-                      fullWidth
-                      value={values.empPayFrequency || ''}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      {SALLARY_FREQUENCY.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText error={touched.empPayFrequency && errors.empPayFrequency}>
-                      {touched.empPayFrequency && errors.empPayFrequency}
-                    </FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 12 }}>

@@ -89,6 +89,16 @@ export const BACKEND_API = {
   EMP_LEAVE_RQSTS_ADD: IP_URL + '/employee/auth/leave-request',
   EMP_LEAVE_RQSTS_PROCESS: IP_URL + '/employee/supAuth/process-leave-request',
 
+  EMP_SALARY_SCHEMA_CREATE: IP_URL + '/payroll/auth/add',
+  EMP_SALARY_SCHEMA_UPDATE: IP_URL + '/payroll/auth/update',
+  EMP_SALARY_SCHEMA_GET: IP_URL + '/payroll/auth/emp-salary-schema',
+  EMP_SALARY_BONUS_ADD: IP_URL + '/payroll/supAuth/add-bonus',
+  EMP_SALARY_BONUS_DELETE: IP_URL + '/payroll/supAuth/delete-bonus',
+  EMP_SALARY_UPDATE: IP_URL + '/payroll/supAuth/update-salary',
+  EMP_SALARY_CHANGE_HISTORY: IP_URL + '/payroll/auth/salary-change-history',
+  EMP_BONUS_HISTORY: IP_URL + '/payroll/auth/emp-bonuses',
+  EMP_UNDO_SALARY_CHANGE: IP_URL + '/payroll/supAuth/undo-salary-change',
+
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',
   SUPPLIER_ADD: IP_URL + '/supplier/auth/register',

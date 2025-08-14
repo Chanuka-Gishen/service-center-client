@@ -7,6 +7,7 @@ import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { EmpInfoTab } from '../components/emp-info-tab';
 import { EmpJobsTab } from '../components/emp-jobs-tab';
 import { EmpAttendenceTab } from '../components/emp-attendence-tab';
+import { EmpPayrollTab } from '../components/emp-payroll-tab';
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -50,6 +51,7 @@ const a11yProps = (index) => {
 };
 
 export const EmployeeView = ({
+  empId,
   jobHeaders,
   attHeaders,
   employee,
@@ -68,7 +70,7 @@ export const EmployeeView = ({
   handleOnClickBreadCrumb,
   handleSelectTab,
   handleToggleUpdateDlg,
-  handleUpdateEmpInfo
+  handleUpdateEmpInfo,
 }) => {
   return (
     <Container>
@@ -100,6 +102,7 @@ export const EmployeeView = ({
                 <Tab label="Employee Information" {...a11yProps(0)} />
                 <Tab label="Assigned Jobs" {...a11yProps(1)} />
                 <Tab label="Attendence" {...a11yProps(2)} />
+                <Tab label="Payroll Management" {...a11yProps(3)} />
               </Tabs>
             </Box>
             <CustomTabPanel value={selectedTab} index={0}>
@@ -129,6 +132,9 @@ export const EmployeeView = ({
                 headers={attHeaders}
                 pagination={attPagination}
               />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={3}>
+              <EmpPayrollTab id={empId} />
             </CustomTabPanel>
           </Box>
         </Grid>

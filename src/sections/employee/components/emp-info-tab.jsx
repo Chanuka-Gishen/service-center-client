@@ -165,25 +165,7 @@ export const EmpInfoTab = ({
                 </TableCell>
               </TableRow>
             )}
-            <TableRow>
-              <TableCell colSpan={2} variant="th">
-                <Typography variant="h4">Compensation</Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Basic Sallary</TableCell>
-              <TableCell>
-                {isLoadingEmp ? 'Loading...' : formatCurrency(employee?.empSalary)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Salary Frequency</TableCell>
-              <TableCell>{isLoadingEmp ? 'Loading...' : employee?.empPayFrequency}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Salary Frequency</TableCell>
-              <TableCell>{isLoadingEmp ? 'Loading...' : employee?.empPayFrequency}</TableCell>
-            </TableRow>
+
             <TableRow>
               <TableCell colSpan={2} variant="th">
                 <Typography variant="h4">Leave Limits (Monthly)</Typography>
