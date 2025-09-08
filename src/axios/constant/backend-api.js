@@ -68,6 +68,7 @@ export const BACKEND_API = {
   PAYMENT_CREATE_INC: IP_URL + '/payment/auth/add-income',
   PAYMENT_CREATE_REFUND: IP_URL + '/payment/supAuth/refund-payment',
   PAYMENT_CREATE_GRN: IP_URL + '/payment/auth/grn-payment',
+  PAYMENT_CREATE_EXP_EMP: IP_URL + '/payment/auth/add-emp-payment',
   PAYMENT_COMPLETE_RECORD: IP_URL + '/payment/auth/complete-payment',
   PAYMENT_GRN: IP_URL + '/payment/auth/grn-payments',
   PAYMENT_SUMMARY: IP_URL + '/payment/auth/summary',

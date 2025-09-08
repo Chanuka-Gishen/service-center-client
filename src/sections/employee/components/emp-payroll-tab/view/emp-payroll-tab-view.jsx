@@ -26,6 +26,7 @@ import { CustomTable } from 'src/components/custom-table/custom-table';
 import { SalaryBonusRow } from '../components/salary-bonus-row';
 import { SalaryChangesRow } from '../components/salary-changes-row';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
+import { AddEmpPaymentDialog } from '../components/add-emp-payment-dialog';
 
 export const EmpPayrollTabView = ({
   bonusTableHeaders,
@@ -43,6 +44,7 @@ export const EmpPayrollTabView = ({
   isOpenAddBonusDialog,
   isOpenDeleteBonusDialog,
   isOpenSalaryRevertDialog,
+  isOpenCreateEmpExp,
   isLoadingEmpPayrollSchema,
   isLoadingCreatePayroll,
   isLoadingUpdatePayroll,
@@ -52,14 +54,17 @@ export const EmpPayrollTabView = ({
   isLoadingDeleteBonus,
   isLoadingSalaryHistory,
   isLoadingSalaryReverse,
+  isLoadingCreateExpEmp,
   handleToggleSchemaDialog,
   handleToggleUpdateSalaryDialog,
   handleToggleAddBonusDialog,
   handleToggleDeleteBonusDialog,
   handleToggleRevertSalaryDialog,
+  handleToggleCreateEmpExpDialog,
   handleSubmitSchema,
   handleSalaryChange,
   handleAddBonus,
+  handleCreateEmpAdvancePayment,
   handleDeleteEmpBonus,
   handleReverseSalaryChange,
 }) => {
@@ -89,6 +94,9 @@ export const EmpPayrollTabView = ({
                 )}
                 <Button variant="contained" onClick={handleToggleSchemaDialog}>
                   Update Schema
+                </Button>
+                <Button variant="contained" onClick={handleToggleCreateEmpExpDialog}>
+                  Advance Payments
                 </Button>
               </Fragment>
             )}
@@ -306,6 +314,14 @@ export const EmpPayrollTabView = ({
           handleClose={handleToggleRevertSalaryDialog}
           handleSubmit={handleReverseSalaryChange}
           isLoading={isLoadingSalaryReverse}
+        />
+      )}
+      {isOpenCreateEmpExp && (
+        <AddEmpPaymentDialog
+          open={isOpenCreateEmpExp}
+          handleOpenClose={handleToggleCreateEmpExpDialog}
+          handleConfirm={handleCreateEmpAdvancePayment}
+          isLoading={isLoadingCreateExpEmp}
         />
       )}
     </>

@@ -16,7 +16,12 @@ import Grid from '@mui/material/Grid2';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { PAY_METHOD_CREDIT, PAY_METHODS } from 'src/constants/payment-methods';
-import { STOCK_IN, STOCK_MV_TYPES } from 'src/constants/stock-movement-types';
+import {
+  STOCK_ADJUSMENT,
+  STOCK_OUT,
+  STOCK_RETURN,
+  STOCK_TRANSFER,
+} from 'src/constants/stock-movement-types';
 import { StockUpdateSchema } from 'src/schema/stock-update-schema';
 
 export const UpdateStockDialog = ({
@@ -37,7 +42,7 @@ export const UpdateStockDialog = ({
 
       <Formik
         initialValues={{
-          stockMovementType: STOCK_IN,
+          stockMovementType: STOCK_ADJUSMENT,
           stockQuantity: 0,
           stockTotalValue: 0,
           stockPaymentPaidAmount: 0,
@@ -77,11 +82,10 @@ export const UpdateStockDialog = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
-                      {STOCK_MV_TYPES.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
+                      <MenuItem value={STOCK_ADJUSMENT}>{STOCK_ADJUSMENT}</MenuItem>
+                      <MenuItem value={STOCK_OUT}>{STOCK_OUT}</MenuItem>
+                      <MenuItem value={STOCK_TRANSFER}>{STOCK_TRANSFER}</MenuItem>
+                      <MenuItem value={STOCK_RETURN}>{STOCK_RETURN}</MenuItem>
                     </Select>
                     <FormHelperText error={touched.stockMovementType && errors.stockMovementType}>
                       {touched.stockMovementType && errors.stockMovementType}

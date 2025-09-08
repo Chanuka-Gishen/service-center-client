@@ -19,7 +19,7 @@ export const SalaryBonusRow = ({ data, handleDelete }) => {
             />
           </TableCell>
           <TableCell>{`${item.bonusEnteredBy.userFirstName} ${item.bonusEnteredBy.userLastName}`}</TableCell>
-          <TableCell>{fDate(item.bonusDate)}</TableCell>
+          <TableCell>{item.bonusMonth}</TableCell>
           <TableCell>
             {item.bonusStatus === SAL_BONUS_STS_NOT_PROCESSED && (
               <IconButton onClick={() => handleDelete(item._id)}>

@@ -13,6 +13,7 @@ export const PAY_SC_INSURANCE = 'Insurance';
 export const PAY_SC_LOANS = 'Loan';
 export const PAY_SC_SUPPLIES = 'Spare parts & Supplies';
 export const PAY_SC_EMPLOYEE_BENIFITS = 'Employee benifits';
+export const PAY_SC_ADVANCE_PAYMENTS = 'Advance Payments';
 export const PAY_SC_TAXS = 'Taxs';
 export const PAY_SC_OTHERS = 'Other';
 
@@ -29,6 +30,7 @@ export const PAY_SC_COMBINED = [
   PAY_SC_LOANS,
   PAY_SC_SUPPLIES,
   PAY_SC_EMPLOYEE_BENIFITS,
+  PAY_SC_ADVANCE_PAYMENTS,
   PAY_SC_TAXS,
   PAY_SC_OTHERS,
 ];
@@ -49,6 +51,7 @@ export const PAY_SC_EXPENSES = [
   PAY_SC_LOANS,
   PAY_SC_SUPPLIES,
   PAY_SC_EMPLOYEE_BENIFITS,
+  PAY_SC_ADVANCE_PAYMENTS,
   PAY_SC_TAXS,
   PAY_SC_OTHERS,
 ];

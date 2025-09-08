@@ -10,5 +10,6 @@ export const NAVBAR_ITEMS = {
   ACCOUNTS_REPORTS: 'reports',
   EMPLOYEES: 'employees',
   EMP_ATTENDENCE: 'emp-attendence',
+  PAYROLL: 'payroll',
   USERS: 'administration',
 };

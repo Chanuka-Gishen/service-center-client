@@ -12,6 +12,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 import { USER_ROLE } from 'src/constants/user-role';
 
@@ -53,13 +54,13 @@ const navConfig = [
     icon: <GroupIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
   },
-  // {
-  //   title: 'Promotions',
-  //   name: NAVBAR_ITEMS.NOTIFICATIONS,
-  //   path: 'notifications',
-  //   icon: <CampaignIcon />,
-  //   permissions: [USER_ROLE.SUPER_ADMIN],
-  // },
+  {
+    title: 'Promotions',
+    name: NAVBAR_ITEMS.NOTIFICATIONS,
+    path: 'notifications',
+    icon: <CampaignIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN],
+  },
   {
     title: 'Suppliers',
     name: NAVBAR_ITEMS.SUPPLIERS,
@@ -94,6 +95,13 @@ const navConfig = [
     path: 'emp-attendence',
     icon: <ScheduleIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN],
+  },
+  {
+    title: 'Payroll Management',
+    name: NAVBAR_ITEMS.PAYROLL,
+    path: 'payroll',
+    icon: <RequestQuoteIcon />,
+    permissions: [USER_ROLE.SUPER_ADMIN],
   },
   {
     title: 'Administration',

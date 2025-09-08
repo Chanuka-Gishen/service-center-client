@@ -47,6 +47,7 @@ const usePayment = () => {
   const [isLoadingExpenseSummary, setIsLoadingExpenseSummary] = useState(true);
   const [isLoadingFinReportDownload, setIsLoadingFinReportDownload] = useState(false);
   const [isLoadingDeleteManPayment, setIsLoadingDeleteManPayment] = useState(false);
+  const [isLoadingCreateExpEmp, setIsLoadingCreateExpEmp] = useState(false);
 
   // Fetch all payments
   const fetchPayments = async (params) => {
@@ -332,6 +333,33 @@ const usePayment = () => {
     return isSuccess;
   };
 
+  // Create employee advance payments
+  const createEmpAdvancePayments = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingCreateExpEmp(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.PAYMENT_CREATE_EXP_EMP,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) {
+          isSuccess = true;
+        }
+      })
+      .catch(() => {
+        setIsLoadingCreateExpEmp(false);
+      })
+      .finally(() => {
+        setIsLoadingCreateExpEmp(false);
+      });
+
+    return isSuccess;
+  };
+
   // Process payment record - Cheques
   const processPaymentRecord = async (id) => {
     let isSuccess = false;
@@ -535,6 +563,7 @@ const usePayment = () => {
     isLoadingFinSummary,
     isLoadingExpenseSummary,
     isLoadingFinReportDownload,
+    isLoadingCreateExpEmp,
     fetchPayments,
     fetchDeletedPayments,
     fetchPendingPayments,
@@ -545,6 +574,7 @@ const usePayment = () => {
     createIncomePayment,
     createRefoundRecord,
     createGrnPaymentRecord,
+    createEmpAdvancePayments,
     processPaymentRecord,
     fetchWorkorderPayments,
     fetchGrnPaymentRecords,

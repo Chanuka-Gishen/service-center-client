@@ -3,6 +3,7 @@ import { EmpPayrollTabView } from '../view/emp-payroll-tab-view';
 import usePayroll from 'src/hooks/usePayroll';
 import { PAY_FREQ_MONTHLY } from 'src/constants/payroll-constants';
 import usePagination from 'src/hooks/usePagination';
+import usePayment from 'src/hooks/usePayment';
 
 const bonusTableHeaders = ['Description', 'Amount', 'Status', 'Entered By', 'Created At'];
 
@@ -45,6 +46,8 @@ const EmpPayrollTabController = ({ id }) => {
     reverseSalaryChange,
   } = usePayroll();
 
+  const { isLoadingCreateExpEmp, createEmpAdvancePayments } = usePayment();
+
   const bonusesPagination = usePagination();
   const salaryPagination = usePagination();
 
@@ -55,6 +58,7 @@ const EmpPayrollTabController = ({ id }) => {
   const [isOpenAddBonusDialog, setIsOpenAddBonusDialog] = useState(false);
   const [isOpenDeleteBonusDialog, setIsOpenDeleteBonusDialog] = useState(false);
   const [isOpenSalaryRevertDialog, setIsOpenSalaryRevertDialog] = useState(false);
+  const [isOpenCreateEmpExp, setIsOpenCreateEmpExp] = useState(false);
 
   const [initialValues, setInitialValues] = useState({
     baseSalary: 0,
@@ -95,6 +99,10 @@ const EmpPayrollTabController = ({ id }) => {
 
   const handleToggleRevertSalaryDialog = () => {
     setIsOpenSalaryRevertDialog(!isOpenSalaryRevertDialog);
+  };
+
+  const handleToggleCreateEmpExpDialog = () => {
+    setIsOpenCreateEmpExp(!isOpenCreateEmpExp);
   };
 
   const handleSubmitSchema = async (values) => {
@@ -191,6 +199,19 @@ const EmpPayrollTabController = ({ id }) => {
     }
   };
 
+  const handleCreateEmpAdvancePayment = async (values) => {
+    const data = {
+      empId: id,
+      ...values,
+    };
+
+    const isSuccess = await createEmpAdvancePayments(data);
+
+    if (isSuccess) {
+      handleToggleCreateEmpExpDialog();
+    }
+  };
+
   const handleFetchEmpBonuses = async () => {
     await fetchEmpBonusesHistory(bonusQuery);
   };
@@ -218,6 +239,7 @@ const EmpPayrollTabController = ({ id }) => {
       isOpenAddBonusDialog={isOpenAddBonusDialog}
       isOpenDeleteBonusDialog={isOpenDeleteBonusDialog}
       isOpenSalaryRevertDialog={isOpenSalaryRevertDialog}
+      isOpenCreateEmpExp={isOpenCreateEmpExp}
       isLoadingEmpPayrollSchema={isLoadingEmpPayrollSchema}
       isLoadingCreatePayroll={isLoadingCreatePayroll}
       isLoadingUpdatePayroll={isLoadingUpdatePayroll}
@@ -227,14 +249,17 @@ const EmpPayrollTabController = ({ id }) => {
       isLoadingDeleteBonus={isLoadingDeleteBonus}
       isLoadingSalaryHistory={isLoadingSalaryHistory}
       isLoadingSalaryReverse={isLoadingSalaryReverse}
+      isLoadingCreateExpEmp={isLoadingCreateExpEmp}
       handleToggleSchemaDialog={handleToggleSchemaDialog}
       handleToggleUpdateSalaryDialog={handleToggleUpdateSalaryDialog}
       handleToggleAddBonusDialog={handleToggleAddBonusDialog}
       handleToggleDeleteBonusDialog={handleToggleDeleteBonusDialog}
       handleToggleRevertSalaryDialog={handleToggleRevertSalaryDialog}
+      handleToggleCreateEmpExpDialog={handleToggleCreateEmpExpDialog}
       handleSubmitSchema={handleSubmitSchema}
       handleSalaryChange={handleSalaryChange}
       handleAddBonus={handleAddBonus}
+      handleCreateEmpAdvancePayment={handleCreateEmpAdvancePayment}
       handleDeleteEmpBonus={handleDeleteEmpBonus}
       handleReverseSalaryChange={handleReverseSalaryChange}
     />
