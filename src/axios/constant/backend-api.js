@@ -116,4 +116,13 @@ export const BACKEND_API = {
   SUPPLIER_RETURN_UPDATE: IP_URL + '/supplier/supAuth/return-update',
   SUPPLIER_RETURN_PROCESS: IP_URL + '/supplier/auth/process-return',
   SUPPLIER_RETURN_CANCEL: IP_URL + '/supplier/auth/cancel-return',
+
+  BOOKINGS_GET: IP_URL + '/bookings/auth/bookings',
+  BOOKINGS_CREATE: IP_URL + '/bookings/auth/create-booking',
+  BOOKINGS_UPDATE: IP_URL + '/bookings/auth/update-booking',
+  BOOKINGS_PR_COMPLETE: IP_URL + '/bookings/auth/complete-booking',
+  BOOKINGS_PR_CANCEL: IP_URL + '/bookings/auth/cancel-booking',
+  BOOKING_STAT_TOTAL: IP_URL + '/bookings/auth/total-count',
+  BOOKING_STAT_TOTAL_PENDING: IP_URL + '/bookings/auth/pending-count',
+  BOOKING_STAT_TOTAL_TODAY: IP_URL + '/bookings/auth/today-count',
 };

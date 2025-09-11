@@ -70,4 +70,7 @@ export const NAVIGATION_ROUTES = {
   notifications: {
     base: '/notifications',
   },
+  bookings: {
+    base: '/bookings',
+  },
 };
