@@ -35,7 +35,7 @@ const StatCard = ({ title, isLoading, value, lastUpdatedAt, icon, type = 'curren
           textAlign={'left'}
         >
           <Box>
-            <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+            <Typography variant="h6" color="textSecondary" gutterBottom>
               {title}
             </Typography>
             {isLoading && <CircularProgress size="30px" />}

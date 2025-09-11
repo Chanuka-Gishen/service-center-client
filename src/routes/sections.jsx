@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
+import BookingsPage from 'src/pages/bookings';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import useAuthStore from 'src/store/auth-store';
 
@@ -29,6 +30,8 @@ export const EmpAttendencePage = lazy(() => import('src/pages/emp-attendence'));
 export const UsersPage = lazy(() => import('src/pages/users'));
 export const GrnInfoPage = lazy(() => import('src/pages/grn-info'));
 export const NotificationsPage = lazy(() => import('src/pages/notifications'));
+export const PayrollPage = lazy(() => import('src/pages/payroll'));
+export const bookingsPage = lazy(() => import('src/pages/bookings'));
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +74,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.inventory.base, element: <InventoryPage /> },
         { path: NAVIGATION_ROUTES.inventory.details.base, element: <InventoryItemPage /> },
         { path: NAVIGATION_ROUTES.workorders.base, element: <WorkordersPage /> },
+        { path: NAVIGATION_ROUTES.bookings.base, element: <BookingsPage /> },
         { path: NAVIGATION_ROUTES.customers.Details.base, element: <CustomerDetailsPage /> },
         { path: NAVIGATION_ROUTES.jobs.base, element: <JobsPage /> },
         { path: NAVIGATION_ROUTES.jobs.details.base, element: <WorkorderDetailsPage /> },
@@ -82,6 +86,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.accounts_reports.base, element: <AccountsReportsPage /> },
         { path: NAVIGATION_ROUTES.employees.base, element: <EmployeesPage /> },
         { path: NAVIGATION_ROUTES.employees.details.base, element: <EmployeePage /> },
+        { path: NAVIGATION_ROUTES.payroll.base, element: <PayrollPage /> },
         { path: NAVIGATION_ROUTES.empAttendence.base, element: <EmpAttendencePage /> },
         { path: NAVIGATION_ROUTES.users.base, element: <UsersPage /> },
       ],

@@ -68,6 +68,7 @@ export const BACKEND_API = {
   PAYMENT_CREATE_INC: IP_URL + '/payment/auth/add-income',
   PAYMENT_CREATE_REFUND: IP_URL + '/payment/supAuth/refund-payment',
   PAYMENT_CREATE_GRN: IP_URL + '/payment/auth/grn-payment',
+  PAYMENT_CREATE_EXP_EMP: IP_URL + '/payment/auth/add-emp-payment',
   PAYMENT_COMPLETE_RECORD: IP_URL + '/payment/auth/complete-payment',
   PAYMENT_GRN: IP_URL + '/payment/auth/grn-payments',
   PAYMENT_SUMMARY: IP_URL + '/payment/auth/summary',
@@ -89,6 +90,16 @@ export const BACKEND_API = {
   EMP_LEAVE_RQSTS_ADD: IP_URL + '/employee/auth/leave-request',
   EMP_LEAVE_RQSTS_PROCESS: IP_URL + '/employee/supAuth/process-leave-request',
 
+  EMP_SALARY_SCHEMA_CREATE: IP_URL + '/payroll/auth/add',
+  EMP_SALARY_SCHEMA_UPDATE: IP_URL + '/payroll/auth/update',
+  EMP_SALARY_SCHEMA_GET: IP_URL + '/payroll/auth/emp-salary-schema',
+  EMP_SALARY_BONUS_ADD: IP_URL + '/payroll/supAuth/add-bonus',
+  EMP_SALARY_BONUS_DELETE: IP_URL + '/payroll/supAuth/delete-bonus',
+  EMP_SALARY_UPDATE: IP_URL + '/payroll/supAuth/update-salary',
+  EMP_SALARY_CHANGE_HISTORY: IP_URL + '/payroll/auth/salary-change-history',
+  EMP_BONUS_HISTORY: IP_URL + '/payroll/auth/emp-bonuses',
+  EMP_UNDO_SALARY_CHANGE: IP_URL + '/payroll/supAuth/undo-salary-change',
+
   SUPPLIERS: IP_URL + '/supplier/auth/suppliers',
   SUPPLIER_INFO: IP_URL + '/supplier/auth/info',
   SUPPLIER_ADD: IP_URL + '/supplier/auth/register',
@@ -105,4 +116,13 @@ export const BACKEND_API = {
   SUPPLIER_RETURN_UPDATE: IP_URL + '/supplier/supAuth/return-update',
   SUPPLIER_RETURN_PROCESS: IP_URL + '/supplier/auth/process-return',
   SUPPLIER_RETURN_CANCEL: IP_URL + '/supplier/auth/cancel-return',
+
+  BOOKINGS_GET: IP_URL + '/bookings/auth/bookings',
+  BOOKINGS_CREATE: IP_URL + '/bookings/auth/create-booking',
+  BOOKINGS_UPDATE: IP_URL + '/bookings/auth/update-booking',
+  BOOKINGS_PR_COMPLETE: IP_URL + '/bookings/auth/complete-booking',
+  BOOKINGS_PR_CANCEL: IP_URL + '/bookings/auth/cancel-booking',
+  BOOKING_STAT_TOTAL: IP_URL + '/bookings/auth/total-count',
+  BOOKING_STAT_TOTAL_PENDING: IP_URL + '/bookings/auth/pending-count',
+  BOOKING_STAT_TOTAL_TODAY: IP_URL + '/bookings/auth/today-count',
 };

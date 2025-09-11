@@ -12,7 +12,6 @@ const EmployeesController = () => {
     'NIC',
     'Mobile Number',
     'Position',
-    'Sallary',
     'Status',
     'Joined Date',
     'Terminated Date',

@@ -64,7 +64,13 @@ export const NAVIGATION_ROUTES = {
   accounts_reports: {
     base: '/reports',
   },
+  payroll: {
+    base: '/payroll',
+  },
   notifications: {
     base: '/notifications',
+  },
+  bookings: {
+    base: '/bookings',
   },
 };
