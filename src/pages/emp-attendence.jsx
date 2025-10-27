@@ -7,7 +7,7 @@ export default function EmpAttendencePage() {
   return (
     <>
       <Helmet>
-        <title> Attendence | WijayaAuto </title>
+        <title> Attendence | TuneTab </title>
       </Helmet>
 
       <EmpAttendence />

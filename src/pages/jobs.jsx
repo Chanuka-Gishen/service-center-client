@@ -7,7 +7,7 @@ export default function JobsPage() {
   return (
     <>
       <Helmet>
-        <title> Jobs | WijayaAuto </title>
+        <title> Jobs | TuneTab </title>
       </Helmet>
 
       <Jobs />

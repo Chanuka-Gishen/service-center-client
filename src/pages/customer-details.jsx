@@ -7,7 +7,7 @@ export default function CustomerDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Details | WijayaAuto </title>
+        <title> Details | TuneTab </title>
       </Helmet>
 
       <CustomerDetails />

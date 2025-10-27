@@ -7,7 +7,7 @@ export default function InventoryItemPage() {
   return (
     <>
       <Helmet>
-        <title> Inventory Item | WijayaAuto </title>
+        <title> Inventory Item | TuneTab </title>
       </Helmet>
 
       <InventoryItem />

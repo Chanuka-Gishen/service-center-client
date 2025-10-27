@@ -7,7 +7,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Workorders | WijayaAuto </title>
+        <title> Workorders | TuneTab </title>
       </Helmet>
 
       <Workorders />

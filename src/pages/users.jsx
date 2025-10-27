@@ -7,7 +7,7 @@ export default function UsersPage() {
   return (
     <>
       <Helmet>
-        <title> Users | WijayaAuto </title>
+        <title> Users | TuneTab </title>
       </Helmet>
 
       <Users />

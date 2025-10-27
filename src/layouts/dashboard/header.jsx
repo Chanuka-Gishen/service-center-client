@@ -87,45 +87,6 @@ export default function Header({ onOpenNav }) {
 
       <Box sx={{ flexGrow: 1 }} />
       <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-        {/* <Typography sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
-          {fDateTime(currentDateTime)}
-        </Typography> */}
-        {/* <Chip
-          label={fDateTime(currentDateTime)}
-          sx={{
-            fontSize: '1rem',
-            padding: 2,
-            bgcolor: 'background.paper',
-          }}
-        /> */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-          <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Typography variant="h4" color="error" fontWeight="bold">
-              {days.toString().padStart(2, '0')}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Days
-            </Typography>
-          </Box>
-
-          <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Typography variant="h4" color="error" fontWeight="bold">
-              {hours.toString().padStart(2, '0')}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Hours
-            </Typography>
-          </Box>
-
-          <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Typography variant="h4" color="error" fontWeight="bold">
-              {minutes.toString().padStart(2, '0')}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Min
-            </Typography>
-          </Box>
-        </Box>
         <ColorSwitch />
         <AccountPopover />
       </Stack>

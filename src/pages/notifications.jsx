@@ -8,7 +8,7 @@ export default function NotificationsPage() {
   return (
     <>
       <Helmet>
-        <title> Notifications | WijayaAuto </title>
+        <title> Notifications | TuneTab </title>
       </Helmet>
 
       <Notifications />

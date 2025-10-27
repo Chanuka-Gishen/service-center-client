@@ -7,7 +7,7 @@ export default function AccountsPage() {
   return (
     <>
       <Helmet>
-        <title> Accounts | WijayaAuto </title>
+        <title> Accounts | TuneTab </title>
       </Helmet>
 
       <Accounts />
