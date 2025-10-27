@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | WijayaAuto </title>
+        <title> Login | TuneTab </title>
       </Helmet>
 
       <LoginView />

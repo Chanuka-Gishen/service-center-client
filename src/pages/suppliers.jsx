@@ -7,7 +7,7 @@ export default function SupplierPage() {
   return (
     <>
       <Helmet>
-        <title> Suppliers | WijayaAuto </title>
+        <title> Suppliers | TuneTab </title>
       </Helmet>
 
       <Suppliers />

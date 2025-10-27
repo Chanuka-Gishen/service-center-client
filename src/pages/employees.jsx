@@ -7,7 +7,7 @@ export default function EmployeesPage() {
   return (
     <>
       <Helmet>
-        <title> Employees | WijayaAuto </title>
+        <title> Employees | TuneTab </title>
       </Helmet>
 
       <Employees />

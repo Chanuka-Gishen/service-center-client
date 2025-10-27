@@ -7,7 +7,7 @@ export default function BookingsPage() {
   return (
     <>
       <Helmet>
-        <title> Bookings | WijayaAuto </title>
+        <title> Bookings | TuneTab </title>
       </Helmet>
 
       <Bookings />

@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | WijayaAuto </title>
+        <title> Dashboard | TuneTab </title>
       </Helmet>
 
       <Overview />

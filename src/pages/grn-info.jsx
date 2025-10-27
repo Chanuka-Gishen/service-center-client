@@ -7,7 +7,7 @@ export default function GrnInfoPage() {
   return (
     <>
       <Helmet>
-        <title> GRN Info | WijayaAuto </title>
+        <title> GRN Info | TuneTab </title>
       </Helmet>
 
       <GrnInfo />

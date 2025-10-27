@@ -8,7 +8,7 @@ export default function SetPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> Password | WijayaAuto </title>
+        <title> Password | TuneTab </title>
       </Helmet>
 
       <SetPassword />

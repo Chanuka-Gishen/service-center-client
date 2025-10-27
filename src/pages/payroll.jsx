@@ -7,7 +7,7 @@ export default function PayrollPage() {
   return (
     <>
       <Helmet>
-        <title> Payroll Management | WijayaAuto </title>
+        <title> Payroll Management | TuneTab </title>
       </Helmet>
 
       <Payroll />
