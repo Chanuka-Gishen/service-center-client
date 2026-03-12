@@ -56,7 +56,7 @@ export const InventoryView = ({
             </Tooltip>
           </Stack>
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
           <TextField
             label="Item Code"
             name="code"
@@ -66,7 +66,7 @@ export const InventoryView = ({
             fullWidth
           />
         </Grid>
-        <Grid size={{ sm: 12, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
           <TextField
             label="Item Title"
             name="name"
@@ -76,7 +76,7 @@ export const InventoryView = ({
             fullWidth
           />
         </Grid>
-        <Grid size={{ sm: 12, md: 12, lg: 12 }}>
+        <Grid size={12}>
           <Card>
             <Paper elevation={0}>
               <CustomTable

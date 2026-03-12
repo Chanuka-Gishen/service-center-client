@@ -19,6 +19,9 @@ export const NAVIGATION_ROUTES = {
       base: '/customers/details',
     },
   },
+  brands: {
+    base: '/brands',
+  },
   inventory: {
     base: '/inventory',
     details: {

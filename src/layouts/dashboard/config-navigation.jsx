@@ -59,7 +59,7 @@ const navConfig = [
       {
         title: 'Brands',
         name: 'brands',
-        path: 'brand',
+        path: 'brands',
       },
       {
         title: 'Categories',

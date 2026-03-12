@@ -3,6 +3,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 import BookingsPage from 'src/pages/bookings';
+import BrandsPage from 'src/pages/brands';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import useAuthStore from 'src/store/auth-store';
 
@@ -32,8 +33,7 @@ export const GrnInfoPage = lazy(() => import('src/pages/grn-info'));
 export const NotificationsPage = lazy(() => import('src/pages/notifications'));
 export const PayrollPage = lazy(() => import('src/pages/payroll'));
 export const bookingsPage = lazy(() => import('src/pages/bookings'));
-
-// ----------------------------------------------------------------------
+export const brandsPage = lazy(() => import('src/pages/brands'));
 
 // Authenticated Routes
 const AuthenticatedRoutes = (
@@ -73,6 +73,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.customers.base, element: <CustomersPage /> },
         { path: NAVIGATION_ROUTES.inventory.base, element: <InventoryPage /> },
         { path: NAVIGATION_ROUTES.inventory.details.base, element: <InventoryItemPage /> },
+        { path: NAVIGATION_ROUTES.brands.base, element: <BrandsPage /> },
         { path: NAVIGATION_ROUTES.workorders.base, element: <WorkordersPage /> },
         { path: NAVIGATION_ROUTES.bookings.base, element: <BookingsPage /> },
         { path: NAVIGATION_ROUTES.customers.Details.base, element: <CustomerDetailsPage /> },

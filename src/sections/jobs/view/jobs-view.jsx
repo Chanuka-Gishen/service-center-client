@@ -32,14 +32,14 @@ export const JobsView = ({
   handleDeleteSearchParam,
 }) => {
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Grid container spacing={4}>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Typography variant="h4">Work History</Typography>
         </Grid>
         <Grid size={{ sm: 12, md: 12, lg: 12 }}>
           <Grid container spacing={2}>
-            <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <TextField
                 label="Customer Name"
                 value={searchParams.name}
@@ -49,7 +49,7 @@ export const JobsView = ({
                 fullWidth
               />
             </Grid>
-            <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <TextField
                 label="Vehicle Number"
                 value={searchParams.vehicleNo}
@@ -59,7 +59,7 @@ export const JobsView = ({
                 fullWidth
               />
             </Grid>
-            <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <TextField
                 label="Invoice Number"
                 value={searchParams.invoiceNo}
@@ -69,7 +69,7 @@ export const JobsView = ({
                 fullWidth
               />
             </Grid>
-            <Grid size={{ sm: 12, md: 4, lg: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <FormControl fullWidth>
                 <InputLabel id="select-label">Payment Status</InputLabel>
                 <Select
