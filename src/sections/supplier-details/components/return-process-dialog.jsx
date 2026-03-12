@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { Formik } from 'formik';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { returnStockSchema } from 'src/schema/return-stock-schema';
 import { RETURN_TYP_CASH, RETURN_TYPS } from 'src/constants/return-Types';

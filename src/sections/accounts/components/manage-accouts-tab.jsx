@@ -15,8 +15,8 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Grid,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 
 import DeselectIcon from '@mui/icons-material/Deselect';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';

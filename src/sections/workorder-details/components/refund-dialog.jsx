@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Formik } from 'formik';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { PAY_METHOD_CASH, PAY_METHODS } from 'src/constants/payment-methods';
 import { refundSchema } from 'src/schema/refund-schema';

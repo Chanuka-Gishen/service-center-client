@@ -20,7 +20,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 

@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Formik } from 'formik';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { PAY_METHOD_CASH, PAY_METHODS } from 'src/constants/payment-methods';
 import { addPaymentSChema } from 'src/schema/add-payment-schema';
@@ -102,9 +102,7 @@ export const AddPaymentDialog = ({ open, handleClose, data, isLoading, handleCon
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText>
-                      {touched.paymentMethod && errors.paymentMethod}
-                    </FormHelperText>
+                    <FormHelperText>{touched.paymentMethod && errors.paymentMethod}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>

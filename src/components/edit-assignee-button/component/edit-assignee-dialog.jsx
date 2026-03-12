@@ -6,9 +6,9 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Grid,
 } from '@mui/material';
 import { Formik } from 'formik';
-import Grid from '@mui/material/Grid2';
 
 import workOrderAssigneesSchema from 'src/schema/assign-emp-schema';
 
@@ -48,7 +48,7 @@ export const EditAssigneeDialog = ({
                     multiple
                     fullWidth
                     loading={isLoadingEmpSelect}
-                    loadingText='Loading Employees...'
+                    loadingText="Loading Employees..."
                     id="tags-outlined"
                     options={options}
                     getOptionLabel={(option) => option.empFullName}

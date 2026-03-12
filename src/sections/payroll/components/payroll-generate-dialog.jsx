@@ -12,7 +12,7 @@ import {
   FormHelperText,
   FormLabel,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { DateCalendar, DatePicker } from '@mui/x-date-pickers';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { payrollSchema } from 'src/schema/payroll-schema';

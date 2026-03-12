@@ -18,7 +18,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Slide from '@mui/material/Slide';
 import { DateCalendar, DatePicker } from '@mui/x-date-pickers';
 import { fDate } from 'src/utils/format-time';

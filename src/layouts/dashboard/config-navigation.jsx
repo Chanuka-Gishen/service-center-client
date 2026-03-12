@@ -17,7 +17,7 @@ const navConfig = [
   {
     title: 'Dashboard',
     name: NAVBAR_ITEMS.DASHBOARD,
-    path: '',
+    path: '/',
     icon: <DashboardIcon />,
     permissions: [USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN, USER_ROLE.STAFF],
     isParent: false,

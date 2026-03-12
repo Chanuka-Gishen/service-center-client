@@ -9,7 +9,7 @@ import {
   Slide,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import empBonusSchema from 'src/schema/add-emp-bonus-schema';

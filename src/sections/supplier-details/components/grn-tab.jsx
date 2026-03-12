@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Card, Container, Paper, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { SupplierGrnRow } from './supplier-grn-row';
 import useAuthStore from 'src/store/auth-store';

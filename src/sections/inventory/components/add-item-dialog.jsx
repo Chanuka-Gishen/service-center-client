@@ -11,7 +11,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';

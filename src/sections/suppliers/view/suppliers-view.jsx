@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Container, Paper, Stack, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { CustomTable } from 'src/components/custom-table/custom-table';

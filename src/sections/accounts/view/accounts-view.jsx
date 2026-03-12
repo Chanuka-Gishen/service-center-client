@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Container, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { Box, Container, Tab, Tabs, useMediaQuery, useTheme, Grid } from '@mui/material';
 
 import { ManageAccountsTab } from '../components/manage-accouts-tab';
 import { DeletedAccountsTab } from '../components/deleted-accounts-tab';

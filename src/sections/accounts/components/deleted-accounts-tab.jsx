@@ -1,5 +1,4 @@
-import { Card, Container, Paper } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { Card, Container, Paper, Grid } from '@mui/material';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { DeletedAccountsRow } from './deleted-accounts-row';
 

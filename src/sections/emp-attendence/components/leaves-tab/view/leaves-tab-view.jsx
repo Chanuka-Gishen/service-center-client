@@ -1,5 +1,5 @@
 import { Box, Button, Card, Container, Paper, Stack, Tab, Tabs, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { PendingRqstsRow } from '../components/pending-rqsts-row';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { AcceptedRqstsRow } from '../components/accepted-rqsts-row';

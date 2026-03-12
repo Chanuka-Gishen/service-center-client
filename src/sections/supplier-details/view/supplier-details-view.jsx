@@ -18,7 +18,7 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { NAVIGATION_ROUTES } from 'src/routes/navigation-routes';
 import { formatCurrency } from 'src/utils/format-number';
 import { CustomTable } from 'src/components/custom-table/custom-table';

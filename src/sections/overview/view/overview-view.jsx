@@ -12,7 +12,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -272,7 +272,7 @@ export const Overview = ({
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
           <Stack spacing={2}>
-            <Typography variant='h6'>Pending Cheque Payments</Typography>
+            <Typography variant="h6">Pending Cheque Payments</Typography>
             <Card>
               <Paper elevation={0}>
                 <CustomTable

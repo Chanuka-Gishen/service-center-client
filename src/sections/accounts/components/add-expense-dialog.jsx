@@ -10,8 +10,8 @@ import {
   MenuItem,
   Select,
   TextField,
+  Grid,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';

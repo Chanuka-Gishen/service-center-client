@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { DatePicker } from '@mui/x-date-pickers';
 
 import UploadFileIcon from '@mui/icons-material/UploadFile';

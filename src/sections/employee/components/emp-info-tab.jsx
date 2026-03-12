@@ -1,5 +1,5 @@
 import { Button, Stack, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import commonUtil from 'src/utils/common-util';
 import { formatCurrency } from 'src/utils/format-number';
 import { fDate } from 'src/utils/format-time';

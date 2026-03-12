@@ -14,7 +14,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { PayrollSchemaDialog } from '../components/payroll-schema-dialog';
 import { formatCurrency } from 'src/utils/format-number';
 import { Fragment } from 'react';

@@ -13,7 +13,7 @@ import {
   TableBody,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { ReturnItemsRow } from './return-items-row';
 import { RETURN_TYPS } from 'src/constants/return-Types';

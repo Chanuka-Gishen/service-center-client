@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';

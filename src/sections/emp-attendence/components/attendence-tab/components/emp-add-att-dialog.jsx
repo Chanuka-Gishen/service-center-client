@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Slide from '@mui/material/Slide';
 import { Formik } from 'formik';
 import { empAddAttendenceSchema } from 'src/schema/add-attendence-schema';
@@ -92,7 +92,7 @@ export const EmpAddAttendenceDialog = ({
                                   required: true,
                                   error: Boolean(
                                     touched.records?.[index]?.checkIn &&
-                                      errors.records?.[index]?.checkIn
+                                    errors.records?.[index]?.checkIn
                                   ),
                                   helperText:
                                     touched.records?.[index]?.checkIn &&
@@ -107,7 +107,7 @@ export const EmpAddAttendenceDialog = ({
                             fullWidth
                             error={Boolean(
                               touched.records?.[index]?.checkOut &&
-                                errors.records?.[index]?.checkOut
+                              errors.records?.[index]?.checkOut
                             )}
                           >
                             <TimePicker
@@ -120,7 +120,7 @@ export const EmpAddAttendenceDialog = ({
                                   required: true,
                                   error: Boolean(
                                     touched.records?.[index]?.checkOut &&
-                                      errors.records?.[index]?.checkOut
+                                    errors.records?.[index]?.checkOut
                                   ),
                                   helperText:
                                     touched.records?.[index]?.checkOut &&

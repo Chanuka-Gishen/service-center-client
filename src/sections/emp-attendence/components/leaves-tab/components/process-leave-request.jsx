@@ -11,7 +11,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { Formik } from 'formik';
 import { LEAVE_STS_APPROVED, LEAVE_STS_REJECTED } from 'src/constants/leave-constants';
 import { processLeaveRequestSchema } from 'src/schema/process-leave-rqst-schema';

@@ -10,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { Formik } from 'formik';
 import { TIME_SLOTS } from 'src/constants/common-constants';
@@ -78,7 +78,11 @@ export const UpdateBookingDialog = ({
                   </FormControl>
                 </Grid>
                 <Grid size={12}>
-                  <FormControl fullWidth required error={Boolean(touched.timeSlot && errors.timeSlot)}>
+                  <FormControl
+                    fullWidth
+                    required
+                    error={Boolean(touched.timeSlot && errors.timeSlot)}
+                  >
                     <InputLabel id="select-label">Time Slot</InputLabel>
                     <Select
                       labelId="select-label"

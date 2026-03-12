@@ -12,7 +12,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { PAY_METHOD_CREDIT, PAY_METHODS } from 'src/constants/payment-methods';

@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { SupplierDetails } from 'src/sections/supplier-details';
 
 // ----------------------------------------------------------------------
@@ -6,9 +5,7 @@ import { SupplierDetails } from 'src/sections/supplier-details';
 export default function SupplierInfoPage() {
   return (
     <>
-      <Helmet>
-        <title> Suppliers Info | TuneTab </title>
-      </Helmet>
+      <title> Suppliers Info | TuneTab </title>
 
       <SupplierDetails />
     </>

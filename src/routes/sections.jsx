@@ -49,10 +49,6 @@ const PublicRoutes = [
   { path: NAVIGATION_ROUTES.login, element: <LoginPage /> },
   { path: NAVIGATION_ROUTES.set_password, element: <SetPasswordPage /> },
   { path: NAVIGATION_ROUTES.not_found, element: <Page404 /> },
-  {
-    path: NAVIGATION_ROUTES.all_path,
-    element: <Navigate to={NAVIGATION_ROUTES.not_found} replace />,
-  }, // Redirect to login if not authenticated
 ];
 
 const Router = () => {
@@ -93,6 +89,10 @@ const Router = () => {
       ],
     },
     ...PublicRoutes,
+    {
+      path: NAVIGATION_ROUTES.all_path,
+      element: <Page404 />,
+    },
   ]);
 
   return routes;

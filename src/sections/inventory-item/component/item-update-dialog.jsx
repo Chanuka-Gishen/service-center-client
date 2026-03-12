@@ -11,13 +11,19 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { Formik } from 'formik';
 import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
 import { UpdateInventoryItemSchema } from 'src/schema/update-inv-item-schema';
 
-export const UpdateItemDialog = ({ open, initialValues, isLoading, handleOpenClose, handleConfirm }) => {
+export const UpdateItemDialog = ({
+  open,
+  initialValues,
+  isLoading,
+  handleOpenClose,
+  handleConfirm,
+}) => {
   return (
     <Dialog
       open={open}
@@ -47,7 +53,7 @@ export const UpdateItemDialog = ({ open, initialValues, isLoading, handleOpenClo
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid size={{ sm: 12, xs: 12, lg: 6 }}>
+                <Grid size={{ sm: 12, xs: 12, lg: 6 }}>
                   <TextField
                     label="Item Code"
                     name="itemCode"

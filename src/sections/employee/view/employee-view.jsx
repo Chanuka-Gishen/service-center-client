@@ -1,5 +1,5 @@
 import { Box, Breadcrumbs, Chip, Container, emphasize, styled, Tab, Tabs } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import HomeIcon from '@mui/icons-material/Home';
 

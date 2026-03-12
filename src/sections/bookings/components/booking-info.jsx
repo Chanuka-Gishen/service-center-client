@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { fDate, fDateTime } from 'src/utils/format-time';
 import { UpdateBookingDialog } from './update-booking-dialog';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
@@ -31,7 +31,6 @@ export const BookingInfo = ({
   handleCompleteBooking,
   handleCancelBooking,
 }) => {
-  
   return (
     <Grid container spacing={4}>
       {selectedBooking.bookingStatus === STATUS_CREATED && (
@@ -55,7 +54,10 @@ export const BookingInfo = ({
       )}
 
       <Grid size={12}>
-        <Chip color="success" label={`${fDate(selectedBooking.date)} at ${selectedBooking.timeSlot}`} />
+        <Chip
+          color="success"
+          label={`${fDate(selectedBooking.date)} at ${selectedBooking.timeSlot}`}
+        />
       </Grid>
       {selectedBooking.bookingProcessedAt && (
         <Grid size={12}>

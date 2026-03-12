@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Container, IconButton, Paper, Stack, Tooltip, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { EmployeeRow } from '../components/employee-row';

@@ -1,5 +1,5 @@
 import { Card, Paper } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { BookingsRow } from './bookings-row';
 import { BookingInfo } from './booking-info';

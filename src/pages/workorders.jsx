@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { Workorders } from 'src/sections/workorders';
 
 // ----------------------------------------------------------------------
@@ -6,9 +5,7 @@ import { Workorders } from 'src/sections/workorders';
 export default function AppPage() {
   return (
     <>
-      <Helmet>
-        <title> Workorders | TuneTab </title>
-      </Helmet>
+      <title> Workorders | TuneTab </title>
 
       <Workorders />
     </>

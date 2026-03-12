@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 import { PAY_STATUS_COMPLETED } from 'src/constants/payment-status';
@@ -144,10 +144,7 @@ export const GrnInfoView = ({
           <>
             {grnInfo.grnItems.map((item, index) => (
               <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-                <GrnItemCard
-                  item={item}
-                  handleToggleCreateReturn={handleToggleCreateReturn}
-                />
+                <GrnItemCard item={item} handleToggleCreateReturn={handleToggleCreateReturn} />
               </Grid>
             ))}
           </>

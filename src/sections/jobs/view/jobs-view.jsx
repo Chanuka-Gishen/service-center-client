@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { JobRow } from '../components/job-row';
 import { PAY_STATUS } from 'src/constants/payment-status';

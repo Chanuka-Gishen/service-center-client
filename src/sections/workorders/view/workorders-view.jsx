@@ -22,7 +22,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import { fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
