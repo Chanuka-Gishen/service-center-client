@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { FormikProvider } from 'formik';
 
 import commonUtil from 'src/utils/common-util';
@@ -35,36 +35,54 @@ const LoginForm = ({
               helperText={touched.userPassword && errors.userPassword}
             />
           )}
+
+          <Box sx={{ textAlign: 'right' }}>
+            <Button
+              variant="text"
+              color="primary"
+              size="small"
+              onClick={() => {
+                // Handle forgot password
+              }}
+              sx={{ textTransform: 'none' }}
+            >
+              Forgot password?
+            </Button>
+          </Box>
+
+          {!isUserEmailVerified && (
+            <Button
+              fullWidth
+              loading={isLoadingVerifyEmail}
+              disabled={isLoadingVerifyEmail || commonUtil.stringIsEmptyOrSpaces(values.userEmail)}
+              size="large"
+              variant="contained"
+              color="inherit"
+              loadingPosition="start"
+              onClick={handleVerifyUserLogin}
+            >
+              Verify Email
+            </Button>
+          )}
+
+          {isUserEmailVerified && !isUserFirstLogin && (
+            <Button
+              fullWidth
+              loading={isLoadingLogin}
+              size="large"
+              type="submit"
+              variant="contained"
+              color="inherit"
+              loadingPosition="start"
+            >
+              Continue
+            </Button>
+          )}
+
+          <Typography variant="body2" color="text.secondary" align="center">
+            Need help? Contact your system administrator
+          </Typography>
         </Stack>
-
-        {!isUserEmailVerified && (
-          <Button
-            fullWidth
-            loading={isLoadingVerifyEmail}
-            disabled={isLoadingVerifyEmail || commonUtil.stringIsEmptyOrSpaces(values.userEmail)}
-            size="large"
-            variant="contained"
-            color="inherit"
-            loadingPosition="start"
-            onClick={handleVerifyUserLogin}
-          >
-            Verify Email
-          </Button>
-        )}
-
-        {isUserEmailVerified && !isUserFirstLogin && (
-          <Button
-            fullWidth
-            loading={isLoadingLogin}
-            size="large"
-            type="submit"
-            variant="contained"
-            color="inherit"
-            loadingPosition="start"
-          >
-            Continue
-          </Button>
-        )}
       </form>
     </FormikProvider>
   );

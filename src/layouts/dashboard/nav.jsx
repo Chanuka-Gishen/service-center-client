@@ -1,29 +1,27 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
-import Avatar from '@mui/material/Avatar';
-import { alpha, styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import ListItemButton from '@mui/material/ListItemButton';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {
+  Box,
+  Stack,
+  Drawer,
+  Avatar,
+  Typography,
+  ListItemButton,
+  Badge,
+  Collapse,
+} from '@mui/material';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+
+import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { usePathname, useRouter } from 'src/routes/hooks';
-
-import { account } from 'src/_mock/account';
-
 import Scrollbar from 'src/components/scrollbar';
-
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
-import { USER_ROLE } from 'src/constants/user-role';
 import { NAVBAR_ITEMS } from './common/navigation-names';
 import useAuthStore from 'src/store/auth-store';
-import { Badge } from '@mui/material';
-
-// ----------------------------------------------------------------------
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -56,24 +54,66 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
+  const theme = useTheme();
+  const router = useRouter();
 
   const { auth } = useAuthStore.getState();
 
   const user = auth.user;
 
   const [selected, setSelected] = useState(NAVBAR_ITEMS.DASHBOARD);
+  const [expandedMenus, setExpandedMenus] = useState({});
 
   const upLg = false;
 
-  const handleSelect = (name) => {
-    setSelected(name);
+  const handleMenuToggle = (menuName) => {
+    setExpandedMenus((prev) => ({
+      ...prev,
+      [menuName]: !prev[menuName],
+    }));
   };
+
+  const handleItemClick = (item) => {
+    setSelected(item.name);
+    if (item.path) {
+      router.push(item.path);
+    }
+  };
+
+  useEffect(() => {
+    const initialExpanded = {};
+    navConfig.forEach((item) => {
+      if (item.isParent) {
+        // Check if any child's path matches current pathname
+        const hasActiveChild = item.children?.some((child) => pathname.includes(child.path));
+        if (hasActiveChild) {
+          initialExpanded[item.name] = true;
+        }
+      }
+    });
+    setExpandedMenus(initialExpanded);
+  }, [pathname]);
+
+  useEffect(() => {
+    navConfig.forEach((item) => {
+      if (item.isParent) {
+        item.children?.forEach((child) => {
+          if (pathname.includes(child.path)) {
+            setSelected(child.name);
+          }
+        });
+      } else {
+        if (pathname.includes(item.path)) {
+          setSelected(item.name);
+        }
+      }
+    });
+  }, [pathname]);
 
   useEffect(() => {
     if (openNav) {
       onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const renderAccount = (
@@ -108,19 +148,107 @@ export default function Nav({ openNav, onCloseNav }) {
     </Box>
   );
 
+  const renderNavItem = (item, level = 0) => {
+    const isActive = selected === item.name;
+    const isParent = item.isParent;
+    const isExpanded = expandedMenus[item.name];
+
+    // if (
+    //   item.children &&
+    //   !item.children.some((child) =>
+    //     child.permissions ? child.permissions.includes(user.userRole) : true
+    //   )
+    // ) {
+    //   return null;
+    // }
+
+    return (
+      <Box key={item.name}>
+        <ListItemButton
+          onClick={() => {
+            if (isParent) {
+              handleMenuToggle(item.name);
+            } else {
+              handleItemClick(item);
+            }
+          }}
+          sx={{
+            minHeight: 44,
+            borderRadius: 0.75,
+            ml: '10px',
+            mr: '10px',
+            typography: 'body2',
+            color: 'text.secondary',
+            textTransform: 'capitalize',
+            fontWeight: 'fontWeightMedium',
+            pl: level > 0 ? 4 + level * 2 : 2,
+            ...(isActive && {
+              color: 'primary.main',
+              fontWeight: 'fontWeightSemiBold',
+              bgcolor: alpha(theme.palette.primary.main, 0.08),
+              '&:hover': {
+                bgcolor: alpha(theme.palette.primary.main, 0.16),
+              },
+            }),
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              width: 24,
+              height: 24,
+              mr: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {item.icon}
+          </Box>
+
+          <Box component="span" sx={{ flexGrow: 1 }}>
+            {item.title}
+          </Box>
+
+          {isParent && <Box component="span">{isExpanded ? <ExpandLess /> : <ExpandMore />}</Box>}
+        </ListItemButton>
+
+        {isParent && (
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            <Stack component="nav" spacing={0.5} sx={{ pl: 2 }}>
+              {item.children?.map((child) => (
+                <ListItemButton
+                  key={child.name}
+                  onClick={() => handleItemClick(child)}
+                  sx={{
+                    minHeight: 36,
+                    pl: 8,
+                    borderRadius: 0.75,
+                    typography: 'body2',
+                    color: 'text.secondary',
+                    ...(selected === child.name && {
+                      color: 'primary.main',
+                      fontWeight: 'fontWeightSemiBold',
+                      bgcolor: alpha(theme.palette.primary.main, 0.08),
+                      '&:hover': {
+                        bgcolor: alpha(theme.palette.primary.main, 0.16),
+                      },
+                    }),
+                  }}
+                >
+                  <Box component="span">{child.title}</Box>
+                </ListItemButton>
+              ))}
+            </Stack>
+          </Collapse>
+        )}
+      </Box>
+    );
+  };
+
   const renderMenu = (
-    <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {navConfig
-        .filter((item) => item.permissions.includes(user.userRole))
-        .map((item) => (
-          <NavItem
-            key={item.title}
-            item={item}
-            selected={selected}
-            pathName={pathname}
-            handleSelect={handleSelect}
-          />
-        ))}
+    <Stack component="nav" spacing={0.5}>
+      {navConfig.map((item) => renderNavItem(item))}
     </Stack>
   );
 
@@ -135,10 +263,7 @@ export default function Nav({ openNav, onCloseNav }) {
         },
       }}
     >
-      {/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
-
       {renderAccount}
-
       {renderMenu}
     </Scrollbar>
   );
@@ -155,8 +280,8 @@ export default function Nav({ openNav, onCloseNav }) {
           sx={{
             height: 1,
             position: 'fixed',
-            width: NAV.WIDTH,
-            borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
+            width: NAV_WIDTH,
+            borderRight: `dashed 1px ${theme.palette.divider}`,
           }}
         >
           {renderContent}
@@ -165,9 +290,12 @@ export default function Nav({ openNav, onCloseNav }) {
         <Drawer
           open={openNav}
           onClose={onCloseNav}
-          PaperProps={{
-            sx: {
-              width: NAV.WIDTH,
+          slotProps={{
+            paper: {
+              sx: {
+                width: NAV.WIDTH,
+                bgcolor: 'background.default',
+              },
             },
           }}
         >
@@ -183,9 +311,7 @@ Nav.propTypes = {
   onCloseNav: PropTypes.func,
 };
 
-// ----------------------------------------------------------------------
-
-function NavItem({ item, selected, pathName, handleSelect }) {
+function NavItem({ item, pathName, handleSelect }) {
   const router = useRouter();
 
   const active = pathName.includes(item.name);
@@ -197,8 +323,6 @@ function NavItem({ item, selected, pathName, handleSelect }) {
 
   return (
     <ListItemButton
-      //component={RouterLink}
-      //href={item.path}
       onClick={handleClick}
       sx={{
         minHeight: 44,
