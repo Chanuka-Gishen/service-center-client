@@ -22,6 +22,9 @@ export const NAVIGATION_ROUTES = {
   brands: {
     base: '/brands',
   },
+  inventory_categories: {
+    base: '/inventory-categories',
+  },
   inventory: {
     base: '/inventory',
     details: {

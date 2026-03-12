@@ -64,7 +64,7 @@ const navConfig = [
       {
         title: 'Categories',
         name: 'categories',
-        path: 'category',
+        path: 'inventory-categories',
       },
       {
         title: 'Items',

@@ -52,7 +52,7 @@ const JobsController = () => {
   const handleDeleteSearchParam = (filterName) => {
     setSearchParams((prevFilters) => ({
       ...prevFilters,
-      [filterName]: "",
+      [filterName]: '',
     }));
   };
 

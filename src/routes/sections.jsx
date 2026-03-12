@@ -34,6 +34,7 @@ export const NotificationsPage = lazy(() => import('src/pages/notifications'));
 export const PayrollPage = lazy(() => import('src/pages/payroll'));
 export const bookingsPage = lazy(() => import('src/pages/bookings'));
 export const brandsPage = lazy(() => import('src/pages/brands'));
+export const CategoriesPage = lazy(() => import('src/pages/inventory-categories'));
 
 // Authenticated Routes
 const AuthenticatedRoutes = (
@@ -69,6 +70,7 @@ const Router = () => {
         { path: NAVIGATION_ROUTES.customers.base, element: <CustomersPage /> },
         { path: NAVIGATION_ROUTES.inventory.base, element: <InventoryPage /> },
         { path: NAVIGATION_ROUTES.inventory.details.base, element: <InventoryItemPage /> },
+        { path: NAVIGATION_ROUTES.inventory_categories.base, element: <CategoriesPage /> },
         { path: NAVIGATION_ROUTES.brands.base, element: <BrandsPage /> },
         { path: NAVIGATION_ROUTES.workorders.base, element: <WorkordersPage /> },
         { path: NAVIGATION_ROUTES.bookings.base, element: <BookingsPage /> },
