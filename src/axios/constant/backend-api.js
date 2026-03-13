@@ -125,4 +125,9 @@ export const BACKEND_API = {
   BOOKING_STAT_TOTAL: IP_URL + '/bookings/auth/total-count',
   BOOKING_STAT_TOTAL_PENDING: IP_URL + '/bookings/auth/pending-count',
   BOOKING_STAT_TOTAL_TODAY: IP_URL + '/bookings/auth/today-count',
+
+  BRANDS: IP_URL + '/brand/auth/',
+  BRANDS_OPTIONS: IP_URL + '/brand/auth/options',
+  BRANDS_ADD: IP_URL + '/brand/auth/',
+  BRANDS_UPDATE: IP_URL + '/brand/auth/',
 };

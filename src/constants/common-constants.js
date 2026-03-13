@@ -15,9 +15,9 @@ export const COLOR_MODE = {
   DARK: 'dark',
 };
 
-export const NOTIFICATION_TITLE_NOTIF = "Notification";
-export const NOTIFICATION_TITLE_GREETINGS = "Greetings";
-export const NOTIFICATION_TITLE_OFFERS = "Offers";
+export const NOTIFICATION_TITLE_NOTIF = 'Notification';
+export const NOTIFICATION_TITLE_GREETINGS = 'Greetings';
+export const NOTIFICATION_TITLE_OFFERS = 'Offers';
 
 export const NOTIFICATION_TITLES = [
   NOTIFICATION_TITLE_NOTIF,
@@ -26,23 +26,25 @@ export const NOTIFICATION_TITLES = [
 ];
 
 export const TIME_SLOTS = [
-  "9.00 AM - 10.00 AM",
-  "10.00 AM - 11.00 AM",
-  "11.00 AM - 12.00 PM",
-  "12.00 PM - 1.00 PM",
-  "1.00 PM - 2.00 PM",
-  "2.00 PM - 3.00 PM",
-  "3.00 PM - 4.00 PM",
-  "4.00 PM - 5.00 PM",
+  '9.00 AM - 10.00 AM',
+  '10.00 AM - 11.00 AM',
+  '11.00 AM - 12.00 PM',
+  '12.00 PM - 1.00 PM',
+  '1.00 PM - 2.00 PM',
+  '2.00 PM - 3.00 PM',
+  '3.00 PM - 4.00 PM',
+  '4.00 PM - 5.00 PM',
 ];
 
-export const STATUS_CREATED = "Created";
-export const STATUS_PENDING = "Pending";
-export const STATUS_COMPLETED = "Completed";
-export const STATUS_CANCELED = "Canceled";
+export const STATUS_CREATED = 'Created';
+export const STATUS_PENDING = 'Pending';
+export const STATUS_COMPLETED = 'Completed';
+export const STATUS_CANCELED = 'Canceled';
 
-export const STATUS_BOOKINGS = [
-  STATUS_CREATED,
-  STATUS_COMPLETED,
-  STATUS_CANCELED,
-];
+export const STATUS_BOOKINGS = [STATUS_CREATED, STATUS_COMPLETED, STATUS_CANCELED];
+
+export const BRAND_STS_ACTIVE = 'Active';
+export const BRAND_STS_INACTIVE = 'Inactive';
+export const BRAND_STS_DISCONTINUED = 'Discontinued';
+
+export const BRAND_STATUS = [BRAND_STS_ACTIVE, BRAND_STS_INACTIVE, BRAND_STS_DISCONTINUED];

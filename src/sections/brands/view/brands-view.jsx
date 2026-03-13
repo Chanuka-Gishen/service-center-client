@@ -17,6 +17,7 @@ import {
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { CustomTable } from 'src/components/custom-table/custom-table';
 import { BrandRow } from '../components/brand-row';
+import { BrandForm } from '../components/brand-form';
 
 export const BrandsView = ({
   tableTitles,
@@ -24,10 +25,18 @@ export const BrandsView = ({
   brands,
   brandsCount,
   pagination,
+  initialValues,
+  isOpenAdd,
+  isOpenUpdate,
   isLoading,
-  handleToggleAddDialog,
+  isLoadingAddBrands,
+  isLoadingUpdateBrands,
   handleChangeSearchParam,
   handleDeleteSearchParam,
+  handleToggleAddDialog,
+  handleToggleUpdateDialog,
+  handleAddBrand,
+  handleUpdateBrand,
 }) => {
   return (
     <Container maxWidth="xl">
@@ -65,7 +74,7 @@ export const BrandsView = ({
               label="Brand Status"
               name="brandStatus"
               fullWidth
-              value={searchParams.brandStatus || ''}
+              value={searchParams.brandStatus}
               onChange={handleChangeSearchParam}
             >
               <MenuItem value={true}>Active</MenuItem>
@@ -99,15 +108,16 @@ export const BrandsView = ({
               label="Sort Order"
               name="sortOrder"
               fullWidth
-              value={searchParams.Order || ''}
+              value={searchParams.sortOrder || ''}
               onChange={handleChangeSearchParam}
             >
+              <MenuItem value={''}></MenuItem>
               <MenuItem value={'asc'}>Ascending</MenuItem>
               <MenuItem value={'dsc'}>Descending</MenuItem>
             </Select>
           </FormControl>
         </Grid>
-        {(searchParams.search || searchParams.brandStatus) && (
+        {(searchParams.search || typeof searchParams.brandStatus === 'boolean') && (
           <Grid size={12}>
             <Stack direction="row" spacing={2} flexWrap="wrap">
               {searchParams.search && (
@@ -116,7 +126,7 @@ export const BrandsView = ({
                   onDelete={() => handleDeleteSearchParam('search')}
                 />
               )}
-              {searchParams.brandStatus && (
+              {typeof searchParams.brandStatus === 'boolean' && (
                 <Chip
                   label={searchParams.brandStatus ? 'Available' : 'Not Available'}
                   onDelete={() => handleDeleteSearchParam('brandStatus')}
@@ -137,12 +147,30 @@ export const BrandsView = ({
                 limit={pagination.limit}
                 handleChangePage={pagination.handleChangePage}
                 handleChangeRowsPerPage={pagination.handleChangeRowsPerPage}
-                tableBody={<BrandRow data={brands} />}
+                tableBody={<BrandRow data={brands} onClick={handleToggleUpdateDialog} />}
               />
             </Paper>
           </Card>
         </Grid>
       </Grid>
+      {isOpenAdd && (
+        <BrandForm
+          open={isOpenAdd}
+          initialValues={initialValues}
+          isLoading={isLoadingAddBrands}
+          handleOpenClose={handleToggleAddDialog}
+          handleConfirm={handleAddBrand}
+        />
+      )}
+      {isOpenUpdate && (
+        <BrandForm
+          open={isOpenUpdate}
+          initialValues={initialValues}
+          isLoading={isLoadingUpdateBrands}
+          handleOpenClose={handleToggleUpdateDialog}
+          handleConfirm={handleUpdateBrand}
+        />
+      )}
     </Container>
   );
 };
