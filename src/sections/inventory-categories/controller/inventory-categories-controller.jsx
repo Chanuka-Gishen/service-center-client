@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import usePagination from 'src/hooks/usePagination';
 import { InventoryCategoriesView } from '../view/inventory-categories-view';
+import useInventoryCategory from 'src/hooks/useInventoryCategory';
 
 const InventoryCategoriesController = () => {
   const tableKeys = ['Category', 'Product Count', 'Is Active', 'Created At', 'Updated At'];
+
+  const {
+    categories,
+    categoriesCount,
+    isLoadingCategories,
+    isLoadingAddCategory,
+    isLoadingUpdateCategory,
+    getCategories,
+    addCategory,
+    updateCategory,
+  } = useInventoryCategory();
 
   const [searchParams, setSearchParams] = useState({
     name: '',
@@ -46,21 +58,41 @@ const InventoryCategoriesController = () => {
     setIsOpenUpdate(!isOpenUpdate);
   };
 
-  const handleAddInventoryCategory = async (values) => {};
+  const handleAddInventoryCategory = async (values) => {
+    const result = await addCategory(values);
 
-  const handleUpdateInventoryCategory = async (values) => {};
+    if (result) {
+      handleToggleAddDialog();
+      getCategories(queryParams);
+    }
+  };
+
+  const handleUpdateInventoryCategory = async (values) => {
+    const result = await updateCategory(values);
+
+    if (result) {
+      handleToggleUpdateDialog();
+      getCategories(queryParams);
+    }
+  };
+
+  useEffect(() => {
+    getCategories(queryParams);
+  }, [pagination.limit, pagination.page, searchParams.name, searchParams.status]);
 
   return (
     <InventoryCategoriesView
       tableHeaders={tableKeys}
       searchParams={searchParams}
-      categories={[]}
-      categoriesCount={0}
+      categories={categories}
+      categoriesCount={categoriesCount}
       pagination={pagination}
       initialValues={initialValues}
       isOpenAdd={isOpenAdd}
       isOpenUpdate={isOpenUpdate}
-      isLoading={false}
+      isLoading={isLoadingCategories}
+      isLoadingAddCategor={isLoadingAddCategory}
+      isLoadingUpdateCategory={isLoadingUpdateCategory}
       handleChangeSearchParam={handleChangeSearchParam}
       handleDeleteSearchParam={handleDeleteSearchParam}
       handleToggleAddDialog={handleToggleAddDialog}

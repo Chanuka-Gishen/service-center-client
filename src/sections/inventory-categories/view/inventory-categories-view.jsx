@@ -29,6 +29,8 @@ export const InventoryCategoriesView = ({
   isOpenAdd,
   isOpenUpdate,
   isLoading,
+  isLoadingAddCategor,
+  isLoadingUpdateCategory,
   handleChangeSearchParam,
   handleDeleteSearchParam,
   handleToggleAddDialog,
@@ -72,21 +74,22 @@ export const InventoryCategoriesView = ({
               label="Category Status"
               name="status"
               fullWidth
-              value={searchParams.status || ''}
+              value={searchParams.status}
               onChange={handleChangeSearchParam}
             >
+              <MenuItem value={''}>Any</MenuItem>
               <MenuItem value={true}>Active</MenuItem>
               <MenuItem value={false}>Not Active</MenuItem>
             </Select>
           </FormControl>
         </Grid>
-        {(searchParams.name || searchParams.status) && (
+        {(searchParams.name || typeof searchParams.status === 'boolean') && (
           <Grid size={12}>
             <Stack direction="row" spacing={2} flexWrap="wrap">
               {searchParams.name && (
                 <Chip label={searchParams.name} onDelete={() => handleDeleteSearchParam('name')} />
               )}
-              {searchParams.status && (
+              {typeof searchParams.status === 'boolean' && (
                 <Chip
                   label={searchParams.status ? 'Available' : 'Not Available'}
                   onDelete={() => handleDeleteSearchParam('status')}
@@ -119,7 +122,7 @@ export const InventoryCategoriesView = ({
         <InventoryCategoryForm
           open={isOpenAdd}
           initialValues={initialValues}
-          isLoading={false}
+          isLoading={isLoadingAddCategor}
           handleOpenClose={handleToggleAddDialog}
           handleConfirm={handleAddInventoryCategory}
         />
@@ -128,7 +131,7 @@ export const InventoryCategoriesView = ({
         <InventoryCategoryForm
           open={isOpenUpdate}
           initialValues={initialValues}
-          isLoading={false}
+          isLoading={isLoadingUpdateCategory}
           handleOpenClose={handleToggleUpdateDialog}
           handleConfirm={handleUpdateInventoryCategory}
         />

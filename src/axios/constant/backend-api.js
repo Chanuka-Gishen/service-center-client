@@ -130,4 +130,9 @@ export const BACKEND_API = {
   BRANDS_OPTIONS: IP_URL + '/brand/auth/options',
   BRANDS_ADD: IP_URL + '/brand/auth/',
   BRANDS_UPDATE: IP_URL + '/brand/auth/',
+
+  INV_CATEGORIES: IP_URL + '/category/auth',
+  INV_CATEGORY_OPTIONS: IP_URL + '/category/auth/options',
+  INV_CATEGORY_ADD: IP_URL + '/category/supAuth',
+  INV_CATEGORY_UPDATE: IP_URL + '/category/supAuth',
 };

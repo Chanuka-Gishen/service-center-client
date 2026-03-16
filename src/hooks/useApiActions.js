@@ -14,6 +14,7 @@ const useApiActions = (apiFunction) => {
 
       if (responseUtil.isResponseSuccess(res.data.responseCode)) {
         setLoading(false);
+
         return res.data.responseData || true;
       }
 
