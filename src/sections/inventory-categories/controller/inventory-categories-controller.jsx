@@ -17,11 +17,13 @@ const InventoryCategoriesController = () => {
     updateCategory,
   } = useInventoryCategory();
 
+  const baseValues = { categoryTitle: '', isActive: true };
+
   const [searchParams, setSearchParams] = useState({
     name: '',
     status: '',
   });
-  const [initialValues, setInitialValues] = useState({ categoryTitle: '', isActive: true });
+  const [initialValues, setInitialValues] = useState(baseValues);
 
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -53,6 +55,8 @@ const InventoryCategoriesController = () => {
   const handleToggleUpdateDialog = (row = null) => {
     if (!isOpenUpdate && row) {
       setInitialValues({ _id: row._id, categoryTitle: row.categoryTitle, isActive: row.isActive });
+    } else {
+      setInitialValues(baseValues);
     }
 
     setIsOpenUpdate(!isOpenUpdate);
