@@ -4,10 +4,8 @@ import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
 export const AddInventoryItemSchema = Yup.object().shape({
   itemCode: Yup.string().required('Item code is required'),
   itemName: Yup.string().required('Item name is required'),
-  itemCategory: Yup.string()
-    .oneOf(ITEM_CATEGORIES_LABELS, 'Invalid category')
-    .nullable()
-    .notRequired(),
+  itemCategory: Yup.string().nullable().notRequired(),
+  itemBrand: Yup.string().nullable().notRequired(),
   itemDescription: Yup.string().nullable().notRequired(),
   itemQuantity: Yup.number().min(0, 'Quantity cannot be negative').required('Quantity is required'),
   itemUnit: Yup.string().default('Pieces'),

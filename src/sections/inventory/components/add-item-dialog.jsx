@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -17,7 +18,16 @@ import { CurrencyInput } from 'src/components/currency-input/currency-input';
 import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
 import { AddInventoryItemSchema } from 'src/schema/add-inv-item-schema';
 
-export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm }) => {
+export const AddItemDialog = ({
+  open,
+  categoryOptions,
+  brandOptions,
+  isLoading,
+  isLoadingCategoryOptions,
+  isLoadingBrandsOptions,
+  handleOpenClose,
+  handleConfirm,
+}) => {
   return (
     <Dialog
       open={open}
@@ -30,7 +40,8 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
         initialValues={{
           itemCode: '',
           itemName: '',
-          itemCategory: '',
+          itemCategory: null,
+          itemBrand: null,
           itemDescription: '',
           itemQuantity: 0,
           itemUnit: 'Pieces',
@@ -45,16 +56,7 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
           handleConfirm(values);
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          resetForm,
-          handleSubmit,
-          getFieldProps,
-          handleChange,
-          handleBlur,
-        }) => (
+        {({ values, errors, touched, resetForm, handleSubmit, getFieldProps, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -84,7 +86,7 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     helperText={touched.itemName && errors.itemName}
                   />
                 </Grid>
-                <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
+                {/* <Grid size={{ sm: 12, xs: 12, lg: 12 }}>
                   <TextField
                     label="Item Description"
                     name="itemDescription"
@@ -95,27 +97,34 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     error={touched.itemDescription && Boolean(errors.itemDescription)}
                     helperText={touched.itemDescription && errors.itemDescription}
                   />
+                </Grid> */}
+                <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+                  <FormControl fullWidth>
+                    <Autocomplete
+                      options={categoryOptions}
+                      disabled={isLoadingCategoryOptions}
+                      value={categoryOptions.find((opt) => opt._id === values.itemCategory) || null}
+                      getOptionLabel={(option) => option.categoryTitle}
+                      onChange={(e, value) => setFieldValue('itemCategory', value?._id ?? null)}
+                      renderInput={(params) => <TextField label="Category" {...params} />}
+                    />
+                    <FormHelperText error={touched.itemCategory && errors.itemCategory}>
+                      {touched.itemCategory && errors.itemCategory}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
                   <FormControl fullWidth>
-                    <InputLabel id="select-label">Category</InputLabel>
-                    <Select
-                      labelId="select-label"
-                      id="simple-select"
-                      label="Category"
-                      name="itemCategory"
-                      value={values.itemCategory || ''}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      {ITEM_CATEGORIES_LABELS.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText error={touched.itemCategory && errors.itemCategory}>
-                      {touched.itemCategory && errors.itemCategory}
+                    <Autocomplete
+                      options={brandOptions}
+                      disabled={isLoadingBrandsOptions}
+                      value={brandOptions.find((opt) => opt._id === values.itemBrand) || null}
+                      getOptionLabel={(option) => option.brandName}
+                      onChange={(e, value) => setFieldValue('itemBrand', value?._id ?? null)}
+                      renderInput={(params) => <TextField label="Brand" {...params} />}
+                    />
+                    <FormHelperText error={touched.itemBrand && errors.itemBrand}>
+                      {touched.itemBrand && errors.itemBrand}
                     </FormHelperText>
                   </FormControl>
                 </Grid>

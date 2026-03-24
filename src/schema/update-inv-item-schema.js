@@ -1,12 +1,10 @@
 import * as Yup from 'yup';
-import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
 
 export const UpdateInventoryItemSchema = Yup.object().shape({
   itemCode: Yup.string().required('Item code is required'),
   itemName: Yup.string().required('Item name is required'),
-  itemCategory: Yup.string()
-    .oneOf(ITEM_CATEGORIES_LABELS, 'Invalid category')
-    .required('Category is required'),
+  itemCategory: Yup.string().nullable().notRequired(),
+  itemBrand: Yup.string().nullable().notRequired(),
   itemDescription: Yup.string().nullable().notRequired(),
   itemUnit: Yup.string().default('Pieces'),
   itemBuyingPrice: Yup.number()

@@ -13,8 +13,8 @@ export const InventoryRow = ({ data, onClickRow }) => {
         >
           <TableCell>{item.itemCode}</TableCell>
           <TableCell>{item.itemName}</TableCell>
-          <TableCell>{item.itemDescription}</TableCell>
-          <TableCell>{item.itemCategory}</TableCell>
+          <TableCell>{item.itemCategory?.categoryTitle ?? ' - '}</TableCell>
+          <TableCell>{item.itemBrand?.brandName ?? ' - '}</TableCell>
           <TableCell>{item.itemQuantity}</TableCell>
           <TableCell>{item.itemThreshold}</TableCell>
           <TableCell>{formatCurrency(item.itemBuyingPrice)}</TableCell>

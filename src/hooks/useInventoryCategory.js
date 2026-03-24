@@ -39,7 +39,7 @@ const useInventoryCategory = () => {
     const result = await getCategoryOptionsRequest(sourceToken.token);
 
     if (result) {
-      setCategoryOptions(result.data.length > 0 ? result.data : []);
+      setCategoryOptions(result.length > 0 ? result : []);
     }
   };
 

@@ -4,6 +4,9 @@ import { useLocation } from 'react-router-dom';
 import { InventoryItemView } from '../view/inventory-item-view';
 import useInventory from 'src/hooks/useInventory';
 import useSupplier from 'src/hooks/useSupplier';
+import useInventoryCategory from 'src/hooks/useInventoryCategory';
+import useBrand from 'src/hooks/useBrand';
+import usePagination from 'src/hooks/usePagination';
 
 const logsTable = [
   'Movement Type',
@@ -34,11 +37,13 @@ const InventoryItemController = () => {
 
   const { suppliersOptions, isLoadingSuppliersOptions, fetchSuppliersForSelection } = useSupplier();
 
+  const { categoryOptions, isLoadingCategoryOptions, getCategoryOptions } = useInventoryCategory();
+  const { brandOptions, isLoadingBrandsOptions, getBrandsOptions } = useBrand();
+
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   const isOpenOptions = Boolean(optionsAnchorEl);
 
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+  const pagination = usePagination();
 
   const [initialValues, setInitialValues] = useState({});
 
@@ -47,17 +52,7 @@ const InventoryItemController = () => {
 
   const params = {
     id,
-    page,
-    limit,
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setPage(0);
-    setLimit(parseInt(event.target.value, 10));
+    ...pagination.params,
   };
 
   const handleClickOptions = (event) => {
@@ -75,6 +70,7 @@ const InventoryItemController = () => {
         itemCode: item.itemCode,
         itemName: item.itemName,
         itemCategory: item.itemCategory,
+        itemBrand: item.itemBrand,
         itemDescription: item.itemDescription,
         itemUnit: 'Pieces',
         itemBuyingPrice: item.itemBuyingPrice,
@@ -119,6 +115,11 @@ const InventoryItemController = () => {
   };
 
   useEffect(() => {
+    getBrandsOptions();
+    getCategoryOptions();
+  }, []);
+
+  useEffect(() => {
     if (id) {
       fetchItemInfo(id);
     }
@@ -133,7 +134,7 @@ const InventoryItemController = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, limit]);
+  }, [pagination.page, pagination.limit]);
 
   return (
     <InventoryItemView
@@ -144,7 +145,12 @@ const InventoryItemController = () => {
       suppliersOptions={suppliersOptions}
       initialValues={initialValues}
       optionsAnchorEl={optionsAnchorEl}
+      pagination={pagination}
+      brandOptions={brandOptions}
+      categoryOptions={categoryOptions}
       isLoading={isLoadingItem}
+      isLoadingBrandsOptions={isLoadingBrandsOptions}
+      isLoadingCategoryOptions={isLoadingCategoryOptions}
       isLoadingEdit={isLoadingEdit}
       isLoadingStockUpdate={isLoadingStockUpdate}
       isLoadingStockUpdateLogs={isLoadingStockUpdateLogs}
@@ -158,10 +164,6 @@ const InventoryItemController = () => {
       handleToggleStockUpdateDialog={handleToggleStockUpdateDialog}
       handleUpdateItem={handleUpdateItem}
       handleUpdateStock={handleUpdateStock}
-      limit={limit}
-      page={page}
-      handleChangePage={handleChangePage}
-      handleChangeRowsPerPage={handleChangeRowsPerPage}
     />
   );
 };

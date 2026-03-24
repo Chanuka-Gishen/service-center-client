@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   alpha,
   Box,
@@ -86,7 +86,12 @@ export const InventoryItemView = ({
   suppliersOptions,
   initialValues,
   optionsAnchorEl,
+  pagination,
+  categoryOptions,
+  brandOptions,
   isLoading,
+  isLoadingCategoryOptions,
+  isLoadingBrandsOptions,
   isLoadingEdit,
   isLoadingStockUpdate,
   isLoadingStockUpdateLogs,
@@ -100,10 +105,6 @@ export const InventoryItemView = ({
   handleToggleStockUpdateDialog,
   handleUpdateItem,
   handleUpdateStock,
-  limit,
-  page,
-  handleChangePage,
-  handleChangeRowsPerPage,
 }) => {
   const { auth } = useAuthStore.getState();
 
@@ -252,10 +253,10 @@ export const InventoryItemView = ({
                     dataLength={stockLogs.length}
                     isLoading={isLoadingStockUpdateLogs}
                     documentCount={stockLogsCount}
-                    page={page}
-                    limit={limit}
-                    handleChangePage={handleChangePage}
-                    handleChangeRowsPerPage={handleChangeRowsPerPage}
+                    page={pagination.page}
+                    limit={pagination.limit}
+                    handleChangePage={pagination.handleChangePage}
+                    handleChangeRowsPerPage={pagination.handleChangeRowsPerPage}
                     tableBody={<StockLogsRow data={stockLogs} />}
                   />
                 </Paper>
@@ -268,6 +269,10 @@ export const InventoryItemView = ({
         <UpdateItemDialog
           open={isOpenUpdateDialog}
           initialValues={initialValues}
+          brandOptions={brandOptions}
+          categoryOptions={categoryOptions}
+          isLoadingBrandsOptions={isLoadingBrandsOptions}
+          isLoadingCategoryOptions={isLoadingBrandsOptions}
           handleOpenClose={handleToggleUpdateDialog}
           handleConfirm={handleUpdateItem}
           isLoading={isLoadingEdit}

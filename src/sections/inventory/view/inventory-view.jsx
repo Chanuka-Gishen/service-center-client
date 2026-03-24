@@ -22,6 +22,9 @@ import { InventoryRow } from '../components/inventory-row';
 export const InventoryView = ({
   items,
   selectedFilters,
+  categoryOptions,
+  brandOptions,
+  pagination,
   isLoading,
   isLoadingAdd,
   isOpenAdd,
@@ -29,12 +32,10 @@ export const InventoryView = ({
   handleToggleAddDialog,
   handleAddItem,
   tableKeys,
-  limit,
-  page,
   documentCount,
+  isLoadingCategoryOptions,
+  isLoadingBrandsOptions,
   handleNavigateItem,
-  handleChangePage,
-  handleChangeRowsPerPage,
 }) => {
   const matchDownSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -84,10 +85,10 @@ export const InventoryView = ({
                 dataLength={items.length}
                 isLoading={isLoading}
                 documentCount={documentCount}
-                page={page}
-                limit={limit}
-                handleChangePage={handleChangePage}
-                handleChangeRowsPerPage={handleChangeRowsPerPage}
+                page={pagination.page}
+                limit={pagination.limit}
+                handleChangePage={pagination.handleChangePage}
+                handleChangeRowsPerPage={pagination.handleChangeRowsPerPage}
                 tableBody={<InventoryRow data={items} onClickRow={handleNavigateItem} />}
               />
             </Paper>
@@ -97,8 +98,12 @@ export const InventoryView = ({
       {isOpenAdd && (
         <AddItemDialog
           open={isOpenAdd}
-          handleOpenClose={handleToggleAddDialog}
+          brandOptions={brandOptions}
+          categoryOptions={categoryOptions}
           isLoading={isLoadingAdd}
+          isLoadingBrandsOptions={isLoadingBrandsOptions}
+          isLoadingCategoryOptions={isLoadingCategoryOptions}
+          handleOpenClose={handleToggleAddDialog}
           handleConfirm={handleAddItem}
         />
       )}

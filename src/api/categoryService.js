@@ -14,7 +14,6 @@ export const fetchCategoryOptions = (cancelToken) =>
     url: BACKEND_API.INV_CATEGORY_OPTIONS,
     method: 'GET',
     cancelToken,
-    params,
   });
 
 export const createCategory = (data, cancelToken) =>

@@ -28,7 +28,7 @@ const useBrand = () => {
     }
   };
 
-  const getBrandsOptional = async () => {
+  const getBrandsOptions = async () => {
     const data = await getOptionsRequest(sourceToken.token);
 
     if (data) {
@@ -154,7 +154,7 @@ const useBrand = () => {
     isLoadingAddBrands,
     isLoadingUpdateBrands,
     getBrands,
-    getBrandsOptional,
+    getBrandsOptions,
     addBrand,
     updateBrand,
   };
