@@ -12,7 +12,7 @@ const assigneeSchema = Yup.object({
 });
 
 // Array of assignees schema (optional, default empty array)
-const workOrderAssigneesSchema = Yup.object({
+const workorderAssigneesSchema = Yup.object({
   assignees: Yup.array()
     .of(assigneeSchema)
     .optional()
@@ -20,4 +20,4 @@ const workOrderAssigneesSchema = Yup.object({
     .max(10, 'Cannot assign more than 10 employees to a work order'),
 });
 
-export default workOrderAssigneesSchema;
+export default workorderAssigneesSchema;

@@ -18,11 +18,11 @@ export const CustomerJobRow = ({ data }) => {
   return (
     <>
       {data.map((item, index) => {
-        const status = item.workOrderStatus;
-        const paymentStatus = item.workOrderPaymentStatus;
+        const status = item.workorderStatus;
+        const paymentStatus = item.workorderPaymentStatus;
         return (
           <TableRow key={index} hover={true} sx={{ cursor: 'pointer' }}>
-            <TableCell>{item.workOrderVehicle.vehicleNumber}</TableCell>
+            <TableCell>{item.workorderVehicle.vehicleNumber}</TableCell>
             <TableCell>
               <Chip
                 icon={status === WO_STATUS_CLOSED ? <CheckCircleIcon /> : <PendingIcon />}
@@ -30,7 +30,7 @@ export const CustomerJobRow = ({ data }) => {
                 color={status === WO_STATUS_CLOSED ? 'success' : 'warning'}
               />
             </TableCell>
-            <TableCell>{item.workOrderInvoiceNumber}</TableCell>
+            <TableCell>{item.workorderInvoiceNumber}</TableCell>
             <TableCell>
               <Chip
                 icon={
@@ -42,7 +42,7 @@ export const CustomerJobRow = ({ data }) => {
                     <PendingIcon />
                   )
                 }
-                label={item.workOrderPaymentStatus}
+                label={item.workorderPaymentStatus}
                 color={
                   paymentStatus === PAY_STATUS_PAID
                     ? 'success'
@@ -54,8 +54,8 @@ export const CustomerJobRow = ({ data }) => {
                 }
               />
             </TableCell>
-            <TableCell>{formatCurrency(item.workOrderTotalAmount)}</TableCell>
-            <TableCell>{formatCurrency(item.workOrderBalanceAmount)}</TableCell>
+            <TableCell>{formatCurrency(item.workorderTotalAmount)}</TableCell>
+            <TableCell>{formatCurrency(item.workorderBalanceAmount)}</TableCell>
             <TableCell>{fDate(item.createdAt)}</TableCell>
           </TableRow>
         );

@@ -72,8 +72,8 @@ const WorkorderController = () => {
 
   const handleAddPaymentRecord = async (values) => {
     const data = {
-      paymentworkOrder: job._id,
-      paymentCustomer: job.workOrderCustomer._id,
+      paymentWorkorder: job._id,
+      paymentCustomer: job.workorderCustomer._id,
       ...values,
     };
     const isSuccess = await createPayment(data);
@@ -81,7 +81,7 @@ const WorkorderController = () => {
     if (isSuccess) {
       handleTogglePaymentDlg();
       fetchWorkorder();
-      fetchWorkorderPayments();
+      fetchWorkorderPayments(id);
     }
   };
 

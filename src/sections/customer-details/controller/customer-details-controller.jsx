@@ -19,7 +19,7 @@ const tableColumns = [
   'Created At',
 ];
 
-const notificationTableColumns = ['Type', 'Title', 'Send At']
+const notificationTableColumns = ['Type', 'Title', 'Send At'];
 
 const CustomerDetailsController = () => {
   const location = useLocation();
@@ -198,8 +198,8 @@ const CustomerDetailsController = () => {
 
   const handleCreateWorkOrder = async (values) => {
     const data = {
-      workOrderCustomer: customer._id,
-      workOrderVehicle: selectedVehicle._id,
+      workorderCustomer: customer._id,
+      workorderVehicle: selectedVehicle._id,
       ...values,
     };
 
@@ -207,6 +207,7 @@ const CustomerDetailsController = () => {
 
     if (isSuccess) {
       handleToggleWorkOrderCreateDialog();
+      fetchCustomerWorkorders(workorderQuery);
     }
   };
 

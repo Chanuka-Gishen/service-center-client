@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 import { ITEM_CATEGORIES_LABELS } from 'src/constants/item-categories';
 
-
 export const UpdateInventoryItemSchema = Yup.object().shape({
   itemCode: Yup.string().required('Item code is required'),
   itemName: Yup.string().required('Item name is required'),
@@ -13,6 +12,9 @@ export const UpdateInventoryItemSchema = Yup.object().shape({
   itemBuyingPrice: Yup.number()
     .min(0, 'Buying price cannot be negative')
     .required('Buying price is required'),
+  itemDiscountAmount: Yup.number()
+    .min(0, 'Discount amount cannot be negative')
+    .required('Discount amount is required'),
   itemSellingPrice: Yup.number()
     .min(0, 'Selling price cannot be negative')
     .required('Selling price is required')

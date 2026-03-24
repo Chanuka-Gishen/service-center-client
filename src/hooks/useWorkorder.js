@@ -9,7 +9,7 @@ const useWorkOrder = () => {
   const sourceToken = axios.CancelToken.source();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [workOrders, setWorkOrders] = useState([]);
+  const [workorders, setWorkOrders] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [customerJobs, setCustomerJobs] = useState([]);
   const [customerPaymentStats, setCustomerPaymentStats] = useState(null);
@@ -30,6 +30,12 @@ const useWorkOrder = () => {
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isLoadingUpdateAssignee, setIsLoadingUpdateAssignee] = useState(false);
+  const [isLoadingAddWorkorderItem, setIsLoadingAddWorkorderItem] = useState(false);
+  const [isLoadingUpdateWorkorderItem, setIsLoadingUpdateWorkorderItem] = useState(false);
+  const [isLoadingDeleteWorkorderItem, setIsLoadingDeleteWorkorderItem] = useState(false);
+  const [isLoadingAddWorkorderCharge, setIsLoadingAddWorkorderCharge] = useState(false);
+  const [isLoadingUpdateWorkorderCharge, setIsLoadingUpdateWorkorderCharge] = useState(false);
+  const [isLoadingDeleteWorkorderCharge, setIsLoadingDeleteWorkorderCharge] = useState(false);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [isLoadingClosed, setIsLoadingClosed] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -198,6 +204,8 @@ const useWorkOrder = () => {
   const updateWorkOrder = async (data) => {
     let isSuccess = false;
 
+    setIsLoadingUpdate(true);
+
     await backendAuthApi({
       url: BACKEND_API.WO_UPDATE,
       method: 'PUT',
@@ -211,6 +219,7 @@ const useWorkOrder = () => {
         enqueueSnackbar(res.data.responseMessage, {
           variant: responseUtil.findResponseType(res.data.responseCode),
         });
+        setIsLoadingUpdate(false);
       })
       .catch(() => {
         setIsLoadingUpdate(false);
@@ -249,6 +258,154 @@ const useWorkOrder = () => {
       })
       .finally(() => {
         setIsLoadingUpdateAssignee(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Add workorder item
+  const addWorkorderItem = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingAddWorkorderItem(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_ADD_ITEM,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingAddWorkorderItem(false);
+      })
+      .catch(() => {
+        setIsLoadingAddWorkorderItem(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Update workorder item
+  const updateWorkorderItem = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingUpdateWorkorderItem(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_UPDATE_ITEM,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingUpdateWorkorderItem(false);
+      })
+      .catch(() => {
+        setIsLoadingUpdateWorkorderItem(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Delete workorder item
+  const deleteWorkorderItem = async (id) => {
+    if (!id) return;
+
+    let isSuccess = false;
+
+    setIsLoadingDeleteWorkorderItem(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_DELETE_ITEM,
+      method: 'DELETE',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingDeleteWorkorderItem(false);
+      })
+      .catch(() => {
+        setIsLoadingDeleteWorkorderItem(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Add workorder charge
+  const addWorkorderCharge = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingAddWorkorderCharge(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_ADD_CHARGE,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingAddWorkorderCharge(false);
+      })
+      .catch(() => {
+        setIsLoadingAddWorkorderCharge(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Update workorder charge
+  const updateWorkorderCharge = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingUpdateWorkorderCharge(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_UPDATE_CHARGE,
+      method: 'PUT',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingUpdateWorkorderCharge(false);
+      })
+      .catch(() => {
+        setIsLoadingUpdateWorkorderCharge(false);
+      });
+
+    return isSuccess;
+  };
+
+  // Delete workorder charge
+  const deleteWorkorderCharge = async (id) => {
+    if (!id) return;
+
+    let isSuccess = false;
+
+    setIsLoadingDeleteWorkorderCharge(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.WO_DELETE_CHARGE,
+      method: 'DELETE',
+      cancelToken: sourceToken.token,
+      params: { id },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingDeleteWorkorderCharge(false);
+      })
+      .catch(() => {
+        setIsLoadingDeleteWorkorderCharge(false);
       });
 
     return isSuccess;
@@ -464,7 +621,7 @@ const useWorkOrder = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${data.workOrderInvoiceNumber}.pdf`);
+        link.setAttribute('download', `${data.workorderInvoiceNumber}.pdf`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -521,7 +678,7 @@ const useWorkOrder = () => {
   };
 
   return {
-    workOrders,
+    workorders,
     jobs,
     customerJobs,
     customerPaymentStats,
@@ -538,6 +695,12 @@ const useWorkOrder = () => {
     isLoadingCreate,
     isLoadingUpdate,
     isLoadingUpdateAssignee,
+    isLoadingAddWorkorderItem,
+    isLoadingAddWorkorderCharge,
+    isLoadingUpdateWorkorderItem,
+    isLoadingUpdateWorkorderCharge,
+    isLoadingDeleteWorkorderItem,
+    isLoadingDeleteWorkorderCharge,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
@@ -560,10 +723,16 @@ const useWorkOrder = () => {
     fetchTodayTotalRevenue,
     fetchTotalReceivables,
     createWorkOrder,
+    addWorkorderItem,
+    addWorkorderCharge,
     updateWorkOrder,
     updateWorkorderAssignees,
+    updateWorkorderItem,
+    updateWorkorderCharge,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
+    deleteWorkorderItem,
+    deleteWorkorderCharge,
     downloadInvoice,
     sendInvoiceEmail,
   };

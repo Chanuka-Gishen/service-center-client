@@ -156,6 +156,20 @@ export const UpdateItemDialog = ({
                     slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
                 </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Discount"
+                    name="itemDiscountAmount"
+                    fullWidth
+                    required
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('itemDiscountAmount')}
+                    error={touched.itemDiscountAmount && Boolean(errors.itemDiscountAmount)}
+                    helperText={touched.itemDiscountAmount && errors.itemDiscountAmount}
+                    slotProps={{ input: { inputComponent: CurrencyInput } }}
+                  />
+                </Grid>
                 <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
                   <TextField
                     label="Item Selling Price"

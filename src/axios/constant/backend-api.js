@@ -57,6 +57,12 @@ export const BACKEND_API = {
   WO_TODAY_REVENUE: IP_URL + '/workorder/auth/today-revenue',
   WO_TOTAL_RECEIVABLES: IP_URL + '/workorder/auth/total-receivables',
   WO_ACTIVE_JOBS_COUNT: IP_URL + '/workorder/auth/total-active-jobs',
+  WO_ADD_ITEM: IP_URL + '/workorder/auth/item',
+  WO_UPDATE_ITEM: IP_URL + '/workorder/auth/item',
+  WO_DELETE_ITEM: IP_URL + '/workorder/auth/item',
+  WO_ADD_CHARGE: IP_URL + '/workorder/auth/charge',
+  WO_UPDATE_CHARGE: IP_URL + '/workorder/auth/charge',
+  WO_DELETE_CHARGE: IP_URL + '/workorder/auth/charge',
 
   PAYMENTS: IP_URL + '/payment/auth/payments',
   PAYMENTS_PENDING: IP_URL + '/payment/auth/pending-payments',

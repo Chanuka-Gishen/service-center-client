@@ -1,6 +1,6 @@
 export const formatCurrency = (amount) => {
   if (!amount) {
-    return ' - ';
+    return 'Rs. 0.0';
   }
   const formattedAmount = amount
     .toLocaleString('en-IN', {

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Formik } from 'formik';
 
-import workOrderAssigneesSchema from 'src/schema/assign-emp-schema';
+import workorderAssigneesSchema from 'src/schema/assign-emp-schema';
 
 export const EditAssigneeDialog = ({
   open,
@@ -34,7 +34,7 @@ export const EditAssigneeDialog = ({
         initialValues={{
           assignees: values ?? [],
         }}
-        validationSchema={workOrderAssigneesSchema}
+        validationSchema={workorderAssigneesSchema}
         onSubmit={(values) => {
           handleConfirm(values.assignees);
         }}

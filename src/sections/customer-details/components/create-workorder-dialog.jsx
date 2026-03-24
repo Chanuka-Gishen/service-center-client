@@ -46,8 +46,8 @@ export const CreateWorkOrderDialog = ({
 
       <Formik
         initialValues={{
-          workOrderMileage: '',
-          workOrderType: WO_TYPE_SERVICE,
+          workorderMileage: '',
+          workorderType: WO_TYPE_SERVICE,
         }}
         validationSchema={createWorkOrderSchema}
         onSubmit={(values) => {
@@ -80,10 +80,10 @@ export const CreateWorkOrderDialog = ({
                       labelId="select-label"
                       id="simple-select"
                       label="Workorder Type"
-                      name="workOrderType"
+                      name="workorderType"
                       required
                       fullWidth
-                      value={values.workOrderType || ''}
+                      value={values.workorderType || ''}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     >
@@ -93,23 +93,23 @@ export const CreateWorkOrderDialog = ({
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText error={touched.workOrderType && errors.workOrderType}>
-                      {touched.workOrderType && errors.workOrderType}
+                    <FormHelperText error={touched.workorderType && errors.workorderType}>
+                      {touched.workorderType && errors.workorderType}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
                   <TextField
                     label="Vehicle Mileage"
-                    name="workOrderMileage"
+                    name="workorderMileage"
                     required
                     type="number"
                     fullWidth
                     autoComplete="off"
                     variant="outlined"
-                    {...getFieldProps('workOrderMileage')}
-                    error={touched.workOrderMileage && Boolean(errors.workOrderMileage)}
-                    helperText={touched.workOrderMileage && errors.workOrderMileage}
+                    {...getFieldProps('workorderMileage')}
+                    error={touched.workorderMileage && Boolean(errors.workorderMileage)}
+                    helperText={touched.workorderMileage && errors.workorderMileage}
                   />
                 </Grid>
               </Grid>

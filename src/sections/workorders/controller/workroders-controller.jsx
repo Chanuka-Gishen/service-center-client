@@ -4,30 +4,52 @@ import { WorkordersView } from '../view/workorders-view';
 import useWorkOrder from 'src/hooks/useWorkorder';
 import useInventory from 'src/hooks/useInventory';
 import usePayment from 'src/hooks/usePayment';
+import { WO_STATUS_OPEN } from 'src/constants/workorderStatus';
+
+const chargeInitialValue = {
+  chargeName: '',
+  chargeAmount: 0,
+};
 
 const WorkordersController = () => {
   const {
-    workOrders,
+    workorders,
     isLoading,
     isLoadingJob,
     isLoadingUpdate,
     isLoadingUpdateAssignee,
+    isLoadingAddWorkorderItem,
+    isLoadingAddWorkorderCharge,
+    isLoadingUpdateWorkorderItem,
+    isLoadingUpdateWorkorderCharge,
+    isLoadingDeleteWorkorderItem,
+    isLoadingDeleteWorkorderCharge,
     isLoadingComplete,
     isLoadingClosed,
     isDownloading,
     fetchActiveWorkOrders,
     fetchWorkOrderInfo,
+    addWorkorderItem,
+    addWorkorderCharge,
     updateWorkOrder,
     updateWorkorderAssignees,
+    updateWorkorderItem,
+    updateWorkorderCharge,
     updateWorkOrderToComplete,
     updateWorkOrderToClosed,
+    deleteWorkorderItem,
+    deleteWorkorderCharge,
     downloadInvoice,
   } = useWorkOrder();
   const { selectItems, isLoadingSelect, fetchItemsForInvoiceSelection } = useInventory();
   const { isLoadingCreate, createPayment } = usePayment();
 
+  const [itemInitialValues, setItemInitialValues] = useState({});
+  const [chargeInitialValues, setChargeInitialValues] = useState(chargeInitialValue);
+
   const [selectedId, setSelectedId] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const [showExQuantity, setShowExQuantity] = useState(false);
 
@@ -36,6 +58,11 @@ const WorkordersController = () => {
   const [isOpenCompleteDlg, setIsOpenCompleteDlg] = useState(false);
   const [isOpenClosedDlg, setIsOpenClosedDlg] = useState(false);
   const [isOpenPaymentDlg, setIsOpenPaymentDlg] = useState(false);
+  const [isOpenItemUpdateDlg, setIsOpenItemUpdateDlg] = useState(false);
+  const [isOpenItemDeleteDlg, setIsOpenItemDeleteDlg] = useState(false);
+  const [isOpenChargeAddDlg, setIsOpenChargeAddDlg] = useState(false);
+  const [isOpenChargeUpdateDlg, setIsOpenChargeUpdateDlg] = useState(false);
+  const [isOpenChargeDeleteDlg, setIsOpenChargeDeleteDlg] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState({
     name: '',
@@ -68,16 +95,11 @@ const WorkordersController = () => {
         fetchItemsForInvoiceSelection();
         setInitialValues({
           _id: selectedJob._id,
-          workOrderMileage: selectedJob.workOrderMileage,
-          workOrderType: selectedJob.workOrderType,
-          workOrderServiceItems: selectedJob.workOrderServiceItems,
-          workOrderCustomItems: selectedJob.workOrderCustomItems,
-          workOrderCustomChargers: selectedJob.workOrderCustomChargers || [],
-          workOrderServiceCharge: selectedJob.workOrderServiceCharge,
-          workOrderOtherChargers: selectedJob.workOrderOtherChargers,
-          workOrderNotes: selectedJob.workOrderNotes,
-          workOrderDiscountPercentage: selectedJob.workOrderDiscountPercentage,
-          workOrderDiscountCash: selectedJob.workOrderDiscountCash,
+          workorderMileage: selectedJob.workorderMileage,
+          workorderType: selectedJob.workorderType,
+          workorderNotes: selectedJob.workorderNotes,
+          workorderDiscountPercentage: selectedJob.workorderDiscountPercentage,
+          workorderDiscountCash: selectedJob.workorderDiscountCash,
         });
       }
       setIsOpenUpdate(!isOpenUpdate);
@@ -100,8 +122,69 @@ const WorkordersController = () => {
     setIsOpenPaymentDlg(!isOpenPaymentDlg);
   };
 
-  const handleSelectJob = (job) => {
-    setSelectedId(selectedId === job._id ? null : job._id);
+  const handleToggleItemUpdateDialog = (values) => {
+    if (selectedJob && selectedJob.workorderStatus != WO_STATUS_OPEN) return;
+
+    if (!isOpenItemUpdateDlg) {
+      if (!values) return;
+
+      setItemInitialValues({
+        _id: values._id,
+        quantity: values.quantity,
+        unitPrice: values.unitPrice,
+      });
+    } else {
+      setItemInitialValues({});
+    }
+
+    setIsOpenItemUpdateDlg(!isOpenItemUpdateDlg);
+  };
+
+  const handleToggleItemDeleteDialog = (id = null) => {
+    if (selectedJob && selectedJob.workorderStatus != WO_STATUS_OPEN) return;
+
+    setSelectedRow(id);
+
+    setIsOpenItemDeleteDlg(!isOpenItemDeleteDlg);
+  };
+
+  const handleToggleChargeAddDialog = () => {
+    setIsOpenChargeAddDlg(!isOpenChargeAddDlg);
+  };
+
+  const handleToggleChargeUpdateDialog = (values = null) => {
+    if (selectedJob && selectedJob.workorderStatus != WO_STATUS_OPEN) return;
+
+    if (!isOpenChargeUpdateDlg && values) {
+      setSelectedRow(values._id);
+      setChargeInitialValues({
+        chargeName: values.chargeName,
+        chargeAmount: values.chargeAmount,
+      });
+    } else {
+      setChargeInitialValues(chargeInitialValue);
+    }
+
+    setIsOpenChargeUpdateDlg(!isOpenChargeUpdateDlg);
+  };
+
+  const handleToggleChargeDeleteDialog = (id = null) => {
+    if (selectedJob && selectedJob.workorderStatus != WO_STATUS_OPEN) return;
+
+    setSelectedRow(id);
+
+    setIsOpenChargeDeleteDlg(!isOpenChargeDeleteDlg);
+  };
+
+  const handleSelectJob = async (job) => {
+    if (selectedId === job._id) {
+      setSelectedId(null);
+      setSelectedJob(null);
+    } else {
+      setSelectedId(job._id);
+      await handleFetchWorkOrder();
+    }
+    //setSelectedId(selectedId === job._id ? null : job._id);
   };
 
   const handleUdpateWorkOrderStatusComplete = async () => {
@@ -123,8 +206,8 @@ const WorkordersController = () => {
 
   const handleAddPaymentRecord = async (values) => {
     const data = {
-      paymentworkOrder: selectedJob._id,
-      paymentCustomer: selectedJob.workOrderCustomer._id,
+      paymentWorkorder: selectedJob._id,
+      paymentCustomer: selectedJob.workorderCustomer._id,
       ...values,
     };
     const isSuccess = await createPayment(data);
@@ -153,6 +236,8 @@ const WorkordersController = () => {
   };
 
   const handleUpdateWorkOrder = async (values) => {
+    if (!values) return;
+
     const isSucess = await updateWorkOrder(values);
 
     if (isSucess) {
@@ -161,11 +246,83 @@ const WorkordersController = () => {
     }
   };
 
+  const handleAddWorkorderItem = async (values) => {
+    if (!values) return;
+
+    const data = {
+      workorder: selectedJob._id,
+      inventoryItem: values._id,
+      inventoryItemName: values.itemName,
+      quantity: 1,
+      unitPrice: values.itemSellingPrice,
+      cashDiscount: 0,
+      totalPrice: 1 * values.itemSellingPrice,
+    };
+
+    const isSucess = await addWorkorderItem(data);
+
+    if (isSucess) {
+      await handleFetchWorkOrder();
+    }
+  };
+
+  const handleUpdateWorkorderItem = async (values) => {
+    const isSuccess = await updateWorkorderItem(values);
+
+    if (isSuccess) {
+      handleToggleItemUpdateDialog();
+      handleFetchWorkOrder();
+    }
+  };
+
+  const handleDeleteWorkorderItem = async (values) => {
+    if (!selectedRow) return;
+
+    const isSuccess = await deleteWorkorderItem(selectedRow);
+
+    if (isSuccess) {
+      handleToggleItemDeleteDialog();
+      handleFetchWorkOrder();
+    }
+  };
+
+  const handleAddWorkorderCharge = async (values) => {
+    const data = { workorder: selectedJob._id, ...values };
+
+    const isSuccess = await addWorkorderCharge(data);
+
+    if (isSuccess) {
+      handleToggleChargeAddDialog();
+      handleFetchWorkOrder();
+    }
+  };
+
+  const handleUpdateWorkorderCharge = async (values, resetForm) => {
+    const data = { _id: selectedRow, ...values };
+
+    const isSuccess = await updateWorkorderCharge(data);
+
+    if (isSuccess) {
+      resetForm();
+      handleToggleChargeUpdateDialog();
+      handleFetchWorkOrder();
+    }
+  };
+
+  const handleDeleteWorkorderCharge = async () => {
+    const isSuccess = await deleteWorkorderCharge(selectedRow);
+
+    if (isSuccess) {
+      handleToggleChargeDeleteDialog();
+      handleFetchWorkOrder();
+    }
+  };
+
   useEffect(() => {
-    fetchItemsForInvoiceSelection(queryParams);
+    if (isOpenSelectItemDlg) fetchItemsForInvoiceSelection(queryParams);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memoizedSelectedFilters]);
+  }, [memoizedSelectedFilters, isOpenSelectItemDlg]);
 
   useEffect(() => {
     handleFetchWorkOrder();
@@ -180,11 +337,13 @@ const WorkordersController = () => {
   }, []);
   return (
     <WorkordersView
-      workOrders={workOrders}
+      workorders={workorders}
       selectItems={selectItems}
       selectedId={selectedId}
       selectedJob={selectedJob}
       initialValues={initialValues}
+      itemInitialValues={itemInitialValues}
+      chargeInitialValues={chargeInitialValues}
       selectedFilters={selectedFilters}
       showExQuantity={showExQuantity}
       isOpenUpdate={isOpenUpdate}
@@ -192,10 +351,21 @@ const WorkordersController = () => {
       isOpenCompleteDlg={isOpenCompleteDlg}
       isOpenClosedDlg={isOpenClosedDlg}
       isOpenPaymentDlg={isOpenPaymentDlg}
+      isOpenItemUpdateDlg={isOpenItemUpdateDlg}
+      isOpenItemDeleteDlg={isOpenItemDeleteDlg}
+      isOpenChargeAddDlg={isOpenChargeAddDlg}
+      isOpenChargeUpdateDlg={isOpenChargeUpdateDlg}
+      isOpenChargeDeleteDlg={isOpenChargeDeleteDlg}
       isLoading={isLoading}
       isLoadingJob={isLoadingJob}
       isLoadingUpdate={isLoadingUpdate}
       isLoadingUpdateAssignee={isLoadingUpdateAssignee}
+      isLoadingAddWorkorderItem={isLoadingAddWorkorderItem}
+      isLoadingUpdateWorkorderItem={isLoadingUpdateWorkorderItem}
+      isLoadingDeleteWorkorderItem={isLoadingDeleteWorkorderItem}
+      isLoadingAddWorkorderCharge={isLoadingAddWorkorderCharge}
+      isLoadingUpdateWorkorderCharge={isLoadingUpdateWorkorderCharge}
+      isLoadingDeleteWorkorderCharge={isLoadingDeleteWorkorderCharge}
       isLoadingSelect={isLoadingSelect}
       isLoadingComplete={isLoadingComplete}
       isLoadingClosed={isLoadingClosed}
@@ -209,10 +379,21 @@ const WorkordersController = () => {
       handleToggleCompleteDlg={handleToggleCompleteDlg}
       handleToggleClosedDlg={handleToggleClosedDlg}
       handleTogglePaymentDlg={handleTogglePaymentDlg}
+      handleToggleItemUpdateDialog={handleToggleItemUpdateDialog}
+      handleToggleItemDeleteDialog={handleToggleItemDeleteDialog}
+      handleToggleChargeAddDialog={handleToggleChargeAddDialog}
+      handleToggleChargeUpdateDialog={handleToggleChargeUpdateDialog}
+      handleToggleChargeDeleteDialog={handleToggleChargeDeleteDialog}
+      handleAddWorkorderItem={handleAddWorkorderItem}
       handleUdpateWorkOrderStatusComplete={handleUdpateWorkOrderStatusComplete}
       handleUpdateWorkOrderStatusClosed={handleUpdateWorkOrderStatusClosed}
       handleAddPaymentRecord={handleAddPaymentRecord}
       handleUpdateWorkOrder={handleUpdateWorkOrder}
+      handleUpdateWorkorderItem={handleUpdateWorkorderItem}
+      handleDeleteWorkorderItem={handleDeleteWorkorderItem}
+      handleAddWorkorderCharge={handleAddWorkorderCharge}
+      handleUpdateWorkorderCharge={handleUpdateWorkorderCharge}
+      handleDeleteWorkorderCharge={handleDeleteWorkorderCharge}
       handelUpdateWorkorderAssignees={handelUpdateWorkorderAssignees}
       downloadInvoice={downloadInvoice}
     />

@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Chip,
   Container,
   Divider,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-  Skeleton,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -23,52 +20,30 @@ import {
   useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+
 import { fDateTime } from 'src/utils/format-time';
 import { formatCurrency } from 'src/utils/format-number';
 import { WokrOrderUpdateDialog } from '../components/workorder-update-dialog';
-import {
-  WO_STATUS_CLOSED,
-  WO_STATUS_COMPLETED,
-  WO_STATUS_OPEN,
-} from 'src/constants/workorderStatus';
+import { WO_STATUS_COMPLETED, WO_STATUS_OPEN } from 'src/constants/workorderStatus';
 import ConfirmationDialog from 'src/components/confirmation-dialog/confirmation-dialog';
 import { PAY_STATUS_PAID } from 'src/constants/payment-status';
 import { AddPaymentDialog } from '../components/add-payment-dialog';
 import { EditAssigneeButton } from 'src/components/edit-assignee-button';
 import commonUtil from 'src/utils/common-util';
-
-const LoadingStack = () => {
-  return (
-    <Stack>
-      {[...Array(4)].map((_, index) => (
-        <Box
-          key={index}
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 2,
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
-          <Skeleton variant="circular" width={50} height={50} sx={{ flexShrink: 0 }} />
-          <Stack sx={{ width: 'calc(100% - 56px)' }}>
-            <Skeleton variant="text" sx={{ fontSize: '1rem', width: '100%' }} />
-            <Skeleton variant="text" sx={{ fontSize: '2rem', width: '100%' }} />
-          </Stack>
-        </Box>
-      ))}
-    </Stack>
-  );
-};
+import { ActiveWorkorderList } from '../components/active-workorder-list';
+import { WorkOrderItemsSelect } from '../components/workorder-items-select';
+import { UpdateWoItemDialog } from '../components/update-wo-item-dialog';
+import { WoChargeFormDialog } from '../components/wo-charge-form-dialog';
 
 export const WorkordersView = ({
-  workOrders,
+  workorders,
   selectItems,
   selectedId,
   selectedJob,
   initialValues,
+  itemInitialValues,
+  chargeInitialValues,
   selectedFilters,
   showExQuantity,
   isOpenUpdate,
@@ -76,10 +51,21 @@ export const WorkordersView = ({
   isOpenCompleteDlg,
   isOpenClosedDlg,
   isOpenPaymentDlg,
+  isOpenItemUpdateDlg,
+  isOpenItemDeleteDlg,
+  isOpenChargeAddDlg,
+  isOpenChargeUpdateDlg,
+  isOpenChargeDeleteDlg,
   isLoading,
   isLoadingJob,
   isLoadingUpdate,
   isLoadingUpdateAssignee,
+  isLoadingAddWorkorderItem,
+  isLoadingAddWorkorderCharge,
+  isLoadingUpdateWorkorderItem,
+  isLoadingUpdateWorkorderCharge,
+  isLoadingDeleteWorkorderItem,
+  isLoadingDeleteWorkorderCharge,
   isLoadingSelect,
   isLoadingComplete,
   isLoadingClosed,
@@ -92,12 +78,23 @@ export const WorkordersView = ({
   handleToggleCompleteDlg,
   handleToggleClosedDlg,
   handleTogglePaymentDlg,
+  handleToggleItemUpdateDialog,
+  handleToggleItemDeleteDialog,
+  handleToggleChargeAddDialog,
+  handleToggleChargeUpdateDialog,
+  handleToggleChargeDeleteDialog,
   downloadInvoice,
+  handleAddWorkorderItem,
   handleUdpateWorkOrderStatusComplete,
   handleUpdateWorkOrderStatusClosed,
   handleUpdateWorkOrder,
   handelUpdateWorkorderAssignees,
   handleAddPaymentRecord,
+  handleUpdateWorkorderItem,
+  handleDeleteWorkorderItem,
+  handleAddWorkorderCharge,
+  handleUpdateWorkorderCharge,
+  handleDeleteWorkorderCharge,
   handleChangeSearch,
 }) => {
   const theme = useTheme();
@@ -105,42 +102,24 @@ export const WorkordersView = ({
   return (
     <Container maxWidth="xl">
       <Grid container rowSpacing={4} columnSpacing={4}>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
-          <Typography variant="h5">Active Work Orders</Typography>
+        <Grid size={12} order={0}>
+          <Stack spacing={2} direction="row" alignItems="center">
+            <Typography variant="h5">Active Work Orders</Typography>
+            <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 24, height: 24 }}>
+              {workorders.length}
+            </Avatar>
+          </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
-          {isLoading ? (
-            <LoadingStack />
-          ) : (
-            <>
-              {workOrders.length > 0 ? (
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                  {workOrders.map((item, index) => (
-                    <ListItemButton
-                      key={index}
-                      onClick={() => handleSelectJob(item)}
-                      selected={selectedId ? item._id === selectedId : false}
-                    >
-                      <ListItemAvatar>
-                        <Avatar>
-                          <DirectionsCarFilledIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={item.workOrderCustomer.customerName}
-                        secondary={item.workOrderVehicle.vehicleNumber}
-                      />
-                    </ListItemButton>
-                  ))}
-                </List>
-              ) : (
-                <Typography>No Active Orders Found</Typography>
-              )}
-            </>
-          )}
+        <Grid size={{ xs: 12, lg: 3 }} order={1}>
+          <ActiveWorkorderList
+            selectedId={selectedId}
+            workorders={workorders}
+            isLoading={isLoading}
+            handleSelect={handleSelectJob}
+          />
         </Grid>
         {selectedJob && selectedId && !isLoadingJob && (
-          <Grid size={{ xs: 12, sm: 12, md: 7, lg: 7 }}>
+          <Grid size={{ xs: 12, lg: 7 }} order={{ xs: 3, lg: 2 }}>
             <Box
               display="flex"
               flexDirection="column"
@@ -152,7 +131,7 @@ export const WorkordersView = ({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography variant="h6">{selectedJob.workOrderCustomer.customerName}</Typography>
+                <Typography variant="h6">{selectedJob.workorderCustomer.customerName}</Typography>
                 <Typography>{`Created At ${fDateTime(selectedJob.createdAt)}`}</Typography>
               </Stack>
               <Stack
@@ -160,7 +139,7 @@ export const WorkordersView = ({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography>{`${selectedJob.workOrderVehicle.vehicleNumber} - ${selectedJob.workOrderVehicle.vehicleManufacturer} - ${selectedJob.workOrderVehicle.vehicleModel}`}</Typography>
+                <Typography>{`${selectedJob.workorderVehicle.vehicleNumber} - ${selectedJob.workorderVehicle.vehicleManufacturer} - ${selectedJob.workorderVehicle.vehicleModel}`}</Typography>
                 <Typography>{`Updated At ${fDateTime(selectedJob.updatedAt)}`}</Typography>
               </Stack>
               <Stack
@@ -168,21 +147,21 @@ export const WorkordersView = ({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography>{`Current Mileage - ${selectedJob.workOrderMileage} KM`}</Typography>
-                {selectedJob.workOrderStatus != WO_STATUS_OPEN && (
+                <Typography>{`Current Mileage - ${selectedJob.workorderMileage} KM`}</Typography>
+                {selectedJob.workorderStatus != WO_STATUS_OPEN && (
                   <Typography>
                     <b>#INVOICE NO</b>
-                    {` ${selectedJob.workOrderInvoiceNumber ?? '-'}`}
+                    {` ${selectedJob.workorderInvoiceNumber ?? <em>Not Created Yet</em>}`}
                   </Typography>
                 )}
               </Stack>
 
-              {selectedJob.workOrderAssignees && selectedJob.workOrderAssignees.length > 0 && (
+              {selectedJob.workorderAssignees && selectedJob.workorderAssignees.length > 0 && (
                 <>
                   <Divider />
                   <Typography variant="h6">Workorder Assignees</Typography>
                   <Stack direction="row" spacing={2} flexWrap="wrap">
-                    {selectedJob.workOrderAssignees.map((emp) => (
+                    {selectedJob.workorderAssignees.map((emp) => (
                       <Chip variant="outlined" label={emp.empFullName} />
                     ))}
                   </Stack>
@@ -191,9 +170,8 @@ export const WorkordersView = ({
               )}
 
               <TableContainer>
-                <Table>
-                  {(selectedJob.workOrderCustomItems.length > 0 ||
-                    selectedJob.workOrderServiceItems.length > 0) && (
+                <Table size="small">
+                  {selectedJob.workorderItems.length > 0 && (
                     <TableHead>
                       <TableRow>
                         <TableCell>Item</TableCell>
@@ -201,98 +179,120 @@ export const WorkordersView = ({
                         <TableCell align="right">Unit Price</TableCell>
                         <TableCell align="right">Discount</TableCell>
                         <TableCell align="right">Total Price</TableCell>
+                        {selectedJob && selectedJob.workorderStatus === WO_STATUS_OPEN && (
+                          <TableCell align="right"></TableCell>
+                        )}
                       </TableRow>
                     </TableHead>
                   )}
                   <TableBody>
-                    {selectedJob.workOrderServiceItems.map((customItem, index) => (
-                      <TableRow key={index}>
+                    {selectedJob.workorderItems.map((customItem, index) => (
+                      <TableRow
+                        key={index}
+                        hover
+                        sx={{ cursor: 'pointer' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleItemUpdateDialog(customItem);
+                        }}
+                      >
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity + customItem.exQuantity}</TableCell>
                         <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
                         <TableCell align="right">
                           {formatCurrency(customItem.cashDiscount)}
                         </TableCell>
-                        <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
-                      </TableRow>
-                    ))}
-                    {selectedJob.workOrderCustomItems.map((customItem, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{customItem.inventoryItemName}</TableCell>
-                        <TableCell>{customItem.quantity}</TableCell>
-                        <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
                         <TableCell align="right">
-                          {formatCurrency(customItem.cashDiscount)}
+                          {formatCurrency(customItem.totalNetPrice)}
                         </TableCell>
-                        <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
+                        {selectedJob && selectedJob.workorderStatus === WO_STATUS_OPEN && (
+                          <TableCell align="right">
+                            <IconButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleItemDeleteDialog(customItem._id);
+                              }}
+                            >
+                              <RemoveCircleIcon color="error" />
+                            </IconButton>
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
-                    <TableRow>
-                      <TableCell colSpan={5}>
-                        <Divider> Charges </Divider>
-                      </TableCell>
-                    </TableRow>
-                    {(selectedJob.workOrderCustomChargers || []).map((customCharge, index) => (
-                      <TableRow key={index}>
+
+                    {(selectedJob.workorderCharges || []).map((customCharge, index) => (
+                      <TableRow
+                        key={index}
+                        hover
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleChargeUpdateDialog(customCharge);
+                        }}
+                        sx={{ cursor: 'pointer' }}
+                      >
                         <TableCell colSpan={4}>{customCharge.chargeName}</TableCell>
                         <TableCell align="right">
                           {formatCurrency(customCharge.chargeAmount)}
                         </TableCell>
+                        {selectedJob && selectedJob.workorderStatus === WO_STATUS_OPEN && (
+                          <TableCell align="right">
+                            <IconButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleChargeDeleteDialog(customCharge._id);
+                              }}
+                            >
+                              <RemoveCircleIcon color="error" />
+                            </IconButton>
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
-                    {selectedJob.workOrderServiceCharge > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4}>Service Charge</TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(selectedJob.workOrderServiceCharge)}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    {selectedJob.workOrderOtherChargers > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4}>Other Charges</TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(selectedJob.workOrderOtherChargers)}
-                        </TableCell>
-                      </TableRow>
-                    )}
                     <TableRow>
                       <TableCell colSpan={5}>
                         <Divider> Summary </Divider>
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={4}>
-                        Gross Total Amount
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderGrossAmount)}
-                      </TableCell>
-                    </TableRow>
-                    {selectedJob.workOrderDiscountPercentage > 0 && (
+                    {selectedJob.workorderDiscountPercentage > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
                           Discount Percentage
                         </TableCell>
-                        <TableCell align="right">{`${selectedJob.workOrderDiscountPercentage} %`}</TableCell>
+                        <TableCell align="right">{`${selectedJob.DiscountPercentage} %`}</TableCell>
                       </TableRow>
                     )}
-                    {selectedJob.workOrderDiscountCash > 0 && (
+                    {selectedJob.workorderDiscountCash > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
                           Cash Discount
                         </TableCell>
                         <TableCell align="right">
-                          {formatCurrency(selectedJob.workOrderDiscountCash)}
+                          {formatCurrency(selectedJob.workorderDiscountCash)}
                         </TableCell>
                       </TableRow>
                     )}
                     <TableRow>
                       <TableCell variant="head" align="right" colSpan={4}>
-                        Net Subtotal Amount
+                        Total Discount
                       </TableCell>
                       <TableCell variant="head" align="right">
-                        {formatCurrency(selectedJob.workOrderTotalAmount)}
+                        {formatCurrency(selectedJob.workorderTotalDiscount)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Total Amount
+                      </TableCell>
+                      <TableCell variant="head" align="right">
+                        {formatCurrency(selectedJob.workorderTotalAmount)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Subtotal Amount
+                      </TableCell>
+                      <TableCell variant="head" align="right">
+                        {formatCurrency(selectedJob.workorderSubTotalAmount)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -300,7 +300,7 @@ export const WorkordersView = ({
                         Paid Amount
                       </TableCell>
                       <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderPaidAmount)}
+                        {formatCurrency(selectedJob.workorderPaidAmount)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -308,13 +308,13 @@ export const WorkordersView = ({
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
-                        {formatCurrency(selectedJob.workOrderBalanceAmount)}
+                        {formatCurrency(selectedJob.workorderBalanceAmount)}
                       </TableCell>
                     </TableRow>
-                    {!commonUtil.stringIsEmptyOrSpaces(selectedJob.workOrderNotes) && (
+                    {!commonUtil.stringIsEmptyOrSpaces(selectedJob.workorderNotes) && (
                       <TableRow>
                         <TableCell colSpan={3}>Notes</TableCell>
-                        <TableCell align="right">{selectedJob.workOrderNotes}</TableCell>
+                        <TableCell align="right">{selectedJob.workorderNotes}</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -324,37 +324,54 @@ export const WorkordersView = ({
           </Grid>
         )}
         {selectedJob && selectedId && !isLoadingJob && (
-          <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2 }}>
-            <Stack spacing={1}>
-              {selectedJob.workOrderStatus != WO_STATUS_CLOSED && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={handleToggleUpdateDialog}
-                  disabled={isLoadingUpdate}
-                >
-                  Edit Invoice
-                </Button>
-              )}
-              <EditAssigneeButton
-                assignees={selectedJob.workOrderAssignees}
-                isLoading={isLoadingUpdateAssignee}
-                handleAssign={handelUpdateWorkorderAssignees}
-              />
-              {selectedJob.workOrderPaymentStatus != PAY_STATUS_PAID &&
-                selectedJob.workOrderInvoiceNumber && (
+          <Grid size={{ xs: 12, lg: 2 }} order={{ xs: 2, lg: 3 }}>
+            <Stack spacing={1} direction={{ xs: 'row', lg: 'column' }}>
+              {selectedJob.workorderStatus === WO_STATUS_OPEN && (
+                <Fragment>
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={handleTogglePaymentDlg}
-                    disabled={isLoadingCreate}
+                    onClick={handleToggleUpdateDialog}
+                    disabled={isLoadingUpdate}
                   >
-                    Add Payment
+                    Edit Invoice
                   </Button>
-                )}
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleToggleSelectItemDialog}
+                    disabled={isLoadingAddWorkorderItem}
+                  >
+                    Add Invoice Item
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleToggleChargeAddDialog}
+                    disabled={isLoadingAddWorkorderCharge}
+                  >
+                    Add Invoice Charges
+                  </Button>
+                </Fragment>
+              )}
+              <EditAssigneeButton
+                assignees={selectedJob.workorderAssignees}
+                isLoading={isLoadingUpdateAssignee}
+                handleAssign={handelUpdateWorkorderAssignees}
+              />
+              {selectedJob.workorderPaymentStatus != PAY_STATUS_PAID && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={handleTogglePaymentDlg}
+                  disabled={isLoadingCreate}
+                >
+                  Add Payment
+                </Button>
+              )}
 
-              {selectedJob.workOrderStatus != WO_STATUS_OPEN &&
-                selectedJob.workOrderInvoiceNumber && (
+              {selectedJob.workorderStatus != WO_STATUS_OPEN &&
+                selectedJob.workorderInvoiceNumber && (
                   <Button
                     variant="contained"
                     size="large"
@@ -364,7 +381,7 @@ export const WorkordersView = ({
                     Download Invoice
                   </Button>
                 )}
-              {selectedJob.workOrderStatus != WO_STATUS_COMPLETED && (
+              {selectedJob.workorderStatus != WO_STATUS_COMPLETED && (
                 <Button
                   variant="contained"
                   size="large"
@@ -374,7 +391,7 @@ export const WorkordersView = ({
                   Complete Invoice
                 </Button>
               )}
-              {selectedJob.workOrderStatus === WO_STATUS_COMPLETED && (
+              {selectedJob.workorderStatus === WO_STATUS_COMPLETED && (
                 <Button
                   variant="contained"
                   size="large"
@@ -391,18 +408,69 @@ export const WorkordersView = ({
       {isOpenUpdate && (
         <WokrOrderUpdateDialog
           open={isOpenUpdate}
-          inventoryItems={selectItems}
-          filterValues={selectedFilters}
           initialValues={initialValues}
-          showExQuantity={showExQuantity}
-          isOpenSelectItemDlg={isOpenSelectItemDlg}
           isLoading={isLoadingUpdate}
-          isLoadingItems={isLoadingSelect}
-          handleToggleShowExQuantity={handleToggleShowExQuantity}
           handleOpenClose={handleToggleUpdateDialog}
-          handleToggleSelectItemDialog={handleToggleSelectItemDialog}
-          handleChangeSearch={handleChangeSearch}
           handleUpdateWorkOrder={handleUpdateWorkOrder}
+        />
+      )}
+      {isOpenSelectItemDlg && (
+        <WorkOrderItemsSelect
+          open={isOpenSelectItemDlg}
+          selectedFilters={selectedFilters}
+          invItems={selectItems}
+          isLoading={isLoadingSelect}
+          isLoadingAdd={isLoadingAddWorkorderItem}
+          handleClose={handleToggleSelectItemDialog}
+          handleChangeSearch={handleChangeSearch}
+          handleAddNewInventoryRow={handleAddWorkorderItem}
+        />
+      )}
+      {isOpenItemUpdateDlg && (
+        <UpdateWoItemDialog
+          open={isOpenItemUpdateDlg}
+          initialValues={itemInitialValues}
+          isLoading={isLoadingUpdateWorkorderItem}
+          handleClose={handleToggleItemUpdateDialog}
+          handleConfirm={handleUpdateWorkorderItem}
+        />
+      )}
+      {isOpenItemDeleteDlg && (
+        <ConfirmationDialog
+          contentText="Are you sure you want to delete this work order item? This action cannot be undone."
+          open={isOpenItemDeleteDlg}
+          isLoading={isLoadingDeleteWorkorderItem}
+          handleClose={handleToggleItemDeleteDialog}
+          handleSubmit={handleDeleteWorkorderItem}
+        />
+      )}
+      {isOpenChargeAddDlg && (
+        <WoChargeFormDialog
+          isAdd={true}
+          open={isOpenChargeAddDlg}
+          initialValues={chargeInitialValues}
+          isLoading={isLoadingAddWorkorderCharge}
+          handleOpenClose={handleToggleChargeAddDialog}
+          handleSubmit={handleAddWorkorderCharge}
+        />
+      )}
+      {isOpenChargeUpdateDlg && (
+        <WoChargeFormDialog
+          isAdd={false}
+          open={isOpenChargeUpdateDlg}
+          initialValues={chargeInitialValues}
+          isLoading={isLoadingUpdateWorkorderCharge}
+          handleOpenClose={handleToggleChargeUpdateDialog}
+          handleSubmit={handleUpdateWorkorderCharge}
+        />
+      )}
+      {isOpenChargeDeleteDlg && (
+        <ConfirmationDialog
+          contentText="Are you sure you want to delete this work order Charge? This action cannot be undone."
+          open={isOpenChargeDeleteDlg}
+          isLoading={isLoadingDeleteWorkorderCharge}
+          handleClose={handleToggleChargeDeleteDialog}
+          handleSubmit={handleDeleteWorkorderCharge}
         />
       )}
       {isOpenPaymentDlg && (

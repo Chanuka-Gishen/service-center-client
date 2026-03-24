@@ -7,7 +7,7 @@ export const PendingPaymentsRow = ({ data }) => {
     <>
       {data.map((item, index) => (
         <TableRow key={index} hover={true} sx={{ cursor: 'pointer' }}>
-          <TableCell>{item.paymentworkOrder.workOrderVehicle.vehicleNumber}</TableCell>
+          <TableCell>{item.paymentworkorder.workorderVehicle.vehicleNumber}</TableCell>
           <TableCell>{`${item.paymentCustomer.customerPrefix} ${item.paymentCustomer.customerName}`}</TableCell>
           <TableCell>{formatCurrency(item.paymentAmount)}</TableCell>
           <TableCell>{item.paymentTransactionId}</TableCell>

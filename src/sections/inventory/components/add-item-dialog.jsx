@@ -35,6 +35,7 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
           itemQuantity: 0,
           itemUnit: 'Pieces',
           itemBuyingPrice: 0,
+          itemDiscountAmount: 0,
           itemSellingPrice: 0,
           itemSupplier: '',
           itemThreshold: 5,
@@ -103,7 +104,6 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                       id="simple-select"
                       label="Category"
                       name="itemCategory"
-                      required
                       value={values.itemCategory || ''}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -171,6 +171,20 @@ export const AddItemDialog = ({ open, isLoading, handleOpenClose, handleConfirm 
                     {...getFieldProps('itemBuyingPrice')}
                     error={touched.itemBuyingPrice && Boolean(errors.itemBuyingPrice)}
                     helperText={touched.itemBuyingPrice && errors.itemBuyingPrice}
+                    slotProps={{ input: { inputComponent: CurrencyInput } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+                  <TextField
+                    label="Discount"
+                    name="itemDiscountAmount"
+                    fullWidth
+                    required
+                    autoComplete="off"
+                    variant="outlined"
+                    {...getFieldProps('itemDiscountAmount')}
+                    error={touched.itemDiscountAmount && Boolean(errors.itemDiscountAmount)}
+                    helperText={touched.itemDiscountAmount && errors.itemDiscountAmount}
                     slotProps={{ input: { inputComponent: CurrencyInput } }}
                   />
                 </Grid>

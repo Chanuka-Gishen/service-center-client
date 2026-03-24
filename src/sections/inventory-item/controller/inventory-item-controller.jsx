@@ -78,6 +78,7 @@ const InventoryItemController = () => {
         itemDescription: item.itemDescription,
         itemUnit: 'Pieces',
         itemBuyingPrice: item.itemBuyingPrice,
+        itemDiscountAmount: item.itemDiscountAmount,
         itemSellingPrice: item.itemSellingPrice,
         itemSupplier: item.itemSupplier,
         itemThreshold: item.itemThreshold,

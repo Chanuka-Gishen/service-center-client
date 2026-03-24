@@ -101,7 +101,7 @@ export const WorkorderView = ({
           <Grid size={{ sm: 12, md: 12, lg: 12 }}>
             <Stack spacing={1} direction={{ xs: 'column', md: 'row' }}>
               {auth.user.userRole === USER_ROLE.SUPER_ADMIN &&
-                job.workOrderPaymentStatus != PAY_STATUS_REFUNDED && (
+                job.workorderPaymentStatus != PAY_STATUS_REFUNDED && (
                   <Button
                     variant="contained"
                     size="large"
@@ -112,13 +112,13 @@ export const WorkorderView = ({
                   </Button>
                 )}
               <EditAssigneeButton
-                assignees={job.workOrderAssignees}
+                assignees={job.workorderAssignees}
                 isLoading={isLoadingUpdateAssignee}
                 handleAssign={handelUpdateWorkorderAssignees}
               />
-              {job.workOrderPaymentStatus != PAY_STATUS_PAID &&
-                job.workOrderPaymentStatus != PAY_STATUS_REFUNDED &&
-                job.workOrderInvoiceNumber && (
+              {job.workorderPaymentStatus != PAY_STATUS_PAID &&
+                job.workorderPaymentStatus != PAY_STATUS_REFUNDED &&
+                job.workorderInvoiceNumber && (
                   <Button
                     variant="contained"
                     size="large"
@@ -129,7 +129,7 @@ export const WorkorderView = ({
                   </Button>
                 )}
 
-              {job.workOrderStatus != WO_STATUS_OPEN && job.workOrderInvoiceNumber && (
+              {job.workorderStatus != WO_STATUS_OPEN && job.workorderInvoiceNumber && (
                 <Button
                   variant="contained"
                   size="large"
@@ -139,7 +139,7 @@ export const WorkorderView = ({
                   Download Invoice
                 </Button>
               )}
-              {job.workOrderStatus === WO_STATUS_CLOSED && (
+              {job.workorderStatus === WO_STATUS_CLOSED && (
                 <Button
                   variant="contained"
                   size="large"
@@ -172,30 +172,30 @@ export const WorkorderView = ({
               sx={{ bgcolor: 'background.paper', p: '10px' }}
             >
               <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h6">{`${job.workOrderCustomer.customerPrefix ?? 'Mr'} ${job.workOrderCustomer.customerName}`}</Typography>
+                <Typography variant="h6">{`${job.workorderCustomer.customerPrefix ?? 'Mr'} ${job.workorderCustomer.customerName}`}</Typography>
                 <Typography>{`Created At ${fDateTime(job.createdAt)}`}</Typography>
               </Stack>
-              <Typography>{`Contact Number - ${job.workOrderCustomer.customerMobile}`}</Typography>
+              <Typography>{`Contact Number - ${job.workorderCustomer.customerMobile}`}</Typography>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography>{`${job.workOrderVehicle.vehicleNumber} - ${job.workOrderVehicle.vehicleManufacturer} - ${job.workOrderVehicle.vehicleModel}`}</Typography>
+                <Typography>{`${job.workorderVehicle.vehicleNumber} - ${job.workorderVehicle.vehicleManufacturer} - ${job.workorderVehicle.vehicleModel}`}</Typography>
                 <Typography>{`Updated At ${fDateTime(job.updatedAt)}`}</Typography>
               </Stack>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography>{`Current Mileage - ${job.workOrderMileage} KM`}</Typography>
-                {job.workOrderStatus != WO_STATUS_OPEN && (
+                <Typography>{`Current Mileage - ${job.workorderMileage} KM`}</Typography>
+                {job.workorderStatus != WO_STATUS_OPEN && (
                   <Typography>
                     <b>#INVOICE NO</b>
-                    {` ${job.workOrderInvoiceNumber ?? '-'}`}
+                    {` ${job.workorderInvoiceNumber ?? '-'}`}
                   </Typography>
                 )}
               </Stack>
 
-              {job.workOrderAssignees && job.workOrderAssignees.length > 0 && (
+              {job.workorderAssignees && job.workorderAssignees.length > 0 && (
                 <>
                   <Divider />
                   <Typography variant="h6">Workorder Assignees</Typography>
                   <Stack direction="row" spacing={2} flexWrap="wrap">
-                    {job.workOrderAssignees.map((emp) => (
+                    {job.workorderAssignees.map((emp) => (
                       <Chip variant="outlined" label={emp.empFullName} />
                     ))}
                   </Stack>
@@ -205,8 +205,7 @@ export const WorkorderView = ({
 
               <TableContainer>
                 <Table>
-                  {(job.workOrderCustomItems.length > 0 ||
-                    job.workOrderServiceItems.length > 0) && (
+                  {job.workorderItems.length > 0 && (
                     <TableHead>
                       <TableRow>
                         <TableCell>Item</TableCell>
@@ -218,7 +217,7 @@ export const WorkorderView = ({
                     </TableHead>
                   )}
                   <TableBody>
-                    {job.workOrderServiceItems.map((customItem, index) => (
+                    {job.workorderItems.map((customItem, index) => (
                       <TableRow key={index}>
                         <TableCell>{customItem.inventoryItemName}</TableCell>
                         <TableCell>{customItem.quantity}</TableCell>
@@ -229,23 +228,7 @@ export const WorkorderView = ({
                         <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
                       </TableRow>
                     ))}
-                    {job.workOrderCustomItems.map((customItem, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{customItem.inventoryItemName}</TableCell>
-                        <TableCell>{customItem.quantity}</TableCell>
-                        <TableCell align="right">{formatCurrency(customItem.unitPrice)}</TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(customItem.cashDiscount)}
-                        </TableCell>
-                        <TableCell align="right">{formatCurrency(customItem.totalPrice)}</TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow>
-                      <TableCell colSpan={5}>
-                        <Divider> Charges </Divider>
-                      </TableCell>
-                    </TableRow>
-                    {(job.workOrderCustomChargers || []).map((customCharge, index) => (
+                    {job.workorderCharges.map((customCharge, index) => (
                       <TableRow key={index}>
                         <TableCell colSpan={4}>{customCharge.chargeName}</TableCell>
                         <TableCell align="right">
@@ -253,79 +236,71 @@ export const WorkorderView = ({
                         </TableCell>
                       </TableRow>
                     ))}
-                    {job.workOrderServiceCharge > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4}>Service Charge</TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(job.workOrderServiceCharge)}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    {job.workOrderOtherChargers > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4}>Other Charges</TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(job.workOrderOtherChargers)}
-                        </TableCell>
-                      </TableRow>
-                    )}
                     <TableRow>
                       <TableCell colSpan={5}>
                         <Divider> Summary </Divider>
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell align="right" colSpan={4}>
-                        Gross Total Amount
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(job.workOrderGrossAmount)}
-                      </TableCell>
-                    </TableRow>
-                    {job.workOrderDiscountPercentage > 0 && (
+                    {job.workorderDiscountPercentage > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
                           Discount Percentage
                         </TableCell>
-                        <TableCell align="right">{`${job.workOrderDiscountPercentage} %`}</TableCell>
+                        <TableCell align="right">{`${job.DiscountPercentage} %`}</TableCell>
                       </TableRow>
                     )}
-                    {job.workOrderDiscountCash > 0 && (
+                    {job.workorderDiscountCash > 0 && (
                       <TableRow>
                         <TableCell align="right" colSpan={4}>
                           Cash Discount
                         </TableCell>
                         <TableCell align="right">
-                          {formatCurrency(job.workOrderDiscountCash)}
+                          {formatCurrency(job.workorderDiscountCash)}
                         </TableCell>
                       </TableRow>
                     )}
                     <TableRow>
                       <TableCell variant="head" align="right" colSpan={4}>
-                        Net Subtotal Amount
+                        Total Discount
                       </TableCell>
                       <TableCell variant="head" align="right">
-                        {formatCurrency(job.workOrderTotalAmount)}
+                        {formatCurrency(job.workorderTotalDiscount)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Total Amount
+                      </TableCell>
+                      <TableCell variant="head" align="right">
+                        {formatCurrency(job.workorderTotalAmount)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell variant="head" align="right" colSpan={4}>
+                        Subtotal Amount
+                      </TableCell>
+                      <TableCell variant="head" align="right">
+                        {formatCurrency(job.workorderSubTotalAmount)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell align="right" colSpan={4}>
                         Paid Amount
                       </TableCell>
-                      <TableCell align="right">{formatCurrency(job.workOrderPaidAmount)}</TableCell>
+                      <TableCell align="right">{formatCurrency(job.workorderPaidAmount)}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell align="right" colSpan={4}>
                         Balance Amount
                       </TableCell>
                       <TableCell align="right">
-                        {formatCurrency(job.workOrderBalanceAmount)}
+                        {formatCurrency(job.workorderBalanceAmount)}
                       </TableCell>
                     </TableRow>
-                    {!commonUtil.stringIsEmptyOrSpaces(job.workOrderNotes) && (
+                    {!commonUtil.stringIsEmptyOrSpaces(job.workorderNotes) && (
                       <TableRow>
                         <TableCell colSpan={3}>Notes</TableCell>
-                        <TableCell align="right">{job.workOrderNotes}</TableCell>
+                        <TableCell align="right">{job.workorderNotes}</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -361,11 +336,11 @@ export const WorkorderView = ({
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
-                        spacing: 2,
+                        spacing: 1,
                       }}
                     >
                       <TableContainer>
-                        <Table>
+                        <Table size="small">
                           <TableBody>
                             <TableRow>
                               <TableCell variant="head">{fDate(payment.createdAt)}</TableCell>

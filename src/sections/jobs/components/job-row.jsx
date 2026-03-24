@@ -17,7 +17,7 @@ export const JobRow = ({ data, onClickRow }) => {
   return (
     <>
       {data.map((item, index) => {
-        const paymentStatus = item.workOrderPaymentStatus;
+        const paymentStatus = item.workorderPaymentStatus;
         return (
           <TableRow
             key={index}
@@ -27,8 +27,8 @@ export const JobRow = ({ data, onClickRow }) => {
           >
             <TableCell>{`${item.customer.customerPrefix ?? 'Mr. '} ${item.customer.customerName}`}</TableCell>
             <TableCell>{item.vehicle.vehicleNumber}</TableCell>
-            <TableCell>{item.workOrderMileage}</TableCell>
-            <TableCell>{item.workOrderInvoiceNumber}</TableCell>
+            <TableCell>{item.workorderMileage}</TableCell>
+            <TableCell>{item.workorderInvoiceNumber}</TableCell>
             <TableCell>
               <Chip
                 icon={
@@ -40,7 +40,7 @@ export const JobRow = ({ data, onClickRow }) => {
                     <PendingIcon />
                   )
                 }
-                label={item.workOrderPaymentStatus}
+                label={item.workorderPaymentStatus}
                 color={
                   paymentStatus === PAY_STATUS_PAID
                     ? 'success'
@@ -52,8 +52,8 @@ export const JobRow = ({ data, onClickRow }) => {
                 }
               />
             </TableCell>
-            <TableCell>{formatCurrency(item.workOrderTotalAmount)}</TableCell>
-            <TableCell>{formatCurrency(item.workOrderBalanceAmount)}</TableCell>
+            <TableCell>{formatCurrency(item.workorderTotalAmount)}</TableCell>
+            <TableCell>{formatCurrency(item.workorderBalanceAmount)}</TableCell>
             <TableCell>{fDate(item.createdAt)}</TableCell>
           </TableRow>
         );

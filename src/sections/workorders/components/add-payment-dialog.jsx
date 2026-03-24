@@ -60,11 +60,11 @@ export const AddPaymentDialog = ({ open, handleClose, data, isLoading, handleCon
                     <Divider> Payment Status </Divider>
                     <Stack direction="row" spacing={2}>
                       <Typography variant="subtitle1">Total Amount :</Typography>
-                      <Typography>{formatCurrency(data.workOrderTotalAmount)}</Typography>
+                      <Typography>{formatCurrency(data.workorderSubTotalAmount)}</Typography>
                     </Stack>
                     <Stack direction="row" spacing={2}>
                       <Typography variant="subtitle1">Balance Amount :</Typography>
-                      <Typography>{formatCurrency(data.workOrderBalanceAmount)}</Typography>
+                      <Typography>{formatCurrency(data.workorderBalanceAmount)}</Typography>
                     </Stack>
                     <Divider> New Payment </Divider>
                   </Stack>
