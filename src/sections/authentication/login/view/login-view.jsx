@@ -17,14 +17,7 @@ const bgGradient = ({ color, imgUrl }) => ({
   backgroundRepeat: 'no-repeat',
 });
 
-export const LoginView = ({
-  formik,
-  isUserEmailVerified,
-  isUserFirstLogin,
-  isLoadingVerifyEmail,
-  isLoadingLogin,
-  handleVerifyUserLogin,
-}) => {
+export const LoginView = ({ formik, isLoadingLogin }) => {
   const theme = useTheme();
 
   return (
@@ -170,27 +163,22 @@ export const LoginView = ({
               </Typography>
             </Box>
 
-            <LoginForm
-              formik={formik}
-              isUserEmailVerified={isUserEmailVerified}
-              isUserFirstLogin={isUserFirstLogin}
-              isLoadingVerifyEmail={isLoadingVerifyEmail}
-              isLoadingLogin={isLoadingLogin}
-              handleVerifyUserLogin={handleVerifyUserLogin}
-            />
+            <LoginForm formik={formik} isLoadingLogin={isLoadingLogin} />
 
             {/* Footer */}
-            <Divider sx={{ my: 3 }}>
-              <Typography variant="caption" color="text.secondary">
-                Secure Login
-              </Typography>
-            </Divider>
+            <Box sx={{ mt: 'auto' }}>
+              <Divider sx={{ my: 2 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Secure Login
+                </Typography>
+              </Divider>
 
-            <Typography variant="caption" color="text.secondary" align="center" display="block">
-              © {new Date().getFullYear()} TuneTab. All rights reserved.
-              <br />
-              Version 2.0.0
-            </Typography>
+              <Typography variant="caption" color="text.secondary" align="center" display="block">
+                © {new Date().getFullYear()} TuneTab. All rights reserved.
+                <br />
+                Version 2.0.0
+              </Typography>
+            </Box>
           </Card>
         </Stack>
       </Container>

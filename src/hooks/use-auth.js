@@ -54,10 +54,6 @@ const useAuth = () => {
         if (responseUtil.isResponseSuccess(res.data.responseCode)) {
           response = res.data.responseData;
         }
-
-        enqueueSnackbar(res.data.responseMessage, {
-          variant: responseUtil.findResponseType(res.data.responseCode),
-        });
       })
       .catch(() => {
         setIsLoadingPwdReset(false);

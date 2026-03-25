@@ -9,7 +9,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { account } from 'src/_mock/account';
 import { backendAuthApi } from 'src/axios/instance/backend-axios-instance';
 import { BACKEND_API } from 'src/axios/constant/backend-api';
 import useAuthStore from 'src/store/auth-store';
@@ -44,9 +43,9 @@ export default function AccountPopover() {
     })
       .then(() => {})
       .finally(() => {
+        router(NAVIGATION_ROUTES.login);
         setIsloading(false);
         logoutUser();
-        router(NAVIGATION_ROUTES.login);
       });
   };
 

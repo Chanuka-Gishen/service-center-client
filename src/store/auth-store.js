@@ -36,12 +36,12 @@ const useAuthStore = create(
           auth: {
             isLoggedIn: false,
             user: {
-              id: payload._id,
-              token: null,
-              name: '',
-              userEmail: '',
-              userRole: '',
-              isUserFirstLogin: true,
+              id: payload.user._id,
+              token: payload.token,
+              name: `${payload.user.userFirstName} ${payload.user.userLastName}`,
+              userEmail: payload.user.userEmail,
+              userRole: payload.user.userRole,
+              isUserFirstLogin: payload.user.isUserFirstLogin,
             },
           },
         })),

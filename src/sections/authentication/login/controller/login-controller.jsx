@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useFormik } from 'formik';
 
@@ -14,11 +14,7 @@ const LoginController = () => {
   const router = useRouter();
   const { loginUser, saveUserData } = useAuthStore.getState();
 
-  const { isLoadingVerifyEmail, isLoadingLogin, verifyUserEmailController, loginController } =
-    useAuth();
-
-  const [isUserEmailVerified, setIsUserEmailVerified] = useState(false);
-  const [isUserFirstLogin, setIsUserFirstLogin] = useState(false);
+  const { isLoadingLogin, loginController } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -31,37 +27,22 @@ const LoginController = () => {
     },
   });
 
-  const handleVerifyUserLogin = async () => {
-    const user = await verifyUserEmailController(formik.values.userEmail);
-
-    setIsUserEmailVerified(user ? true : false);
-    setIsUserFirstLogin(user ? user.isUserFirstLogin : false);
-
-    if (user && user.isUserFirstLogin) {
-      saveUserData(user);
-      router.push(NAVIGATION_ROUTES.set_password);
-    }
-  };
-
   const handleLogin = async (data) => {
     const response = await loginController(data);
 
-    if (response) {
-      loginUser(response);
-      router.push(NAVIGATION_ROUTES.dashboard.base);
+    if (!response) return;
+
+    if (response.user.isUserFirstLogin) {
+      saveUserData(response);
+      router.push(NAVIGATION_ROUTES.set_password);
+      return;
     }
+
+    loginUser(response);
+    router.push(NAVIGATION_ROUTES.dashboard.base);
   };
 
-  return (
-    <LoginView
-      formik={formik}
-      isUserEmailVerified={isUserEmailVerified}
-      isUserFirstLogin={isUserFirstLogin}
-      isLoadingVerifyEmail={isLoadingVerifyEmail}
-      isLoadingLogin={isLoadingLogin}
-      handleVerifyUserLogin={handleVerifyUserLogin}
-    />
-  );
+  return <LoginView formik={formik} isLoadingLogin={isLoadingLogin} />;
 };
 
 export default LoginController;

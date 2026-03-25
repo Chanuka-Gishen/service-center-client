@@ -13,8 +13,7 @@ import { bgBlur } from 'src/theme/css';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 import { ColorSwitch } from 'src/components/color-switch';
-import { Chip, Stack, Typography } from '@mui/material';
-import { fDateTime } from 'src/utils/format-time';
+import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
@@ -23,20 +22,6 @@ export default function Header({ onOpenNav }) {
   const theme = useTheme();
 
   const lgUp = false;
-
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
-
-  // useEffect(() => {
-  //   // Update time immediately and every second
-  //   const updateTime = () => {
-  //     setCurrentDateTime(new Date());
-  //   };
-
-  //   updateTime();
-  //   const interval = setInterval(updateTime, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const targetDate = new Date(2025, 9, 7, 23, 59, 59, 999);
 

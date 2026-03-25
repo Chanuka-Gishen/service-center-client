@@ -21,7 +21,6 @@ const SetPasswordController = () => {
       ...values,
     };
     const user = await resetPasswordController(data);
-
     if (user) {
       loginUser(user);
       router.push(NAVIGATION_ROUTES.dashboard.base);
