@@ -1,3 +1,4 @@
+import { element } from 'prop-types';
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
@@ -10,6 +11,7 @@ import useAuthStore from 'src/store/auth-store';
 // --------------- Public Pages ---------------
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const SetPasswordPage = lazy(() => import('src/pages/set-password'));
+export const ForgotPasswordPage = lazy(() => import('src/pages/forgot-password'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // --------------- Auth Pages ---------------
@@ -49,6 +51,7 @@ const AuthenticatedRoutes = (
 const PublicRoutes = [
   { path: NAVIGATION_ROUTES.login, element: <LoginPage /> },
   { path: NAVIGATION_ROUTES.set_password, element: <SetPasswordPage /> },
+  { path: NAVIGATION_ROUTES.forgot_password, element: <ForgotPasswordPage /> },
   { path: NAVIGATION_ROUTES.not_found, element: <Page404 /> },
 ];
 

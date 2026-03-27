@@ -2,7 +2,7 @@ export const NAVIGATION_ROUTES = {
   // authentication routes
   login: '/login',
   set_password: '/setPassword',
-  register: 'register',
+  forgot_password: '/forgot-password',
 
   // not found
   not_found: '404',

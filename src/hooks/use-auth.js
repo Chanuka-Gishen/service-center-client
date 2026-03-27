@@ -13,6 +13,9 @@ const useAuth = () => {
   const [isLoadingVerifyEmail, setIsLoadingVerifyEmail] = useState(false);
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const [isLoadingPwdReset, setIsLoadingPwdReset] = useState(false);
+  const [isLoadingSendVerificationOtp, setIsLoadingSendVerificationOtp] = useState(false);
+  const [isLoadingVerifyingForgotPwdOtp, setIsLoadingVerifyingForgotPwdOtp] = useState(false);
+  const [isLoadingResetForgotPwd, setIsLoadingResetForgotPwd] = useState(false);
 
   const verifyUserEmailController = async (email) => {
     let user = null;
@@ -90,13 +93,89 @@ const useAuth = () => {
     return response;
   };
 
+  const sendVerificationOtp = async (email) => {
+    let isSuccess = false;
+    setIsLoadingSendVerificationOtp(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.SEND_RESET_PWD_OTP,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { email },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+      })
+      .catch(() => {
+        setIsLoadingSendVerificationOtp(false);
+      })
+      .finally(() => {
+        setIsLoadingSendVerificationOtp(false);
+      });
+
+    return isSuccess;
+  };
+
+  const verifyResetForgotPasswordOtp = async (email, otp) => {
+    let result = null;
+
+    setIsLoadingVerifyingForgotPwdOtp(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.VERIFY_RESET_PWD_OTP,
+      method: 'GET',
+      cancelToken: sourceToken.token,
+      params: { email, otp },
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) result = res.data.responseData;
+      })
+      .catch(() => {
+        setIsLoadingVerifyingForgotPwdOtp(false);
+      })
+      .finally(() => {
+        setIsLoadingVerifyingForgotPwdOtp(false);
+      });
+
+    return result;
+  };
+
+  const resetForgotPassword = async (data) => {
+    let isSuccess = false;
+
+    setIsLoadingResetForgotPwd(true);
+
+    await backendAuthApi({
+      url: BACKEND_API.RESET_FORGOT_PWD,
+      method: 'POST',
+      cancelToken: sourceToken.token,
+      data,
+    })
+      .then((res) => {
+        if (responseUtil.isResponseSuccess(res.data.responseCode)) isSuccess = true;
+
+        setIsLoadingResetForgotPwd(false);
+      })
+      .catch(() => {
+        setIsLoadingResetForgotPwd(false);
+      });
+
+    return isSuccess;
+  };
+
   return {
     isLoadingVerifyEmail,
     isLoadingLogin,
     isLoadingPwdReset,
+    isLoadingSendVerificationOtp,
+    isLoadingVerifyingForgotPwdOtp,
+    isLoadingResetForgotPwd,
     verifyUserEmailController,
     resetPasswordController,
     loginController,
+    sendVerificationOtp,
+    verifyResetForgotPasswordOtp,
+    resetForgotPassword,
   };
 };
 

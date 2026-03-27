@@ -6,6 +6,9 @@ export const BACKEND_API = {
   // AUTHENTICATION API'S
   LOGIN: IP_URL + '/authentication/noAuth/login',
   LOGOUT: IP_URL + '/authentication/auth/logout',
+  SEND_RESET_PWD_OTP: IP_URL + '/authentication/noAuth/send-reset-pwd-otp',
+  VERIFY_RESET_PWD_OTP: IP_URL + '/authentication/noAuth/verify-reset-pwd-otp',
+  RESET_FORGOT_PWD: IP_URL + '/authentication/noAuth/reset-forgot-password',
 
   USER_REGISTER: IP_URL + '/user/supAuth/create',
   USERS: IP_URL + '/user/auth/all',

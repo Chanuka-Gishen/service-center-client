@@ -17,7 +17,7 @@ const bgGradient = ({ color, imgUrl }) => ({
   backgroundRepeat: 'no-repeat',
 });
 
-export const LoginView = ({ formik, isLoadingLogin }) => {
+export const LoginView = ({ formik, isLoadingLogin, handleNavigateForgotPassword }) => {
   const theme = useTheme();
 
   return (
@@ -46,7 +46,7 @@ export const LoginView = ({ formik, isLoadingLogin }) => {
         }}
       />
 
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={3}
@@ -163,7 +163,11 @@ export const LoginView = ({ formik, isLoadingLogin }) => {
               </Typography>
             </Box>
 
-            <LoginForm formik={formik} isLoadingLogin={isLoadingLogin} />
+            <LoginForm
+              formik={formik}
+              isLoadingLogin={isLoadingLogin}
+              handleNavigateForgotPassword={handleNavigateForgotPassword}
+            />
 
             {/* Footer */}
             <Box sx={{ mt: 'auto' }}>

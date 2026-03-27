@@ -27,6 +27,10 @@ const LoginController = () => {
     },
   });
 
+  const handleNavigateForgotPassword = () => {
+    router.push(NAVIGATION_ROUTES.forgot_password);
+  };
+
   const handleLogin = async (data) => {
     const response = await loginController(data);
 
@@ -42,7 +46,13 @@ const LoginController = () => {
     router.push(NAVIGATION_ROUTES.dashboard.base);
   };
 
-  return <LoginView formik={formik} isLoadingLogin={isLoadingLogin} />;
+  return (
+    <LoginView
+      formik={formik}
+      isLoadingLogin={isLoadingLogin}
+      handleNavigateForgotPassword={handleNavigateForgotPassword}
+    />
+  );
 };
 
 export default LoginController;

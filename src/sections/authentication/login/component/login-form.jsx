@@ -4,7 +4,7 @@ import { FormikProvider } from 'formik';
 
 import { PasswordField } from 'src/components/password-field/password-field';
 
-const LoginForm = ({ formik, isLoadingLogin }) => {
+const LoginForm = ({ formik, isLoadingLogin, handleNavigateForgotPassword }) => {
   const { touched, errors, getFieldProps, handleSubmit } = formik;
 
   return (
@@ -31,9 +31,7 @@ const LoginForm = ({ formik, isLoadingLogin }) => {
               variant="text"
               color="primary"
               size="small"
-              onClick={() => {
-                // Handle forgot password
-              }}
+              onClick={handleNavigateForgotPassword}
               sx={{ textTransform: 'none' }}
             >
               Forgot password?
